@@ -1,32 +1,32 @@
-# Prerequisites
-*.d
+# Windows Visual Studio + Unreal
 
-# Compiled Object files
-*.slo
-*.lo
-*.o
+# IDE 파일
+.vs/
+*.suo
+*.VC.db
+*.VC.opendb
+
+# 빌드 아웃풋
 *.obj
-
-# Precompiled Headers
-*.gch
-*.pch
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
 *.exe
-*.out
+*.dll
+*.lib
 *.app
+*.out
+
+# Unreal Engine
+Binaries/
+Build/
+Intermediate/
+Saved/
+DerivedDataCache/
+*_BuiltData.uasset
+
+# 생성된 프로젝트 파일
+*.xcodeproj
+*.xcworkspace
+
+# 텍스트/라인엔딩
+* text=auto
+*.cpp text eol=lf
+*.h   text eol=lf

@@ -21,6 +21,7 @@ Intermediate/
 Saved/
 DerivedDataCache/
 *_BuiltData.uasset
+*.sln
 
 # 생성된 프로젝트 파일
 *.xcodeproj

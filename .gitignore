@@ -21,7 +21,6 @@ Intermediate/
 Saved/
 DerivedDataCache/
 *_BuiltData.uasset
-*.sln
 
 # 생성된 프로젝트 파일
 *.xcodeproj
@@ -31,3 +30,9 @@ DerivedDataCache/
 * text=auto
 *.cpp text eol=lf
 *.h   text eol=lf
+
+GravityRacing/*.sln
+GravityRacingServer/x64/
+GravityRacingServer/Release/
+GravityRacingServer/Debug/
+GravityRacingServer/*.vcxproj.user

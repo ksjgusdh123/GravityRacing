@@ -59,31 +59,6 @@ void AGRPlayer::BeginPlay()
 void AGRPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	if (IsFlip)
-	{
-
-		FVector Start = GravityArrow->GetComponentLocation();
-		FVector GravityDir = GravityArrow->GetForwardVector();
-		float Dist = 30;
-
-		FVector End = Start + GravityDir * Dist;
-
-		FHitResult result;
-		FCollisionQueryParams params;
-		params.AddIgnoredActor(this);
-
-		bool bHit = GetWorld()->LineTraceSingleByChannel(result, Start, End, ECC_Visibility, params);
-
-		DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 1.f);
-		if (bHit)
-		{
-			auto* movement = GetCharacterMovement();
-			IsFlip = false;
-			movement->SetMovementMode(EMovementMode::MOVE_Walking);
-			//movement->bOrientRotationToMovement = true;
-		}
-	}
 }
 
 // Called to bind functionality to input
@@ -153,7 +128,7 @@ void AGRPlayer::Flip(const FInputActionValue& value)
 	auto* movement = GetCharacterMovement();
 	movement->SetMovementMode(EMovementMode::MOVE_Falling);
 
-	movement->GravityScale = movement->GravityScale * -1;
+	movement->SetGravityDirection(FVector(0.f, 0.f, movement->GetGravityDirection().Z * -1));
 
 	movement->bOrientRotationToMovement = false;
 	movement->Velocity = FVector(0.f, 0.f, 0.f);

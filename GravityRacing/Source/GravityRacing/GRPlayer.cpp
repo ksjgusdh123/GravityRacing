@@ -8,6 +8,7 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Components/ArrowComponent.h"
 
 // Sets default values
 AGRPlayer::AGRPlayer()
@@ -23,6 +24,12 @@ AGRPlayer::AGRPlayer()
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
 	Camera->bUsePawnControlRotation = false;
+
+	GravityArrow = CreateDefaultSubobject<UArrowComponent>(TEXT("GravityArrow"));
+	GravityArrow->SetupAttachment(RootComponent);
+	GravityArrow->SetRelativeLocation(FVector(0.f, 0.f, -80.f));
+	GravityArrow->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));
+	GravityArrow->SetArrowColor(FColor::Green);
 
 	ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshAsset(TEXT("/Game/Assets/Player/Mesh/Skin_1/SK_Skin_1.SK_Skin_1"));
 
@@ -53,6 +60,30 @@ void AGRPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (IsFlip)
+	{
+
+		FVector Start = GravityArrow->GetComponentLocation();
+		FVector GravityDir = GravityArrow->GetForwardVector();
+		float Dist = 30;
+
+		FVector End = Start + GravityDir * Dist;
+
+		FHitResult result;
+		FCollisionQueryParams params;
+		params.AddIgnoredActor(this);
+
+		bool bHit = GetWorld()->LineTraceSingleByChannel(result, Start, End, ECC_Visibility, params);
+
+		DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 1.f);
+		if (bHit)
+		{
+			auto* movement = GetCharacterMovement();
+			IsFlip = false;
+			movement->SetMovementMode(EMovementMode::MOVE_Walking);
+			//movement->bOrientRotationToMovement = true;
+		}
+	}
 }
 
 // Called to bind functionality to input

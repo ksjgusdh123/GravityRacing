@@ -1,5 +1,5 @@
 #include "PCH.h"
-#include "FGameServer.h"
+#include "GameServer.h"
 
 FGameServer::FGameServer()
 {

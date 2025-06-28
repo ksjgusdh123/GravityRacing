@@ -70,6 +70,14 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <PublicIncludeDirectories>
+    </PublicIncludeDirectories>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <PublicIncludeDirectories>
+    </PublicIncludeDirectories>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -106,6 +114,10 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>PCH.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(ProjectDir)../third_party\spdlog\include;$(ProjectDir)Source\Core;$(ProjectDir)Source\Game;$(ProjectDir)Source\Network;$(ProjectDir)Source\Utils</AdditionalIncludeDirectories>
+      <AdditionalOptions>/utf-8
+ %(AdditionalOptions)</AdditionalOptions>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -122,6 +134,10 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>PCH.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(ProjectDir)../third_party\spdlog\include;$(ProjectDir)Source\Core;$(ProjectDir)Source\Game;$(ProjectDir)Source\Network;$(ProjectDir)Source\Utils</AdditionalIncludeDirectories>
+      <AdditionalOptions>/utf-8
+ %(AdditionalOptions)</AdditionalOptions>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -131,29 +147,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="FGameServer.cpp" />
-    <ClCompile Include="FGameWorld.cpp" />
-    <ClCompile Include="FSession.cpp" />
-    <ClCompile Include="FSessionManager.cpp" />
-    <ClCompile Include="PCH.cpp">
+    <ClCompile Include="Source\Core\GameServer.cpp" />
+    <ClCompile Include="Source\Core\Logger.cpp" />
+    <ClCompile Include="Source\Core\PCH.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">PCH.h</PrecompiledHeaderFile>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">PCH.h</PrecompiledHeaderFile>
     </ClCompile>
-    <ClCompile Include="ServerMain.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">PCH.h</PrecompiledHeaderFile>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">PCH.h</PrecompiledHeaderFile>
-    </ClCompile>
+    <ClCompile Include="Source\Core\ServerMain.cpp" />
+    <ClCompile Include="Source\Game\GameWorld.cpp" />
+    <ClCompile Include="Source\Network\Session.cpp" />
+    <ClCompile Include="Source\Network\SessionManager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="FGameServer.h" />
-    <ClInclude Include="FGameWorld.h" />
-    <ClInclude Include="FSession.h" />
-    <ClInclude Include="FSessionManager.h" />
-    <ClInclude Include="PCH.h" />
+    <ClInclude Include="Source\Core\GameServer.h" />
+    <ClInclude Include="Source\Core\Logger.h" />
+    <ClInclude Include="Source\Core\PCH.h" />
+    <ClInclude Include="Source\Game\GameWorld.h" />
+    <ClInclude Include="Source\Network\Session.h" />
+    <ClInclude Include="Source\Network\SessionManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

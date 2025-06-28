@@ -9,57 +9,75 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="소스 파일\PCH">
-      <UniqueIdentifier>{24313fff-011b-4e82-bf2a-78146c01762c}</UniqueIdentifier>
+    <Filter Include="소스 파일\01.">
+      <UniqueIdentifier>{dc523d3a-6554-4c84-8d3d-546b793cd0c2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\Server">
-      <UniqueIdentifier>{20baf9e2-371c-489d-aa3b-bf2a7e2c36c2}</UniqueIdentifier>
+    <Filter Include="소스 파일\02.">
+      <UniqueIdentifier>{3629f046-78f7-429b-808e-37bf6aa86f08}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\Main">
+    <Filter Include="소스 파일\01.\Main">
       <UniqueIdentifier>{2020080c-cef1-4dd3-9609-5ee894c12a5b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\Session">
-      <UniqueIdentifier>{5bc936c9-a011-44a1-9aa1-c3e3a1c9241a}</UniqueIdentifier>
+    <Filter Include="소스 파일\01.\Server">
+      <UniqueIdentifier>{20baf9e2-371c-489d-aa3b-bf2a7e2c36c2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\GameWorld">
+    <Filter Include="소스 파일\02.\GameWorld">
       <UniqueIdentifier>{5dd9edd4-4748-4acb-a17b-21195e83dab5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\01.\Session">
+      <UniqueIdentifier>{5bc936c9-a011-44a1-9aa1-c3e3a1c9241a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\03.">
+      <UniqueIdentifier>{38b5dff6-df7a-4fd1-afea-3ff8fd5aa011}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\03.\PCH">
+      <UniqueIdentifier>{24313fff-011b-4e82-bf2a-78146c01762c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\03.\Logger">
+      <UniqueIdentifier>{abebaf2c-1df0-411f-b38b-576675653fbc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="PCH.cpp">
-      <Filter>소스 파일\PCH</Filter>
+    <ClCompile Include="Source\Core\ServerMain.cpp">
+      <Filter>소스 파일\01.\Main</Filter>
     </ClCompile>
-    <ClCompile Include="FGameServer.cpp">
-      <Filter>소스 파일\Server</Filter>
+    <ClCompile Include="Source\Core\PCH.cpp">
+      <Filter>소스 파일\03.\PCH</Filter>
     </ClCompile>
-    <ClCompile Include="ServerMain.cpp">
-      <Filter>소스 파일\Main</Filter>
+    <ClCompile Include="Source\Core\Logger.cpp">
+      <Filter>소스 파일\03.\Logger</Filter>
     </ClCompile>
-    <ClCompile Include="FSession.cpp">
-      <Filter>소스 파일\Session</Filter>
+    <ClCompile Include="Source\Core\GameServer.cpp">
+      <Filter>소스 파일\01.\Server</Filter>
     </ClCompile>
-    <ClCompile Include="FSessionManager.cpp">
-      <Filter>소스 파일\Session</Filter>
+    <ClCompile Include="Source\Network\SessionManager.cpp">
+      <Filter>소스 파일\01.\Session</Filter>
     </ClCompile>
-    <ClCompile Include="FGameWorld.cpp">
-      <Filter>소스 파일\GameWorld</Filter>
+    <ClCompile Include="Source\Network\Session.cpp">
+      <Filter>소스 파일\01.\Session</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\GameWorld.cpp">
+      <Filter>소스 파일\02.\GameWorld</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="PCH.h">
-      <Filter>소스 파일\PCH</Filter>
+    <ClInclude Include="Source\Core\PCH.h">
+      <Filter>소스 파일\03.\PCH</Filter>
     </ClInclude>
-    <ClInclude Include="FGameServer.h">
-      <Filter>소스 파일\Server</Filter>
+    <ClInclude Include="Source\Core\Logger.h">
+      <Filter>소스 파일\03.\Logger</Filter>
     </ClInclude>
-    <ClInclude Include="FSession.h">
-      <Filter>소스 파일\Session</Filter>
+    <ClInclude Include="Source\Core\GameServer.h">
+      <Filter>소스 파일\01.\Server</Filter>
     </ClInclude>
-    <ClInclude Include="FSessionManager.h">
-      <Filter>소스 파일\Session</Filter>
+    <ClInclude Include="Source\Network\SessionManager.h">
+      <Filter>소스 파일\01.\Session</Filter>
     </ClInclude>
-    <ClInclude Include="FGameWorld.h">
-      <Filter>소스 파일\GameWorld</Filter>
+    <ClInclude Include="Source\Network\Session.h">
+      <Filter>소스 파일\01.\Session</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\GameWorld.h">
+      <Filter>소스 파일\02.\GameWorld</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

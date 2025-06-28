@@ -8,3 +8,8 @@
 #include <iostream>
 #include <vector>
 #include <unordered_map>
+#include <ranges>
+#include <memory>
+#include <unordered_map>
+#include <typeindex>
+#include <type_traits>

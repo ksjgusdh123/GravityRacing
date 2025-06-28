@@ -159,6 +159,7 @@
     <ClCompile Include="Source\System\Logger\Logger.cpp" />
     <ClCompile Include="Source\System\Logger\LoggerSystem.cpp" />
     <ClCompile Include="Source\System\SystemManager.cpp" />
+    <ClCompile Include="Source\System\SystemScope.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Core\GameServer.h" />
@@ -166,9 +167,11 @@
     <ClInclude Include="Source\Game\GameWorld.h" />
     <ClInclude Include="Source\Network\Session.h" />
     <ClInclude Include="Source\Network\SessionManager.h" />
+    <ClInclude Include="Source\System\ISystem.h" />
     <ClInclude Include="Source\System\Logger\Logger.h" />
     <ClInclude Include="Source\System\Logger\LoggerSystem.h" />
     <ClInclude Include="Source\System\SystemManager.h" />
+    <ClInclude Include="Source\System\SystemScope.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

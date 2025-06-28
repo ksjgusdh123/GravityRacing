@@ -1,11 +1,12 @@
 #include "PCH.h"
 #include "GameServer.h"
+#include "SystemManager.h"
 #include "Logger/LoggerSystem.h"
 #include "Logger/Logger.h"
 
 int main()
 {
-    FLoggerSystem::Init();
+
     try {
         FGameServer Server;
         if (!Server.Start()) {
@@ -19,5 +20,6 @@ int main()
     }
 
     FLogger::Info("Server shutdown normally.");
+
     return EXIT_SUCCESS;
 }

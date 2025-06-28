@@ -1,8 +1,9 @@
 #pragma once
+#include "ISystem.h"
 
-class FLoggerSystem
+class FLoggerSystem : public ISystem
 {
 public:
-    static void Init();
-    static void Shutdown();
+    virtual void Init() override;
+    virtual void Shutdown() override;
 };

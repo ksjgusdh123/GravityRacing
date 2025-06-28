@@ -71,6 +71,9 @@
     <ClCompile Include="Source\System\SystemManager.cpp">
       <Filter>소스 파일\03.\System\SystemManager</Filter>
     </ClCompile>
+    <ClCompile Include="Source\System\SystemScope.cpp">
+      <Filter>소스 파일\03.\System\SystemManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Core\PCH.h">
@@ -95,6 +98,12 @@
       <Filter>소스 파일\03.\System\Logger</Filter>
     </ClInclude>
     <ClInclude Include="Source\System\SystemManager.h">
+      <Filter>소스 파일\03.\System\SystemManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\SystemScope.h">
+      <Filter>소스 파일\03.\System\SystemManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\ISystem.h">
       <Filter>소스 파일\03.\System\SystemManager</Filter>
     </ClInclude>
   </ItemGroup>

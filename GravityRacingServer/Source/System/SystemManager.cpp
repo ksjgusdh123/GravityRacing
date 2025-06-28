@@ -1,22 +1,17 @@
 #include "PCH.h"
 #include "SystemManager.h"
 
-void ISystem::Init()
-{
-}
-
-void ISystem::Shutdown()
-{
-}
-
-void FSystemManager::Register(std::shared_ptr<ISystem> system)
-{
-}
+FSystemManager::FSystemManager() = default;
+FSystemManager::~FSystemManager() = default;
 
 void FSystemManager::InitAll()
 {
+    for (auto& [type, system] : Systems)
+        system->Init();
 }
 
 void FSystemManager::ShutdownAll()
 {
+    for (auto& [type, system] : Systems | std::views::reverse)
+        system->Shutdown();
 }

@@ -1,4 +1,6 @@
 #pragma once
+#include "SystemManager.h"
+
 class FGameServer
 {
 public:
@@ -11,5 +13,6 @@ private:
     void Run();
     void Shutdown();
 
+private:
+    FSystemManager SystemMgr;
 };
-

@@ -24,23 +24,26 @@
     <Filter Include="소스 파일\02.\GameWorld">
       <UniqueIdentifier>{5dd9edd4-4748-4acb-a17b-21195e83dab5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\01.\Session">
-      <UniqueIdentifier>{5bc936c9-a011-44a1-9aa1-c3e3a1c9241a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\03.">
       <UniqueIdentifier>{38b5dff6-df7a-4fd1-afea-3ff8fd5aa011}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\03.\PCH">
+    <Filter Include="소스 파일\04.">
+      <UniqueIdentifier>{cbe3a189-7b6f-4f24-abab-1ae4714e3604}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\04.\PCH">
       <UniqueIdentifier>{24313fff-011b-4e82-bf2a-78146c01762c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\03.\System">
+    <Filter Include="소스 파일\03.\Systems">
       <UniqueIdentifier>{dd4ee203-2e22-4ca4-bca3-93a5c341e7fc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\03.\System\Logger">
-      <UniqueIdentifier>{abebaf2c-1df0-411f-b38b-576675653fbc}</UniqueIdentifier>
+    <Filter Include="소스 파일\03.\Systems\Network">
+      <UniqueIdentifier>{1ca6ed51-9fd5-4347-8926-0e834bbd9202}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\03.\System\SystemManager">
+    <Filter Include="소스 파일\03.\SystemManager">
       <UniqueIdentifier>{7508e4f4-92b4-4786-8f63-3c7a14586600}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\04.\Logger">
+      <UniqueIdentifier>{abebaf2c-1df0-411f-b38b-576675653fbc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -48,63 +51,45 @@
       <Filter>소스 파일\01.\Main</Filter>
     </ClCompile>
     <ClCompile Include="Source\Core\PCH.cpp">
-      <Filter>소스 파일\03.\PCH</Filter>
+      <Filter>소스 파일\04.\PCH</Filter>
     </ClCompile>
     <ClCompile Include="Source\Core\GameServer.cpp">
       <Filter>소스 파일\01.\Server</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Network\SessionManager.cpp">
-      <Filter>소스 파일\01.\Session</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Network\Session.cpp">
-      <Filter>소스 파일\01.\Session</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Game\GameWorld.cpp">
       <Filter>소스 파일\02.\GameWorld</Filter>
     </ClCompile>
-    <ClCompile Include="Source\System\Logger\Logger.cpp">
-      <Filter>소스 파일\03.\System\Logger</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\System\Logger\LoggerSystem.cpp">
-      <Filter>소스 파일\03.\System\Logger</Filter>
-    </ClCompile>
     <ClCompile Include="Source\System\SystemManager.cpp">
-      <Filter>소스 파일\03.\System\SystemManager</Filter>
+      <Filter>소스 파일\03.\SystemManager</Filter>
     </ClCompile>
-    <ClCompile Include="Source\System\SystemScope.cpp">
-      <Filter>소스 파일\03.\System\SystemManager</Filter>
+    <ClCompile Include="Source\System\Network\RIONetworkSystem.cpp">
+      <Filter>소스 파일\03.\Systems\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utils\Logger\Logger.cpp">
+      <Filter>소스 파일\04.\Logger</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Core\PCH.h">
-      <Filter>소스 파일\03.\PCH</Filter>
+      <Filter>소스 파일\04.\PCH</Filter>
     </ClInclude>
     <ClInclude Include="Source\Core\GameServer.h">
       <Filter>소스 파일\01.\Server</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Network\SessionManager.h">
-      <Filter>소스 파일\01.\Session</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\Session.h">
-      <Filter>소스 파일\01.\Session</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Game\GameWorld.h">
       <Filter>소스 파일\02.\GameWorld</Filter>
     </ClInclude>
-    <ClInclude Include="Source\System\Logger\Logger.h">
-      <Filter>소스 파일\03.\System\Logger</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\System\Logger\LoggerSystem.h">
-      <Filter>소스 파일\03.\System\Logger</Filter>
-    </ClInclude>
     <ClInclude Include="Source\System\SystemManager.h">
-      <Filter>소스 파일\03.\System\SystemManager</Filter>
+      <Filter>소스 파일\03.\SystemManager</Filter>
     </ClInclude>
-    <ClInclude Include="Source\System\SystemScope.h">
-      <Filter>소스 파일\03.\System\SystemManager</Filter>
+    <ClInclude Include="Source\System\Network\RIONetworkSystem.h">
+      <Filter>소스 파일\03.\Systems\Network</Filter>
     </ClInclude>
     <ClInclude Include="Source\System\ISystem.h">
-      <Filter>소스 파일\03.\System\SystemManager</Filter>
+      <Filter>소스 파일\03.\SystemManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utils\Logger\Logger.h">
+      <Filter>소스 파일\04.\Logger</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

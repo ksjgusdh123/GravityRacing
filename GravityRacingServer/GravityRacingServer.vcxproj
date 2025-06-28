@@ -114,7 +114,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>PCH.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)../third_party\spdlog\include;$(ProjectDir)Source\Core;$(ProjectDir)Source\Game;$(ProjectDir)Source\Network;$(ProjectDir)Source\Utils</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)../third_party\spdlog\include;$(ProjectDir)Source\Core;$(ProjectDir)Source\Game;$(ProjectDir)Source\System;$(ProjectDir)Source\Network;$(ProjectDir)Source\Utils</AdditionalIncludeDirectories>
       <AdditionalOptions>/utf-8
  %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpplatest</LanguageStandard>
@@ -134,7 +134,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>PCH.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)../third_party\spdlog\include;$(ProjectDir)Source\Core;$(ProjectDir)Source\Game;$(ProjectDir)Source\Network;$(ProjectDir)Source\Utils</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)../third_party\spdlog\include;$(ProjectDir)Source\Core;$(ProjectDir)Source\Game;$(ProjectDir)Source\System;$(ProjectDir)Source\Network;$(ProjectDir)Source\Utils</AdditionalIncludeDirectories>
       <AdditionalOptions>/utf-8
  %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpplatest</LanguageStandard>
@@ -148,7 +148,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\Core\GameServer.cpp" />
-    <ClCompile Include="Source\Core\Logger.cpp" />
     <ClCompile Include="Source\Core\PCH.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -157,14 +156,19 @@
     <ClCompile Include="Source\Game\GameWorld.cpp" />
     <ClCompile Include="Source\Network\Session.cpp" />
     <ClCompile Include="Source\Network\SessionManager.cpp" />
+    <ClCompile Include="Source\System\Logger\Logger.cpp" />
+    <ClCompile Include="Source\System\Logger\LoggerSystem.cpp" />
+    <ClCompile Include="Source\System\SystemManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Core\GameServer.h" />
-    <ClInclude Include="Source\Core\Logger.h" />
     <ClInclude Include="Source\Core\PCH.h" />
     <ClInclude Include="Source\Game\GameWorld.h" />
     <ClInclude Include="Source\Network\Session.h" />
     <ClInclude Include="Source\Network\SessionManager.h" />
+    <ClInclude Include="Source\System\Logger\Logger.h" />
+    <ClInclude Include="Source\System\Logger\LoggerSystem.h" />
+    <ClInclude Include="Source\System\SystemManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

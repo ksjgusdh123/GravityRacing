@@ -33,8 +33,14 @@
     <Filter Include="소스 파일\03.\PCH">
       <UniqueIdentifier>{24313fff-011b-4e82-bf2a-78146c01762c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\03.\Logger">
+    <Filter Include="소스 파일\03.\System">
+      <UniqueIdentifier>{dd4ee203-2e22-4ca4-bca3-93a5c341e7fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\03.\System\Logger">
       <UniqueIdentifier>{abebaf2c-1df0-411f-b38b-576675653fbc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\03.\System\SystemManager">
+      <UniqueIdentifier>{7508e4f4-92b4-4786-8f63-3c7a14586600}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -43,9 +49,6 @@
     </ClCompile>
     <ClCompile Include="Source\Core\PCH.cpp">
       <Filter>소스 파일\03.\PCH</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Core\Logger.cpp">
-      <Filter>소스 파일\03.\Logger</Filter>
     </ClCompile>
     <ClCompile Include="Source\Core\GameServer.cpp">
       <Filter>소스 파일\01.\Server</Filter>
@@ -59,13 +62,19 @@
     <ClCompile Include="Source\Game\GameWorld.cpp">
       <Filter>소스 파일\02.\GameWorld</Filter>
     </ClCompile>
+    <ClCompile Include="Source\System\Logger\Logger.cpp">
+      <Filter>소스 파일\03.\System\Logger</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\Logger\LoggerSystem.cpp">
+      <Filter>소스 파일\03.\System\Logger</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\SystemManager.cpp">
+      <Filter>소스 파일\03.\System\SystemManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Core\PCH.h">
       <Filter>소스 파일\03.\PCH</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Core\Logger.h">
-      <Filter>소스 파일\03.\Logger</Filter>
     </ClInclude>
     <ClInclude Include="Source\Core\GameServer.h">
       <Filter>소스 파일\01.\Server</Filter>
@@ -78,6 +87,15 @@
     </ClInclude>
     <ClInclude Include="Source\Game\GameWorld.h">
       <Filter>소스 파일\02.\GameWorld</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Logger\Logger.h">
+      <Filter>소스 파일\03.\System\Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Logger\LoggerSystem.h">
+      <Filter>소스 파일\03.\System\Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\SystemManager.h">
+      <Filter>소스 파일\03.\System\SystemManager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

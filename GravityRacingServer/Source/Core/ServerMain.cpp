@@ -1,27 +1,23 @@
 #include "PCH.h"
 #include "GameServer.h"
-#include "Logger.h"
+#include "Logger/LoggerSystem.h"
+#include "Logger/Logger.h"
 
 int main()
 {
-	FLogger::Init();
+    FLoggerSystem::Init();
+    try {
+        FGameServer Server;
+        if (!Server.Start()) {
+            FLogger::Error("Server failed to start.");
+            return EXIT_FAILURE;
+        }
+    }
+    catch (const std::exception& ex) {
+        FLogger::Error("Exception caught in main: {}", ex.what());
+        return EXIT_FAILURE;
+    }
 
-	FLogger::Info("Init");
-	FLogger::Warn("경고 테스트 메시지");
-	FLogger::Error("치명적 오류 발생!");
-
-//    try {
-//        FGameServer Server;
-//        if (!Server.Start()) {
-//            std::cerr << "서버 실행 실패\n";
-//            return EXIT_FAILURE;
-//        }
-//    }
-//    catch (const std::exception& ex) {
-//        std::cerr << "예외 발생: " << ex.what() << "\n";
-//        return EXIT_FAILURE;
-//    }
-//
-//    return EXIT_SUCCESS;
-
+    FLogger::Info("Server shutdown normally.");
+    return EXIT_SUCCESS;
 }

@@ -26,7 +26,7 @@ void UGRNetworkSubsystem::Deinitialize()
 bool UGRNetworkSubsystem::ConnectToServer()
 {
 	Socket = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->CreateSocket(TEXT("Stream"), TEXT("ClientSocket"));
-	Socket->SetNonBlocking(false);
+	Socket->SetNonBlocking(true);
 
 	FIPv4Address Ip;
 	FIPv4Address::Parse(IpAddress, Ip);

@@ -31,14 +31,14 @@ AGRPlayer::AGRPlayer()
 	GravityArrow->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));
 	GravityArrow->SetArrowColor(FColor::Green);
 
-	ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshAsset(TEXT("/Game/Assets/Player/Mesh/Skin_1/SK_Skin_1.SK_Skin_1"));
+	//ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshAsset(TEXT("/Game/Assets/Player/Mesh/Skin_1/SK_Skin_1.SK_Skin_1"));
 
-	if (MeshAsset.Succeeded())
-	{
-		GetMesh()->SetSkeletalMesh(MeshAsset.Object);
-		GetMesh()->SetRelativeLocation(FVector(0.f, 0.f, -90.f));
-		GetMesh()->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));
-	}
+	//if (MeshAsset.Succeeded())
+	//{
+	//	GetMesh()->SetSkeletalMesh(MeshAsset.Object);
+	//	GetMesh()->SetRelativeLocation(FVector(0.f, 0.f, -90.f));
+	//	GetMesh()->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));
+	//}
 }
 
 // Called when the game starts or when spawned
@@ -52,6 +52,13 @@ void AGRPlayer::BeginPlay()
 		{
 			subsystem->AddMappingContext(IMC, 0);
 		}
+	}
+
+	if (DefaultMesh)
+	{
+		GetMesh()->SetSkeletalMesh(DefaultMesh);
+		GetMesh()->SetRelativeLocation(FVector(0.f, 0.f, -90.f));
+		GetMesh()->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));
 	}
 }
 

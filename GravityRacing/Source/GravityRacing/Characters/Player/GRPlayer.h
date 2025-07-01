@@ -38,6 +38,9 @@ public:
 	void Flip(const FInputActionValue& value);
 	
 public:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Visual")
+	TObjectPtr<USkeletalMesh> DefaultMesh;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	TObjectPtr<class UInputMappingContext> IMC;
 

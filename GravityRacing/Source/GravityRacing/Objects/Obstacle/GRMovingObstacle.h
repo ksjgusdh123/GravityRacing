@@ -3,19 +3,19 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Obstacle/Obstacle.h"
-#include "RLMovingObstacle.generated.h"
+#include "Objects/Obstacle/GRObstacle.h"
+#include "GRMovingObstacle.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class GRAVITYRACING_API ARLMovingObstacle : public AObstacle
+class GRAVITYRACING_API AGRMovingObstacle : public AGRObstacle
 {
 	GENERATED_BODY()
 
 public:
-	ARLMovingObstacle();
+	AGRMovingObstacle();
 
 public:
 	virtual void Tick(float DeltaSeconds);

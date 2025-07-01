@@ -4,16 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Obstacle.generated.h"
+#include "GRObstacle.generated.h"
 
 UCLASS()
-class GRAVITYRACING_API AObstacle : public AActor
+class GRAVITYRACING_API AGRObstacle : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AObstacle();
+	AGRObstacle();
 
 protected:
 	// Called when the game starts or when spawned

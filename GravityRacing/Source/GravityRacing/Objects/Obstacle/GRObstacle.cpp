@@ -1,11 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Obstacle/Obstacle.h"
+#include "Objects/Obstacle/GRObstacle.h"
 #include "Components/BoxComponent.h"
 
 // Sets default values
-AObstacle::AObstacle()
+AGRObstacle::AGRObstacle()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -15,7 +15,7 @@ AObstacle::AObstacle()
 
 	CollisionBox->SetNotifyRigidBodyCollision(true);
 	CollisionBox->SetCollisionProfileName(TEXT("BlockAll"));
-	CollisionBox->OnComponentHit.AddDynamic(this, &AObstacle::HitEvent);
+	CollisionBox->OnComponentHit.AddDynamic(this, &AGRObstacle::HitEvent);
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	Mesh->SetupAttachment(CollisionBox);
@@ -29,20 +29,20 @@ AObstacle::AObstacle()
 }
 
 // Called when the game starts or when spawned
-void AObstacle::BeginPlay()
+void AGRObstacle::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
 // Called every frame
-void AObstacle::Tick(float DeltaTime)
+void AGRObstacle::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 }
 
-void AObstacle::HitEvent(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& SweepResult)
+void AGRObstacle::HitEvent(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& SweepResult)
 {
 	UE_LOG(LogTemp, Log, TEXT("NOTIFYOVERRIDE"));
 	if (GEngine)

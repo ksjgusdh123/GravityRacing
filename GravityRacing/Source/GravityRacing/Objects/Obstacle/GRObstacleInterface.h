@@ -4,11 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
-#include "ObstacleInterface.generated.h"
+#include "GRObstacleInterface.generated.h"
 
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
-class UObstacleInterface : public UInterface
+class UGRObstacleInterface : public UInterface
 {
 	GENERATED_BODY()
 };
@@ -16,7 +16,7 @@ class UObstacleInterface : public UInterface
 /**
  * 
  */
-class GRAVITYRACING_API IObstacleInterface
+class GRAVITYRACING_API IGRObstacleInterface
 {
 	GENERATED_BODY()
 

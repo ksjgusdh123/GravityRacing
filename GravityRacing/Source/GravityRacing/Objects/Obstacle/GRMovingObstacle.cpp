@@ -1,22 +1,22 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Obstacle/RLMovingObstacle.h"
-#include "..\Player\GRPlayer.h"
+#include "Objects/Obstacle/GRMovingObstacle.h"
+#include "Characters/Player/GRPlayer.h"
 
-ARLMovingObstacle::ARLMovingObstacle()
+AGRMovingObstacle::AGRMovingObstacle()
 	: dir(1)
 {
 }
 
-void ARLMovingObstacle::Tick(float DeltaSeconds)
+void AGRMovingObstacle::Tick(float DeltaSeconds)
 {
 	FVector right = GetActorRightVector();
 
 	AddActorWorldOffset(right * dir, true);
 }
 
-void ARLMovingObstacle::HitEvent(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& SweepResult)
+void AGRMovingObstacle::HitEvent(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& SweepResult)
 {
 	AGRPlayer* player = Cast<AGRPlayer>(OtherActor);
 	if (!player)

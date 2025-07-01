@@ -38,14 +38,14 @@ bool UGRNetworkSubsystem::ConnectToServer()
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("Connecting To Server..."));
 
 	bool bConnected = Socket->Connect(*InternetAddr);
-	if (bConnected)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Connection Success"));
-	}
-	else
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Connection Failed"));
-	}
+	//if (bConnected)// 지금은 논블로킹이라 의미 없음
+	//{
+	//	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Connection Success"));
+	//}
+	//else
+	//{
+	//	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Connection Failed"));
+	//}
 
 	return bConnected;
 }

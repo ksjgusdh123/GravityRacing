@@ -6,6 +6,8 @@
 #include "Components/SphereComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Characters/Player/GRPlayer.h" 
+#include "Framework/GRGameModeBase.h"
+#include "Kismet/GameplayStatics.h"
 
 AGRCoin::AGRCoin()
 {
@@ -32,6 +34,11 @@ void AGRCoin::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 	if (AGRPlayer* Player = Cast<AGRPlayer>(OtherActor))
 	{
 		GRLOG("Coin!");
+		auto* GameMode = Cast<AGRGameModeBase>(UGameplayStatics::GetGameMode(this));
+		if (GameMode)
+		{
+			GameMode->AddScore(1);
+		}
 		Destroy();
 	}
 }

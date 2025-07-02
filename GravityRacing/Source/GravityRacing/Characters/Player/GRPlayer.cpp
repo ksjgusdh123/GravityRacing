@@ -17,7 +17,7 @@
 
 // Sets default values
 AGRPlayer::AGRPlayer()
-	: RoadDistance(380.f)
+	: RoadDistance(380.f), CurrentLine(1), bIsMoving(false), bIsFlip(false), bIsCurrentFlipState(false)
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -53,8 +53,7 @@ void AGRPlayer::BeginPlay()
 		}
 	}
 
-
-
+	SetActorLocation(FVector(0.f, -RoadDistance * 1.5, 0.f));
 }
 
 // Called every frame
@@ -74,11 +73,6 @@ void AGRPlayer::Tick(float DeltaTime)
 			SetActorLocation(FVector(CurrentLocation.X, TargetLocation.Y, CurrentLocation.Z));
 			bIsMoving = false;
 		}
-		/*if (FVector::Dist(NewLocation, TargetLocation) < 1.f)
-		{
-			SetActorLocation(TargetLocation); 
-			bIsMoving = false;
-		}*/
 	}
 }
 
@@ -104,7 +98,7 @@ void AGRPlayer::Landed(const FHitResult& Hit)
 	auto* movement = GetCharacterMovement();
 	movement->SetMovementMode(EMovementMode::MOVE_Walking);
 	movement->bOrientRotationToMovement = true;
-	IsFlip = false;
+	bIsFlip = false;
 }
 
 void AGRPlayer::Move(const FInputActionValue& value)
@@ -128,14 +122,26 @@ void AGRPlayer::InGameMove(const FInputActionValue& value)
 	float input = value.Get<float>();
 	if (FMath::IsNearlyZero(input)) return;
 
+	if (bIsCurrentFlipState)
+	{
+		input *= -1.f;
+	}
 
 	if (input > 0)
 	{
+		if (CurrentLine >= MAX_ROAD_LINE)
+			return;
+
 		TargetLocation = GetActorLocation() + GetActorRightVector() * RoadDistance;
+		++CurrentLine;
 	}
 	else if (input < 0)
 	{
+		if (CurrentLine <= 1)
+			return;
+
 		TargetLocation = GetActorLocation() - GetActorRightVector() * RoadDistance;
+		--CurrentLine;
 	}
 
 	GRLOG("input: %f", input);
@@ -179,5 +185,7 @@ void AGRPlayer::Flip(const FInputActionValue& value)
 	ReverseRot.Roll += 180.f;
 	SetActorRotation(FRotator(ReverseRot));
 
-	IsFlip = true;
+	bIsFlip = true;
+	bIsCurrentFlipState ^= 1;
+	CurrentLine = MAX_ROAD_LINE - CurrentLine + 1;
 }

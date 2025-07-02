@@ -2,12 +2,16 @@
 
 #pragma once
 
+#define MAX_ROAD_LINE 4
+
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "GRPlayer.generated.h"
 
+
 class UInputAction;
 struct FInputActionValue;
+
 
 UCLASS()
 class GRAVITYRACING_API AGRPlayer : public ACharacter
@@ -74,8 +78,11 @@ public:
 
 
 private:
-	bool IsFlip{ false };
+	uint32 bIsFlip : 1;
+	uint32 bIsCurrentFlipState : 1;
+	uint32 bIsMoving : 1;
+
 	float RoadDistance;
 	FVector TargetLocation;
-	bool bIsMoving{ false };
+	int32 CurrentLine;
 };

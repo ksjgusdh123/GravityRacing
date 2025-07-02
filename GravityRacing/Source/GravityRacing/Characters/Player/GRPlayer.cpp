@@ -59,6 +59,8 @@ void AGRPlayer::BeginPlay()
 void AGRPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+
 }
 
 // Called to bind functionality to input

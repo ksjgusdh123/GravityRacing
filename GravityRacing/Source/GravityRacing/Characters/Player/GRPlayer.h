@@ -26,7 +26,6 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -34,6 +33,11 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	virtual void Landed(const FHitResult& Hit) override;
+
+
+public:
+	void SetPlayerMaxSpeed(float Speed);
+
 public:
 	void Move(const FInputActionValue& value);
 	void InGameMove(const FInputActionValue& value);
@@ -81,8 +85,13 @@ private:
 	uint32 bIsFlip : 1;
 	uint32 bIsCurrentFlipState : 1;
 	uint32 bIsMoving : 1;
+	uint32 bIsBoosting = 1;
 
 	float RoadDistance;
+	float OriginalMaxSpeed;
+	float BoostTime;
+	float MaxBoostTime;
+
 	FVector TargetLocation;
 	int32 CurrentLine;
 };

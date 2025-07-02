@@ -17,7 +17,7 @@
 
 // Sets default values
 AGRPlayer::AGRPlayer()
-	: RoadDistance(380.f), CurrentLine(1), bIsMoving(false), bIsFlip(false), bIsCurrentFlipState(false)
+	: RoadDistance(380.f), CurrentLine(1), bIsMoving(false), bIsFlip(false), bIsCurrentFlipState(false), bIsBoosting(false), OriginalMaxSpeed(600.f), BoostTime(0.f), MaxBoostTime(1.f)
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -77,6 +77,17 @@ void AGRPlayer::Tick(float DeltaTime)
 		}
 	}
 
+	if (bIsBoosting)
+	{
+		BoostTime += DeltaTime;
+		if (BoostTime >= MaxBoostTime)
+		{
+			GetCharacterMovement()->MaxWalkSpeed = OriginalMaxSpeed;
+			bIsBoosting = false;
+			BoostTime = 0.f;
+		}
+	}
+
 	AddMovementInput(FVector(1.f, 0.f, 0.f));
 }
 
@@ -103,6 +114,12 @@ void AGRPlayer::Landed(const FHitResult& Hit)
 	movement->SetMovementMode(EMovementMode::MOVE_Walking);
 	movement->bOrientRotationToMovement = true;
 	bIsFlip = false;
+}
+
+void AGRPlayer::SetPlayerMaxSpeed(float Speed)
+{
+	GetCharacterMovement()->MaxWalkSpeed = Speed;
+	bIsBoosting = true;
 }
 
 void AGRPlayer::Move(const FInputActionValue& value)

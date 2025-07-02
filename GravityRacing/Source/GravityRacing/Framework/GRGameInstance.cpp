@@ -6,17 +6,23 @@
 void UGRGameInstance::Init()
 {
 	Super::Init();
-
-	MusicSystem = NewObject<UMusicSystem>(this);
-	MusicSystem->Init(this);
-
-
-	MusicSystem->Play(EGameMusic::MainMenu);
-	
 }
 
 void UGRGameInstance::Shutdown()
 {
 	Super::Shutdown();
+}
+
+void UGRGameInstance::OnStart()
+{
+	Super::OnStart();
+	if (MusicSystem == nullptr)
+	{
+		MusicSystem = NewObject<UMusicSystem>(this);
+		MusicSystem->Init(this);
+	}
+
+	MusicSystem->Play(EGameMusic::MainMenu);
+
 }
 

@@ -9,6 +9,10 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/ArrowComponent.h"
+#include "Sound/SoundBase.h"
+#include "Components/AudioComponent.h"
+#include <Kismet/GameplayStatics.h>
+#include <Sound/SoundCue.h>
 
 // Sets default values
 AGRPlayer::AGRPlayer()
@@ -30,6 +34,8 @@ AGRPlayer::AGRPlayer()
 	GravityArrow->SetRelativeLocation(FVector(0.f, 0.f, -80.f));
 	GravityArrow->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));
 	GravityArrow->SetArrowColor(FColor::Green);
+
+	
 }
 
 // Called when the game starts or when spawned
@@ -44,13 +50,15 @@ void AGRPlayer::BeginPlay()
 			subsystem->AddMappingContext(IMC, 0);
 		}
 	}
+
+
+
 }
 
 // Called every frame
 void AGRPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 
 }
 
@@ -132,4 +140,3 @@ void AGRPlayer::Flip(const FInputActionValue& value)
 
 	IsFlip = true;
 }
-

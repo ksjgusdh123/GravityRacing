@@ -36,7 +36,10 @@ public:
 	void JumpStart(const FInputActionValue& value);
 	void JumpStop(const FInputActionValue& value);
 	void Flip(const FInputActionValue& value);
-	
+
+public:
+	void RunSound();
+
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	TObjectPtr<class UInputMappingContext> IMC;
@@ -61,6 +64,10 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Trace)
 	class UArrowComponent* GravityArrow;
+
+
+
+
 
 private:
 	bool IsFlip{ false };

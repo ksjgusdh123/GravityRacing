@@ -20,11 +20,16 @@ UMusicSystem::UMusicSystem()
 
 void UMusicSystem::Init(UObject* Outer)
 {
-	AudioComponent = NewObject<UAudioComponent>(Outer);
-	AudioComponent->RegisterComponent();
+	UWorld* World = GEngine->GetWorldFromContextObjectChecked(Outer);
+	AudioComponent = NewObject<UAudioComponent>(World->GetWorldSettings());
+	AudioComponent->RegisterComponentWithWorld(World);
 	AudioComponent->bIsUISound = true;
 	AudioComponent->bAllowSpatialization = false;
 	AudioComponent->SetVolumeMultiplier(1.0f);
+
+	AudioComponent->AttachToComponent(World->GetWorldSettings()->GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
+	AudioComponent->Activate(true);
+
 }
 
 

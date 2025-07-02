@@ -53,6 +53,8 @@ void AGRPlayer::BeginPlay()
 		}
 	}
 
+	GetCharacterMovement()->AirControl = 1.f;
+	
 	SetActorLocation(FVector(0.f, -RoadDistance * 1.5, 0.f));
 }
 
@@ -74,6 +76,8 @@ void AGRPlayer::Tick(float DeltaTime)
 			bIsMoving = false;
 		}
 	}
+
+	AddMovementInput(FVector(1.f, 0.f, 0.f));
 }
 
 // Called to bind functionality to input
@@ -144,8 +148,6 @@ void AGRPlayer::InGameMove(const FInputActionValue& value)
 		--CurrentLine;
 	}
 
-	GRLOG("input: %f", input);
-	GRLOG("%f %f %f", TargetLocation.X, TargetLocation.Y, TargetLocation.Z);
 		
 	bIsMoving = true;
 }
@@ -179,7 +181,7 @@ void AGRPlayer::Flip(const FInputActionValue& value)
 	movement->SetGravityDirection(FVector(0.f, 0.f, movement->GetGravityDirection().Z * -1));
 
 	movement->bOrientRotationToMovement = false;
-	movement->Velocity = FVector(0.f, 0.f, 0.f);
+	//movement->Velocity = FVector(0.f, 0.f, 0.f);
 
 	FRotator ReverseRot = GetActorRotation();
 	ReverseRot.Roll += 180.f;

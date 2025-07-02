@@ -32,6 +32,7 @@ public:
 	virtual void Landed(const FHitResult& Hit) override;
 public:
 	void Move(const FInputActionValue& value);
+	void InGameMove(const FInputActionValue& value);
 	void Look(const FInputActionValue& value);
 	void JumpStart(const FInputActionValue& value);
 	void JumpStop(const FInputActionValue& value);
@@ -46,6 +47,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	TObjectPtr<UInputAction> MoveAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	TObjectPtr<UInputAction> InGameMoveAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	TObjectPtr<UInputAction> LookAction;
@@ -71,4 +75,7 @@ public:
 
 private:
 	bool IsFlip{ false };
+	float RoadDistance;
+	FVector TargetLocation;
+	bool bIsMoving{ false };
 };

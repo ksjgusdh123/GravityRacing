@@ -2,6 +2,7 @@
 
 
 #include "GRPlayer.h"
+#include "GravityRacing.h"
 #include "InputMappingContext.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
@@ -16,6 +17,7 @@
 
 // Sets default values
 AGRPlayer::AGRPlayer()
+	: RoadDistance(380.f)
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -60,6 +62,24 @@ void AGRPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (bIsMoving)
+	{
+		FVector CurrentLocation = GetActorLocation();
+		FVector NewLocation = FMath::VInterpTo(CurrentLocation, TargetLocation, DeltaTime, 30.f);
+
+		SetActorLocation(NewLocation);
+
+		if (abs(NewLocation.Y - TargetLocation.Y) < 10.f)
+		{
+			SetActorLocation(FVector(CurrentLocation.X, TargetLocation.Y, CurrentLocation.Z));
+			bIsMoving = false;
+		}
+		/*if (FVector::Dist(NewLocation, TargetLocation) < 1.f)
+		{
+			SetActorLocation(TargetLocation); 
+			bIsMoving = false;
+		}*/
+	}
 }
 
 // Called to bind functionality to input
@@ -70,6 +90,7 @@ void AGRPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	if (UEnhancedInputComponent* input = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		input->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AGRPlayer::Move);
+		input->BindAction(InGameMoveAction, ETriggerEvent::Triggered, this, &AGRPlayer::InGameMove);
 		input->BindAction(LookAction, ETriggerEvent::Triggered, this, &AGRPlayer::Look);
 		input->BindAction(JumpAction, ETriggerEvent::Started, this, &AGRPlayer::JumpStart);
 		input->BindAction(JumpAction, ETriggerEvent::Ongoing, this, &AGRPlayer::JumpStop);
@@ -88,9 +109,6 @@ void AGRPlayer::Landed(const FHitResult& Hit)
 
 void AGRPlayer::Move(const FInputActionValue& value)
 {
-	if (Controller == nullptr)
-		return;
-
 	FVector2D input = value.Get<FVector2D>();
 
 	FRotator rot = Controller->GetControlRotation();
@@ -101,6 +119,29 @@ void AGRPlayer::Move(const FInputActionValue& value)
 
 	AddMovementInput(forward, input.Y);
 	AddMovementInput(right, input.X);
+}
+
+void AGRPlayer::InGameMove(const FInputActionValue& value)
+{
+	if (bIsMoving) return;
+
+	float input = value.Get<float>();
+	if (FMath::IsNearlyZero(input)) return;
+
+
+	if (input > 0)
+	{
+		TargetLocation = GetActorLocation() + GetActorRightVector() * RoadDistance;
+	}
+	else if (input < 0)
+	{
+		TargetLocation = GetActorLocation() - GetActorRightVector() * RoadDistance;
+	}
+
+	GRLOG("input: %f", input);
+	GRLOG("%f %f %f", TargetLocation.X, TargetLocation.Y, TargetLocation.Z);
+		
+	bIsMoving = true;
 }
 
 void AGRPlayer::Look(const FInputActionValue& value)

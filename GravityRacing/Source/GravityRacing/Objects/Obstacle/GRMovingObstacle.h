@@ -18,12 +18,22 @@ public:
 	AGRMovingObstacle();
 
 public:
+	inline void SetObstacleDir(const FVector& dir) { Dir = dir; }
+
+public:
 	virtual void Tick(float DeltaSeconds);
 
 protected:
 	virtual void HitEvent(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 		FVector NormalImpulse, const FHitResult& SweepResult) override;
 
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Game)
+	float Speed;
+		
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Game)
+	FVector Dir;
 private:
-	int8 dir;
+
+
 };

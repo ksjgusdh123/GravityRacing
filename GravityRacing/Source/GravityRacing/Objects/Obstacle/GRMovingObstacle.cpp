@@ -5,15 +5,16 @@
 #include "Characters/Player/GRPlayer.h"
 
 AGRMovingObstacle::AGRMovingObstacle()
-	: dir(1)
+	: Dir(FVector(1.f, 0.f, 0.f)), Speed(FMath::RandRange(3, 20))
 {
+
 }
 
 void AGRMovingObstacle::Tick(float DeltaSeconds)
 {
 	FVector right = GetActorRightVector();
 
-	AddActorWorldOffset(right * dir, true);
+	AddActorWorldOffset(Dir * Speed, true);
 }
 
 void AGRMovingObstacle::HitEvent(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& SweepResult)
@@ -23,6 +24,6 @@ void AGRMovingObstacle::HitEvent(UPrimitiveComponent* OverlappedComponent, AActo
 	{
 		FString Msg = FString::Printf(TEXT("withWall!!"), *OtherActor->GetName());
 		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, Msg);
-		dir *= -1;
+		Dir *= -1;
 	}
 }

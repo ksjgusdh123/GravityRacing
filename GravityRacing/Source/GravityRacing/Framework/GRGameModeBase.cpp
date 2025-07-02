@@ -3,3 +3,8 @@
 
 #include "Framework/GRGameModeBase.h"
 
+void AGRGameModeBase::AddScore(int32 Amount)
+{
+	Score += Amount;
+	OnScoreChanged.Broadcast(Score);
+}

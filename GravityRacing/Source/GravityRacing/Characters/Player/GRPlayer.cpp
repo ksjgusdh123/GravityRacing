@@ -37,7 +37,13 @@ AGRPlayer::AGRPlayer()
 	GravityArrow->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));
 	GravityArrow->SetArrowColor(FColor::Green);
 
-	
+	static ConstructorHelpers::FObjectFinder<USoundBase> CoinSound(TEXT("/Game/GravityRacing/Audio/BGM/SW_Coin.SW_Coin"));
+	if (CoinSound.Succeeded()) Coin = CoinSound.Object;
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> BoostSound(TEXT("/Game/GravityRacing/Audio/BGM/SW_Boost.SW_Boost"));
+	if (BoostSound.Succeeded()) Boost = BoostSound.Object;
+
+
 }
 
 // Called when the game starts or when spawned
@@ -207,4 +213,19 @@ void AGRPlayer::Flip(const FInputActionValue& value)
 	bIsFlip = true;
 	bIsCurrentFlipState ^= 1;
 	CurrentLine = MAX_ROAD_LINE - CurrentLine + 1;
+}
+
+void AGRPlayer::PlayMusic(EGameSound SoundType)
+{
+	switch (SoundType) {
+	case EGameSound::Coin:
+		UGameplayStatics::PlaySound2D(this,Coin);
+		break;
+
+	case EGameSound::Boost:
+		UGameplayStatics::PlaySound2D(this, Boost);
+		break;
+
+	}
+	
 }

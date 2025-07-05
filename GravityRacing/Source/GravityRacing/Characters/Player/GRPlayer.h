@@ -4,6 +4,7 @@
 
 #define MAX_ROAD_LINE 4
 
+#include "System/MusicSystem.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "GRPlayer.generated.h"
@@ -45,9 +46,9 @@ public:
 	void JumpStart(const FInputActionValue& value);
 	void JumpStop(const FInputActionValue& value);
 	void Flip(const FInputActionValue& value);
-
+	
 public:
-	void RunSound();
+	void PlayMusic(EGameSound SoundType);
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
@@ -76,6 +77,12 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Trace)
 	class UArrowComponent* GravityArrow;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Sound)
+	class USoundBase* Coin;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Sound)
+	class USoundBase* Boost;
 
 
 

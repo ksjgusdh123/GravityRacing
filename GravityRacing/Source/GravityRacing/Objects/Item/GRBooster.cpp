@@ -46,6 +46,7 @@ void AGRBooster::OverlapEvent(UPrimitiveComponent* OverlappedComponent, AActor* 
 	AGRPlayer* player = Cast<AGRPlayer>(OtherActor);
 	if (player)
 	{
+		player->PlayMusic(EGameSound::Boost);
 		player->SetPlayerMaxSpeed(1800.f);
 		GRLOG("Boost!!");
 	}

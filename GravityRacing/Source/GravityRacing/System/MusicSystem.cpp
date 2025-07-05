@@ -9,12 +9,9 @@
 UMusicSystem::UMusicSystem()
 {
 	static ConstructorHelpers::FObjectFinder<USoundBase> ThemeMusic(TEXT("/Game/GravityRacing/Audio/BGM/SW_Theme.SW_Theme"));
-	static ConstructorHelpers::FObjectFinder<USoundBase> Run(TEXT("/Script/Engine.SoundWave'/Game/GravityRacing/Audio/BGM/SW_Run.SW_Run'"));
-	static ConstructorHelpers::FObjectFinder<USoundBase> Jump(TEXT("/Script/Engine.SoundWave'/Game/GravityRacing/Audio/BGM/SW_Jump.SW_Jump'"));
 
 	if (ThemeMusic.Succeeded())  MusicMap.Add(EGameMusic::MainMenu, ThemeMusic.Object);
-	if (Run.Succeeded()) MusicMap.Add(EGameMusic::Run, Run.Object);
-	if (Jump.Succeeded())  MusicMap.Add(EGameMusic::Jump, Jump.Object);
+
 
 }
 

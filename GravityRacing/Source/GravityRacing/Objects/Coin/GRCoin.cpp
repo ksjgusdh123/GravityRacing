@@ -33,6 +33,7 @@ void AGRCoin::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 {
 	if (AGRPlayer* Player = Cast<AGRPlayer>(OtherActor))
 	{
+		Player->PlayMusic(EGameSound::Coin);
 		GRLOG("Coin!");
 		auto* GameMode = Cast<AGRGameModeBase>(UGameplayStatics::GetGameMode(this));
 		if (GameMode)

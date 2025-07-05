@@ -12,10 +12,15 @@ enum class EGameMusic : uint8
 {
 	None       UMETA(DisplayName = "None"),
 	MainMenu   UMETA(DisplayName = "Main Menu"),
-	Run       UMETA(DisplayName = "Run"),
-	Jump     UMETA(DisplayName = "Jump"),
+
 };
 
+UENUM(BlueprintType)
+enum class EGameSound : uint8
+{
+	Coin	   UMETA(DisplayName = "Coin"),
+	Boost	   UMETA(DisplayName = "Boost"),
+};
 
 /**
  * 
@@ -44,5 +49,4 @@ private:
 	UPROPERTY()
 	EGameMusic CurrentMusic = EGameMusic::None;
 
-	void RegisterMusic();
 };

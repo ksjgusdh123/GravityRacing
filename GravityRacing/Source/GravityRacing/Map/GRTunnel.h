@@ -23,7 +23,14 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+public:
+	void SetObstacle(class AGRObstacle* obstacle) { Obstacle = obstacle; }
+	void RePositionEvent(TSubclassOf<class AGRObstacle> NewObstacleClass);
+
 private:
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* Mesh;
+
+	UPROPERTY()
+	AGRObstacle* Obstacle;
 };

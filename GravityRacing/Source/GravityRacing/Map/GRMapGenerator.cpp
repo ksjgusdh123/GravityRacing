@@ -5,6 +5,7 @@
 #include "GRTunnel.h"
 #include "../Characters/Player/GRPlayer.h"
 #include "Kismet/GameplayStatics.h"
+#include "../Objects/Obstacle/GRMovingObstacle.h"
 
 // Sets default values
 AGRMapGenerator::AGRMapGenerator()
@@ -61,6 +62,7 @@ void AGRMapGenerator::RepositionTunnel()
 
 	FVector NewLocation = LastTunnelLocation + FVector(TunnelLength, 0, 0);
 	tunnel->SetActorLocation(NewLocation);
+	tunnel->RePositionEvent(AGRMovingObstacle::StaticClass());
 
 	LastTunnelLocation = NewLocation;
 	ActiveTunnels.Add(tunnel);

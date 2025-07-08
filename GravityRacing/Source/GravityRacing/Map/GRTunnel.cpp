@@ -2,6 +2,7 @@
 
 
 #include "Map/GRTunnel.h"
+#include "../Objects/Obstacle/GRObstacle.h"
 
 // Sets default values
 AGRTunnel::AGRTunnel()
@@ -34,5 +35,23 @@ void AGRTunnel::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AGRTunnel::RePositionEvent(TSubclassOf<class AGRObstacle> NewObstacleClass)
+{
+	if (Obstacle)
+	{
+		Obstacle->Destroy();
+		Obstacle = nullptr;
+	}
+
+	if (NewObstacleClass)
+	{
+		AGRObstacle* NewObstacle = GetWorld()->SpawnActor<AGRObstacle>(NewObstacleClass, GetActorLocation(), GetActorRotation());
+		if (NewObstacle)
+		{
+			Obstacle = NewObstacle;
+		}
+	}
 }
 

@@ -15,13 +15,6 @@ AGRTunnel::AGRTunnel()
 	SetRootComponent(Mesh);
 
 	RootComponent->SetMobility(EComponentMobility::Movable);
-
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshAsset(TEXT("/Game/GravityRacing/Objects/Obstacle/Assets/Mesh/SM_Tunnel.SM_Tunnel"));
-
-	if (MeshAsset.Succeeded())
-	{
-		Mesh->SetStaticMesh(MeshAsset.Object);
-	}
 }
 
 // Called when the game starts or when spawned
@@ -38,7 +31,7 @@ void AGRTunnel::Tick(float DeltaTime)
 
 }
 
-void AGRTunnel::RePositionEvent(TSubclassOf<class AGRObstacle> NewObstacleClass)
+void AGRTunnel::RePositionEvent(TSubclassOf<AGRObstacle> NewObstacleClass)
 {
 	if (Obstacle)
 	{

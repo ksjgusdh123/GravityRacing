@@ -5,11 +5,12 @@
 #include "GRTunnel.h"
 #include "../Characters/Player/GRPlayer.h"
 #include "Kismet/GameplayStatics.h"
-#include "../Objects/Obstacle/GRMovingObstacle.h"
+#include "../Objects/Obstacle/GRObstacle.h"
+
 
 // Sets default values
 AGRMapGenerator::AGRMapGenerator()
-	: TunnelLength(2000.f)
+	: TunnelLength(2000.f), ObstaclesCount(0)
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -39,6 +40,8 @@ void AGRMapGenerator::BeginPlay()
 		}
 	}
 	LastTunnelLocation -= FVector(TunnelLength, 0.f, 0.f);
+
+	ObstaclesCount = ObstacleClasses.Num();
 }
 
 // Called every frame
@@ -62,7 +65,10 @@ void AGRMapGenerator::RepositionTunnel()
 
 	FVector NewLocation = LastTunnelLocation + FVector(TunnelLength, 0, 0);
 	tunnel->SetActorLocation(NewLocation);
-	tunnel->RePositionEvent(AGRMovingObstacle::StaticClass());
+
+	TSubclassOf<AGRObstacle> ObstacleClass = ObstacleClasses[FMath::RandRange(0, ObstaclesCount - 1)];
+
+	tunnel->RePositionEvent(ObstacleClass);
 
 	LastTunnelLocation = NewLocation;
 	ActiveTunnels.Add(tunnel);

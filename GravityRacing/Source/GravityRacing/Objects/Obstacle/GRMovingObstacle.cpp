@@ -22,8 +22,6 @@ void AGRMovingObstacle::HitEvent(UPrimitiveComponent* OverlappedComponent, AActo
 	AGRPlayer* player = Cast<AGRPlayer>(OtherActor);
 	if (!player)
 	{
-		FString Msg = FString::Printf(TEXT("withWall!!"), *OtherActor->GetName());
-		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, Msg);
 		Dir *= -1;
 	}
 }

@@ -3,6 +3,7 @@
 
 #include "Map/GRTunnel.h"
 #include "../Objects/Obstacle/GRObstacle.h"
+#include "../GravityRacing.h"
 
 // Sets default values
 AGRTunnel::AGRTunnel()
@@ -50,6 +51,18 @@ void AGRTunnel::RePositionEvent(TSubclassOf<class AGRObstacle> NewObstacleClass)
 		AGRObstacle* NewObstacle = GetWorld()->SpawnActor<AGRObstacle>(NewObstacleClass, GetActorLocation(), GetActorRotation());
 		if (NewObstacle)
 		{
+			UStaticMeshComponent* ObstacleMesh = NewObstacle->FindComponentByClass<UStaticMeshComponent>();
+			if (ObstacleMesh)
+			{
+				FVector Extent = ObstacleMesh->Bounds.BoxExtent  ;
+
+				FVector OriginLocation = GetActorLocation();
+				OriginLocation.Z += Extent.Z;
+				NewObstacle->SetActorLocation(OriginLocation);
+
+				GRLOG("Obstacle Extent: %s", *Extent.ToString());
+			}
+
 			Obstacle = NewObstacle;
 		}
 	}

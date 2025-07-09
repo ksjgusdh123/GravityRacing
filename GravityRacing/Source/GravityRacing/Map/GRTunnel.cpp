@@ -44,10 +44,16 @@ void AGRTunnel::RePositionEvent(TSubclassOf<AGRObstacle> NewObstacleClass)
 		AGRObstacle* NewObstacle = GetWorld()->SpawnActor<AGRObstacle>(NewObstacleClass, GetActorLocation(), GetActorRotation());
 		if (NewObstacle)
 		{
-			UStaticMeshComponent* ObstacleMesh = NewObstacle->FindComponentByClass<UStaticMeshComponent>();
-			if (ObstacleMesh)
+			TArray<UStaticMeshComponent*> ObstacleMeshes;
+			NewObstacle->GetComponents<UStaticMeshComponent>(ObstacleMeshes);
+
+			if (ObstacleMeshes.Num() > 1)
 			{
-				FVector Extent = ObstacleMesh->Bounds.BoxExtent  ;
+
+			}
+			else if (ObstacleMeshes[0])
+			{
+				FVector Extent = ObstacleMeshes[0]->Bounds.BoxExtent;
 
 				FVector OriginLocation = GetActorLocation();
 				OriginLocation.Z += Extent.Z;

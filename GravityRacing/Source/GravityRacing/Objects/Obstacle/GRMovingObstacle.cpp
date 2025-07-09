@@ -3,11 +3,11 @@
 
 #include "Objects/Obstacle/GRMovingObstacle.h"
 #include "Characters/Player/GRPlayer.h"
+#include "../../GravityRacing.h"
 
 AGRMovingObstacle::AGRMovingObstacle()
-	: Dir(FVector(1.f, 0.f, 0.f)), Speed(FMath::RandRange(3, 20))
+	: Dir(FVector(1.f, 0.f, 0.f)), Speed(FMath::RandRange(3, 20)), PushDistance(5.f)
 {
-
 }
 
 void AGRMovingObstacle::Tick(float DeltaSeconds)
@@ -22,6 +22,10 @@ void AGRMovingObstacle::HitEvent(UPrimitiveComponent* OverlappedComponent, AActo
 	AGRPlayer* player = Cast<AGRPlayer>(OtherActor);
 	if (!player)
 	{
+		GRLOG("With Wall");
 		Dir *= -1;
+
+		FVector PushOffset = SweepResult.ImpactNormal * PushDistance;
+		SetActorLocation(GetActorLocation() + PushOffset);
 	}
 }

@@ -33,6 +33,11 @@ public:
 		
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Game)
 	FVector Dir;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Game)
+	float PushDistance;
+
+
 private:
 
 

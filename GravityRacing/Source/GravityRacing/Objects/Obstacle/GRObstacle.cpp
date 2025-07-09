@@ -33,6 +33,17 @@ void AGRObstacle::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	UStaticMeshComponent* mesh = FindComponentByClass<UStaticMeshComponent>();
+	UBoxComponent* box = FindComponentByClass<UBoxComponent>();
+
+	//if (mesh && box)
+	//{
+	//	FVector extent, origin;
+	//	mesh->GetLocalBounds(origin, extent);
+
+	//	box->SetBoxExtent(extent);
+	//	box->SetRelativeLocation(FVector(origin));
+	//}
 }
 
 // Called every frame

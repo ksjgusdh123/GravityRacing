@@ -3,6 +3,7 @@
 
 #include "Objects/Obstacle/GRObstacle.h"
 #include "Components/BoxComponent.h"
+#include "../../GravityRacing.h"
 
 // Sets default values
 AGRObstacle::AGRObstacle()
@@ -10,15 +11,20 @@ AGRObstacle::AGRObstacle()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	CollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionBox"));
+	/*CollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionBox"));
 	SetRootComponent(CollisionBox);
-
 	CollisionBox->SetNotifyRigidBodyCollision(true);
 	CollisionBox->SetCollisionProfileName(TEXT("BlockAll"));
-	CollisionBox->OnComponentHit.AddDynamic(this, &AGRObstacle::HitEvent);
+	CollisionBox->OnComponentHit.AddDynamic(this, &AGRObstacle::HitEvent);*/
+
+	Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
+	Root->SetMobility(EComponentMobility::Movable);
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
-	Mesh->SetupAttachment(CollisionBox);
+	Mesh->SetupAttachment(Root);
+	Mesh->SetNotifyRigidBodyCollision(true);
+	Mesh->SetCollisionProfileName(TEXT("BlockAll"));
+	Mesh->OnComponentHit.AddDynamic(this, &AGRObstacle::HitEvent);
 
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshAsset(TEXT("/Engine/EditorMeshes/EditorCube.EditorCube"));
 
@@ -32,17 +38,14 @@ AGRObstacle::AGRObstacle()
 void AGRObstacle::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	UStaticMeshComponent* mesh = FindComponentByClass<UStaticMeshComponent>();
-	UBoxComponent* box = FindComponentByClass<UBoxComponent>();
 
-	//if (mesh && box)
+	//if (Mesh && CollisionBox)
 	//{
 	//	FVector extent, origin;
-	//	mesh->GetLocalBounds(origin, extent);
+	//	Mesh->GetLocalBounds(origin, extent);
 
-	//	box->SetBoxExtent(extent);
-	//	box->SetRelativeLocation(FVector(origin));
+	//	CollisionBox->SetBoxExtent(extent);
+	//	//Mesh->SetRelativeLocation(FVector(origin));
 	//}
 }
 
@@ -55,11 +58,6 @@ void AGRObstacle::Tick(float DeltaTime)
 
 void AGRObstacle::HitEvent(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& SweepResult)
 {
-	UE_LOG(LogTemp, Log, TEXT("NOTIFYOVERRIDE"));
-	if (GEngine)
-	{
-		FString Msg = FString::Printf(TEXT("hit"), *OtherActor->GetName());
-		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, Msg);
-	}
+	GRLOG("NOTIFYOVERRIDE");
 }
 

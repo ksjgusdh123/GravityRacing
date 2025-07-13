@@ -24,7 +24,10 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 public:
+	float GetTunnelLength() const { return Mesh->Bounds.BoxExtent.X; }
+
 	void SetObstacle(class AGRObstacle* obstacle) { Obstacle = obstacle; }
+
 	void RePositionEvent(TSubclassOf<class AGRObstacle> NewObstacleClass);
 
 private:

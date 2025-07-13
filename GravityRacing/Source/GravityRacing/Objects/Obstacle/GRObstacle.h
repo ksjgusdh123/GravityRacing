@@ -32,6 +32,6 @@ protected:
 	UStaticMeshComponent* Mesh;
 
 	UPROPERTY(EditAnywhere)
-	class UBoxComponent* CollisionBox;
+	USceneComponent* Root;
 
 };

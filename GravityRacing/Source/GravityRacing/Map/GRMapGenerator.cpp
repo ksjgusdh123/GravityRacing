@@ -21,7 +21,7 @@ AGRMapGenerator::AGRMapGenerator()
 void AGRMapGenerator::BeginPlay()
 {
 	Super::BeginPlay();
-	
+		
 	PlayerRef = Cast<AGRPlayer>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 
 	for (int32 i = 0; i < MaxTunnelCount; ++i)
@@ -33,8 +33,6 @@ void AGRMapGenerator::BeginPlay()
 
 		if (tunnel)
 		{
-			FString Msg = FString::Printf(TEXT("Spawn!!"));
-			GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, Msg);
 			ActiveTunnels.Add(tunnel);
 			LastTunnelLocation += FVector(TunnelLength, 0.f, 0.f);
 		}

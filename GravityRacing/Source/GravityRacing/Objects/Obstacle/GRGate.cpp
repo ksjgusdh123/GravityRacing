@@ -7,57 +7,70 @@
 
 AGRGate::AGRGate()
 {
-	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
+	//RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 
-	CollisionBox->SetupAttachment(RootComponent);
-	Mesh->SetupAttachment(CollisionBox);
+	//CollisionBox->SetupAttachment(RootComponent);
+	Mesh->SetupAttachment(Root);
 
-	UpCollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("UpCollisionBox"));
-	UpGateMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("UpGateMesh"));
-	UpCollisionBox->SetupAttachment(RootComponent);
-	UpGateMesh->SetupAttachment(UpCollisionBox);
-
-	UpCollisionBox->SetNotifyRigidBodyCollision(true);
+	//UpCollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("UpCollisionBox"));
+	//UpCollisionBox->SetupAttachment(RootComponent);
+	/*UpCollisionBox->SetNotifyRigidBodyCollision(true);
 	UpCollisionBox->SetCollisionProfileName(TEXT("BlockAll"));
-	UpCollisionBox->OnComponentHit.AddDynamic(this, &AGRGate::HitEvent);
+	UpCollisionBox->OnComponentHit.AddDynamic(this, &AGRGate::HitEvent);*/
 
 
-	DownCollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("DownCollisionBox"));
+	UpGateMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("UpGateMesh"));
+	UpGateMesh->SetupAttachment(Root);
+	//UpGateMesh->SetupAttachment(UpCollisionBox);
+	UpGateMesh->SetNotifyRigidBodyCollision(true);
+	UpGateMesh->SetCollisionProfileName(TEXT("BlockAll"));
+	UpGateMesh->OnComponentHit.AddDynamic(this, &AGRGate::HitEvent);
+
+
+	/*DownCollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("DownCollisionBox"));
+	DownCollisionBox->SetupAttachment(RootComponent);*/
+	//DownCollisionBox->SetNotifyRigidBodyCollision(true);
+	//DownCollisionBox->SetCollisionProfileName(TEXT("BlockAll"));
+	//DownCollisionBox->OnComponentHit.AddDynamic(this, &AGRGate::HitEvent);
+
 	DownGateMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("DownGateMesh"));
-	DownCollisionBox->SetupAttachment(RootComponent);
-	DownGateMesh->SetupAttachment(DownCollisionBox);
-
-	DownCollisionBox->SetNotifyRigidBodyCollision(true);
-	DownCollisionBox->SetCollisionProfileName(TEXT("BlockAll"));
-	DownCollisionBox->OnComponentHit.AddDynamic(this, &AGRGate::HitEvent);
+	DownGateMesh->SetupAttachment(Root);
+	//DownGateMesh->SetupAttachment(DownCollisionBox);
+	DownGateMesh->SetNotifyRigidBodyCollision(true);
+	DownGateMesh->SetCollisionProfileName(TEXT("BlockAll"));
+	DownGateMesh->OnComponentHit.AddDynamic(this, &AGRGate::HitEvent);
 }
 
 void AGRGate::BeginPlay()
 {
 	Super::BeginPlay();
+
+	//if (UpGateMesh && UpCollisionBox)
+	//{
+	//	FVector extent, origin;
+	//	UpGateMesh->GetLocalBounds(origin, extent);
+
+	//	UpCollisionBox->SetBoxExtent(extent);
+	//	//UpCollisionBox->SetRelativeLocation(FVector(origin));
+	//}
+
+	//if (DownGateMesh && DownCollisionBox)
+	//{
+	//	FVector extent, origin;
+	//	DownGateMesh->GetLocalBounds(origin, extent);
+
+	//	DownCollisionBox->SetBoxExtent(extent);
+	//	//DownCollisionBox->SetRelativeLocation(FVector(origin));
+	//}
 }
 
 void AGRGate::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	/*if (UpGateMesh && UpCollisionBox)
-	{
-		FVector extent, origin;
-		UpGateMesh->GetLocalBounds(origin, extent);
+	
+	AddActorWorldOffset(GetActorForwardVector() * 100 * DeltaTime, true);
 
-		UpCollisionBox->SetBoxExtent(extent);
-		UpCollisionBox->SetRelativeLocation(FVector(origin));
-	}
-
-	if (DownGateMesh && DownCollisionBox)
-	{
-		FVector extent, origin;
-		DownGateMesh->GetLocalBounds(origin, extent);
-
-		DownCollisionBox->SetBoxExtent(extent);	
-		DownCollisionBox->SetRelativeLocation(FVector(origin));
-	}*/
 }
 
 void AGRGate::HitEvent(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& SweepResult)

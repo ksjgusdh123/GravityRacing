@@ -21,6 +21,7 @@ public:
 	inline void SetObstacleDir(const FVector& dir) { Dir = dir; }
 
 public:
+	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaSeconds);
 
 protected:
@@ -37,6 +38,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Game)
 	float PushDistance;
 
+protected:
+	UPROPERTY(EditAnywhere)
+	class UBoxComponent* CollisionBox;
 
 private:
 

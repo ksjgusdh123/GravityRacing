@@ -30,16 +30,21 @@ private:
 	TSubclassOf<class AGRTunnel> TunnelClass;
 
 	UPROPERTY(EditAnywhere)
+	TArray<TSubclassOf<class AGRObstacle>> ObstacleClasses;
+
+	UPROPERTY(EditAnywhere)
 	int32 MaxTunnelCount = 5;
 
 	UPROPERTY(EditAnywhere)
 	float TunnelLength;
 
+	UPROPERTY()
 	class AGRPlayer* PlayerRef;
 
+	UPROPERTY()
 	TArray<AGRTunnel*> ActiveTunnels;
+
+	int32 ObstaclesCount;
 	FVector NextSpawnLocation;
 	FVector LastTunnelLocation;
-
-
 };

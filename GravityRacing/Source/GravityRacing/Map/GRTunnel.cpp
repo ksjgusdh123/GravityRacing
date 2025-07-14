@@ -2,6 +2,8 @@
 
 
 #include "Map/GRTunnel.h"
+#include "../Objects/Obstacle/GRObstacle.h"
+#include "../GravityRacing.h"
 
 // Sets default values
 AGRTunnel::AGRTunnel()
@@ -13,13 +15,6 @@ AGRTunnel::AGRTunnel()
 	SetRootComponent(Mesh);
 
 	RootComponent->SetMobility(EComponentMobility::Movable);
-
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshAsset(TEXT("/Game/GravityRacing/Objects/Obstacle/Assets/Mesh/SM_Tunnel.SM_Tunnel"));
-
-	if (MeshAsset.Succeeded())
-	{
-		Mesh->SetStaticMesh(MeshAsset.Object);
-	}
 }
 
 // Called when the game starts or when spawned
@@ -34,5 +29,39 @@ void AGRTunnel::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AGRTunnel::RePositionEvent(TSubclassOf<AGRObstacle> NewObstacleClass)
+{
+	if (Obstacle)
+	{
+		Obstacle->Destroy();
+		Obstacle = nullptr;
+	}
+
+	if (NewObstacleClass)
+	{
+		AGRObstacle* NewObstacle = GetWorld()->SpawnActor<AGRObstacle>(NewObstacleClass, GetActorLocation(), GetActorRotation());
+		if (NewObstacle)
+		{
+			TArray<UStaticMeshComponent*> ObstacleMeshes;
+			NewObstacle->GetComponents<UStaticMeshComponent>(ObstacleMeshes);
+
+			if (ObstacleMeshes.Num() > 1)
+			{
+
+			}
+			else if (ObstacleMeshes[0])
+			{
+				FVector Extent = ObstacleMeshes[0]->Bounds.BoxExtent;
+
+				FVector OriginLocation = GetActorLocation();
+				OriginLocation.Z += Extent.Z;
+				NewObstacle->SetActorLocation(OriginLocation);
+			}
+
+			Obstacle = NewObstacle;
+		}
+	}
 }
 

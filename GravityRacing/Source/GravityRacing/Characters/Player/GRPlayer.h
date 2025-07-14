@@ -69,21 +69,20 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	TObjectPtr<UInputAction> FlipAction;
 
+	UPROPERTY(EditAnywhere)
+	UStaticMeshComponent* BikeMesh;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	class USpringArmComponent* SpringArm;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	class UCameraComponent* Camera;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Trace)
-	class UArrowComponent* GravityArrow;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Sound)
 	class USoundBase* Coin;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Sound)
 	class USoundBase* Boost;
-
 
 
 

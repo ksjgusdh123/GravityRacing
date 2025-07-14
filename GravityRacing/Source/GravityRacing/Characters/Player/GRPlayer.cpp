@@ -22,6 +22,10 @@ AGRPlayer::AGRPlayer()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	BikeMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Bike"));
+	BikeMesh->SetupAttachment(GetMesh());
+	BikeMesh->SetCollisionProfileName(TEXT("NoCollision"));
+
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	SpringArm->SetupAttachment(RootComponent);
 	SpringArm->TargetArmLength = 300.f;
@@ -30,12 +34,6 @@ AGRPlayer::AGRPlayer()
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
 	Camera->bUsePawnControlRotation = false;
-
-	GravityArrow = CreateDefaultSubobject<UArrowComponent>(TEXT("GravityArrow"));
-	GravityArrow->SetupAttachment(RootComponent);
-	GravityArrow->SetRelativeLocation(FVector(0.f, 0.f, -80.f));
-	GravityArrow->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));
-	GravityArrow->SetArrowColor(FColor::Green);
 
 	static ConstructorHelpers::FObjectFinder<USoundBase> CoinSound(TEXT("/Game/GravityRacing/Audio/BGM/SW_Coin.SW_Coin"));
 	if (CoinSound.Succeeded()) Coin = CoinSound.Object;
@@ -106,7 +104,7 @@ void AGRPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	{
 		input->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AGRPlayer::Move);
 		input->BindAction(InGameMoveAction, ETriggerEvent::Triggered, this, &AGRPlayer::InGameMove);
-		input->BindAction(LookAction, ETriggerEvent::Triggered, this, &AGRPlayer::Look);
+		//input->BindAction(LookAction, ETriggerEvent::Triggered, this, &AGRPlayer::Look);
 		input->BindAction(JumpAction, ETriggerEvent::Started, this, &AGRPlayer::JumpStart);
 		input->BindAction(JumpAction, ETriggerEvent::Ongoing, this, &AGRPlayer::JumpStop);
 		input->BindAction(FlipAction, ETriggerEvent::Started, this, &AGRPlayer::Flip);

@@ -53,13 +53,11 @@ void AGRTunnel::RePositionEvent(TSubclassOf<AGRObstacle> NewObstacleClass)
 			}
 			else if (ObstacleMeshes[0])
 			{
-				/*FVector Extent = ObstacleMeshes[0]->Bounds.BoxExtent;
+				FVector Extent = ObstacleMeshes[0]->Bounds.BoxExtent;
 
 				FVector OriginLocation = GetActorLocation();
 				OriginLocation.Z += Extent.Z;
 				NewObstacle->SetActorLocation(OriginLocation);
-
-				GRLOG("Obstacle Extent: %s", *Extent.ToString());*/
 			}
 
 			Obstacle = NewObstacle;

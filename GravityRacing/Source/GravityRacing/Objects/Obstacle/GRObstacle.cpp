@@ -11,12 +11,6 @@ AGRObstacle::AGRObstacle()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	/*CollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionBox"));
-	SetRootComponent(CollisionBox);
-	CollisionBox->SetNotifyRigidBodyCollision(true);
-	CollisionBox->SetCollisionProfileName(TEXT("BlockAll"));
-	CollisionBox->OnComponentHit.AddDynamic(this, &AGRObstacle::HitEvent);*/
-
 	Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	Root->SetMobility(EComponentMobility::Movable);
 
@@ -38,15 +32,6 @@ AGRObstacle::AGRObstacle()
 void AGRObstacle::BeginPlay()
 {
 	Super::BeginPlay();
-
-	//if (Mesh && CollisionBox)
-	//{
-	//	FVector extent, origin;
-	//	Mesh->GetLocalBounds(origin, extent);
-
-	//	CollisionBox->SetBoxExtent(extent);
-	//	//Mesh->SetRelativeLocation(FVector(origin));
-	//}
 }
 
 // Called every frame

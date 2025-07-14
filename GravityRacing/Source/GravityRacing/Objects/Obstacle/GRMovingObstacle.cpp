@@ -7,10 +7,9 @@
 #include "../../GravityRacing.h"
 
 AGRMovingObstacle::AGRMovingObstacle()
-	: Dir(FVector(1.f, 0.f, 0.f)), Speed(FMath::RandRange(300.f, 2000.f)), PushDistance(5.f)
+	: Dir(FVector(0.f, 1.f, 0.f)), Speed(FMath::RandRange(300.f, 2000.f)), PushDistance(5.f)
 {
 	CollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionBox"));
-	//CollisionBox->SetupAttachment(RootComponent);
 	SetRootComponent(CollisionBox);
 	CollisionBox->SetNotifyRigidBodyCollision(true);
 	CollisionBox->SetCollisionProfileName(TEXT("BlockAll"));
@@ -30,12 +29,7 @@ void AGRMovingObstacle::BeginPlay()
 		FVector extent, origin;
 		Mesh->GetLocalBounds(origin, extent);
 
-		CollisionBox->SetBoxExtent(extent);
-		//CollisionBox->SetRelativeLocation(FVector(origin));
-		//FVector WorldLocation = GetActorLocation();
-		//FVector originOffset = FVector(WorldLocation.X, WorldLocation.Y, WorldLocation.Z + extent.Z * 0.5f);
-		//SetActorRelativeLocation(FVector(originOffset));
-		//Mesh->SetRelativeLocation(FVector(origin));
+		CollisionBox->SetBoxExtent(extent);	
 	}
 }
 
@@ -50,7 +44,6 @@ void AGRMovingObstacle::Tick(float DeltaSeconds)
 void AGRMovingObstacle::HitEvent(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& SweepResult)
 {
 	AGRPlayer* player = Cast<AGRPlayer>(OtherActor);
-	GRLOG("With Wall");
 	if (!player)
 	{
 		GRLOG("With Wall");

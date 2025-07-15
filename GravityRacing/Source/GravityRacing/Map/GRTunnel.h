@@ -24,7 +24,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 public:
-	float GetTunnelLength() const { return Mesh->Bounds.BoxExtent.X; }
+	float GetTunnelLengthX() const { return Mesh->Bounds.BoxExtent.X * 2; }
+	float GetTunnelLinesLengthY() const;
+	float GetTunnelOneLineLengthY() const;
 
 	void SetObstacle(class AGRObstacle* obstacle) { Obstacle = obstacle; }
 
@@ -36,4 +38,11 @@ private:
 
 	UPROPERTY()
 	AGRObstacle* Obstacle;
+	
+	UPROPERTY(EditAnywhere)
+	class UArrowComponent* StartRoadArrow;
+
+	UPROPERTY(EditAnywhere)
+	class UArrowComponent* EndRoadArrow;
 };
+	

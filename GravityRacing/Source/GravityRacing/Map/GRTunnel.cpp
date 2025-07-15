@@ -2,9 +2,10 @@
 
 
 #include "Map/GRTunnel.h"
-#include "../Objects/Obstacle/GRObstacle.h"
-#include "../Objects/Obstacle/GRGate.h"
-#include "../GravityRacing.h"
+#include "Objects/Obstacle/GRObstacle.h"
+#include "Objects/Obstacle/GRGate.h"
+#include "GravityRacing.h"
+#include "Components/ArrowComponent.h"
 
 // Sets default values
 AGRTunnel::AGRTunnel()
@@ -16,6 +17,22 @@ AGRTunnel::AGRTunnel()
 	SetRootComponent(Mesh);
 
 	RootComponent->SetMobility(EComponentMobility::Movable);
+
+	StartRoadArrow = CreateDefaultSubobject<UArrowComponent>(TEXT("StartArrow"));
+	StartRoadArrow->SetupAttachment(Mesh);
+
+	EndRoadArrow = CreateDefaultSubobject<UArrowComponent>(TEXT("EndArrow"));
+	EndRoadArrow->SetupAttachment(Mesh);
+
+
+	Mesh->SetRelativeRotation(FRotator(0.f, 90.f, 0.f));
+
+	StartRoadArrow->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));
+	StartRoadArrow->SetRelativeLocation(FVector(-740.f, 0.f, 0.f));
+
+	EndRoadArrow->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));
+	EndRoadArrow->SetRelativeLocation(FVector(740.f, 0.f, 0.f));
+
 }
 
 // Called when the game starts or when spawned
@@ -29,7 +46,19 @@ void AGRTunnel::BeginPlay()
 void AGRTunnel::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	GetTunnelOneLineLengthY();
+}
 
+float AGRTunnel::GetTunnelLinesLengthY() const
+{
+	float len = EndRoadArrow->GetComponentLocation().Y - StartRoadArrow->GetComponentLocation().Y;
+	return len;
+}
+
+float AGRTunnel::GetTunnelOneLineLengthY() const
+{
+	GRLOG("%.2f", GetTunnelLinesLengthY() / 4);
+	return GetTunnelLinesLengthY() / 4;
 }
 
 void AGRTunnel::RePositionEvent(TSubclassOf<AGRObstacle> NewObstacleClass)

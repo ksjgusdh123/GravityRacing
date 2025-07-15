@@ -38,7 +38,7 @@ protected:
 
 public:
 	void SetPlayerMaxSpeed(float Speed);
-
+	void SetRoadDistance(float dist) { RoadDistance = dist; }
 public:
 	void Move(const FInputActionValue& value);
 	void InGameMove(const FInputActionValue& value);

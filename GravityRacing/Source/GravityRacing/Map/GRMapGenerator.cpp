@@ -7,14 +7,15 @@
 #include "Kismet/GameplayStatics.h"
 #include "../Objects/Obstacle/GRObstacle.h"
 
+float AGRMapGenerator::OneLineLengthY = 0.f;
+FVector2D AGRMapGenerator::TunnelLength = FVector2D(0.f, 0.f);
 
 // Sets default values
 AGRMapGenerator::AGRMapGenerator()
-	: TunnelLength(2000.f), ObstaclesCount(0)
+	: ObstaclesCount(0)
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
 // Called when the game starts or when spawned
@@ -29,15 +30,20 @@ void AGRMapGenerator::BeginPlay()
 		AGRTunnel* tunnel = GetWorld()->SpawnActor<AGRTunnel>(
 			TunnelClass,
 			LastTunnelLocation,
-			FRotator(0.f, 90.f, 0.f));
+			FRotator(0.f, 0.f, 0.f));
+
+		TunnelLength.X = tunnel->GetTunnelLengthX();
 
 		if (tunnel)
 		{
 			ActiveTunnels.Add(tunnel);
-			LastTunnelLocation += FVector(TunnelLength, 0.f, 0.f);
+			LastTunnelLocation += FVector(TunnelLength.X, 0.f, 0.f);
 		}
 	}
-	LastTunnelLocation -= FVector(TunnelLength, 0.f, 0.f);
+	LastTunnelLocation -= FVector(TunnelLength.X, 0.f, 0.f);
+
+	OneLineLengthY = ActiveTunnels[0]->GetTunnelOneLineLengthY();
+	TunnelLength.Y = ActiveTunnels[0]->GetTunnelLinesLengthY();
 
 	ObstaclesCount = ObstacleClasses.Num();
 }
@@ -50,7 +56,7 @@ void AGRMapGenerator::Tick(float DeltaTime)
 	FVector PlayerLocation = PlayerRef->GetActorLocation();
 	float DistFinalTunnel = FVector::Dist(PlayerLocation, ActiveTunnels[0]->GetActorLocation());
 
-	if (DistFinalTunnel > TunnelLength)
+	if (DistFinalTunnel > TunnelLength.X)
 	{
 		RepositionTunnel();
 	}
@@ -61,7 +67,7 @@ void AGRMapGenerator::RepositionTunnel()
 	AGRTunnel* tunnel = ActiveTunnels[0];
 	ActiveTunnels.RemoveAt(0);
 
-	FVector NewLocation = LastTunnelLocation + FVector(TunnelLength, 0, 0);
+	FVector NewLocation = LastTunnelLocation + FVector(TunnelLength.X, 0, 0);
 	tunnel->SetActorLocation(NewLocation);
 
 	TSubclassOf<AGRObstacle> ObstacleClass = ObstacleClasses[FMath::RandRange(0, ObstaclesCount - 1)];

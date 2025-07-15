@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -25,6 +25,12 @@ public:
 
 	void RepositionTunnel();
 
+public:
+	static float OneLineLengthY;
+
+	// X -> 터널의 X축 총 길이, Y -> 터널의 4차선의 길이
+	static FVector2D TunnelLength;
+
 private:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class AGRTunnel> TunnelClass;
@@ -35,8 +41,6 @@ private:
 	UPROPERTY(EditAnywhere)
 	int32 MaxTunnelCount = 5;
 
-	UPROPERTY(EditAnywhere)
-	float TunnelLength;
 
 	UPROPERTY()
 	class AGRPlayer* PlayerRef;

@@ -12,6 +12,10 @@ UCLASS()
 class GRAVITYRACING_API AGRGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
+
+public:
+	virtual void BeginPlay() override;
+
 public:
 	UPROPERTY(BlueprintAssignable, Category = "Event")
 	FOnScoreChanged OnScoreChanged;

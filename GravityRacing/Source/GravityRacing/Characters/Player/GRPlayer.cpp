@@ -17,7 +17,7 @@
 
 // Sets default values
 AGRPlayer::AGRPlayer()
-	: RoadDistance(380.f), CurrentLine(1), bIsMoving(false), bIsFlip(false), bIsCurrentFlipState(false), bIsBoosting(false), OriginalMaxSpeed(600.f), BoostTime(0.f), MaxBoostTime(1.f)
+	: RoadDistance(0.f), CurrentLine(1), bIsMoving(false), bIsFlip(false), bIsCurrentFlipState(false), bIsBoosting(false), OriginalMaxSpeed(600.f), BoostTime(0.f), MaxBoostTime(1.f)
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;

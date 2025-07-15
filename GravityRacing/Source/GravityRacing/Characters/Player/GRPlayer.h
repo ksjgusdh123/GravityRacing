@@ -46,6 +46,10 @@ public:
 	void JumpStart(const FInputActionValue& value);
 	void JumpStop(const FInputActionValue& value);
 	void Flip(const FInputActionValue& value);
+
+	void CrossLine(float DeltaTime);
+	void FlipPlayer(float DeltaTime);
+	void BoostSpeedTime(float DeltaTime);
 	
 public:
 	void PlayMusic(EGameSound SoundType);
@@ -69,14 +73,14 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	TObjectPtr<UInputAction> FlipAction;
 
+	UPROPERTY(EditAnywhere)
+	UStaticMeshComponent* BikeMesh;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	class USpringArmComponent* SpringArm;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	class UCameraComponent* Camera;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Trace)
-	class UArrowComponent* GravityArrow;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Sound)
 	class USoundBase* Coin;
@@ -87,18 +91,20 @@ public:
 
 
 
-
 private:
 	uint32 bIsFlip : 1;
 	uint32 bIsCurrentFlipState : 1;
 	uint32 bIsMoving : 1;
-	uint32 bIsBoosting = 1;
+	uint32 bIsBoosting : 1;
 
 	float RoadDistance;
 	float OriginalMaxSpeed;
 	float BoostTime;
 	float MaxBoostTime;
+	float PitchDegree = 0.f;
+	float RollDegree = 0.f;
 
 	FVector TargetLocation;
+	FQuat  PrevQuat;
 	int32 CurrentLine;
 };

@@ -22,6 +22,10 @@ AGRPlayer::AGRPlayer()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	BikeMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Bike"));
+	BikeMesh->SetupAttachment(GetMesh());
+	BikeMesh->SetCollisionProfileName(TEXT("NoCollision"));
+
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	SpringArm->SetupAttachment(RootComponent);
 	SpringArm->TargetArmLength = 300.f;
@@ -31,19 +35,21 @@ AGRPlayer::AGRPlayer()
 	Camera->SetupAttachment(SpringArm);
 	Camera->bUsePawnControlRotation = false;
 
-	GravityArrow = CreateDefaultSubobject<UArrowComponent>(TEXT("GravityArrow"));
-	GravityArrow->SetupAttachment(RootComponent);
-	GravityArrow->SetRelativeLocation(FVector(0.f, 0.f, -80.f));
-	GravityArrow->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));
-	GravityArrow->SetArrowColor(FColor::Green);
-
 	static ConstructorHelpers::FObjectFinder<USoundBase> CoinSound(TEXT("/Game/GravityRacing/Audio/BGM/SW_Coin.SW_Coin"));
 	if (CoinSound.Succeeded()) Coin = CoinSound.Object;
 
 	static ConstructorHelpers::FObjectFinder<USoundBase> BoostSound(TEXT("/Game/GravityRacing/Audio/BGM/SW_Boost.SW_Boost"));
 	if (BoostSound.Succeeded()) Boost = BoostSound.Object;
 
+	GetMesh()->SetRelativeLocation(FVector(0.f, 0.f, -90.f));
+	FRotator Rot = GetMesh()->GetRelativeRotation();
+	Rot.Yaw += -90.f;
+	GetMesh()->SetRelativeRotation(Rot);
 
+	GetCharacterMovement()->bOrientRotationToMovement = false;
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationYaw = false;
+	bUseControllerRotationRoll = false;
 }
 
 // Called when the game starts or when spawned
@@ -71,28 +77,20 @@ void AGRPlayer::Tick(float DeltaTime)
 
 	if (bIsMoving)
 	{
-		FVector CurrentLocation = GetActorLocation();
-		FVector NewLocation = FMath::VInterpTo(CurrentLocation, TargetLocation, DeltaTime, 30.f);
+		CrossLine(DeltaTime);
+	}
 
-		SetActorLocation(NewLocation);
-
-		if (abs(NewLocation.Y - TargetLocation.Y) < 10.f)
-		{
-			SetActorLocation(FVector(CurrentLocation.X, TargetLocation.Y, CurrentLocation.Z));
-			bIsMoving = false;
-		}
+	if (bIsFlip)
+	{
+		FlipPlayer(DeltaTime);
 	}
 
 	if (bIsBoosting)
 	{
-		BoostTime += DeltaTime;
-		if (BoostTime >= MaxBoostTime)
-		{
-			GetCharacterMovement()->MaxWalkSpeed = OriginalMaxSpeed;
-			bIsBoosting = false;
-			BoostTime = 0.f;
-		}
+		BoostSpeedTime(DeltaTime);
 	}
+
+	FQuat NewQuat = GetActorQuat();
 
 	AddMovementInput(FVector(1.f, 0.f, 0.f));
 }
@@ -106,7 +104,7 @@ void AGRPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	{
 		input->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AGRPlayer::Move);
 		input->BindAction(InGameMoveAction, ETriggerEvent::Triggered, this, &AGRPlayer::InGameMove);
-		input->BindAction(LookAction, ETriggerEvent::Triggered, this, &AGRPlayer::Look);
+		//input->BindAction(LookAction, ETriggerEvent::Triggered, this, &AGRPlayer::Look);
 		input->BindAction(JumpAction, ETriggerEvent::Started, this, &AGRPlayer::JumpStart);
 		input->BindAction(JumpAction, ETriggerEvent::Ongoing, this, &AGRPlayer::JumpStop);
 		input->BindAction(FlipAction, ETriggerEvent::Started, this, &AGRPlayer::Flip);
@@ -130,6 +128,8 @@ void AGRPlayer::SetPlayerMaxSpeed(float Speed)
 
 void AGRPlayer::Move(const FInputActionValue& value)
 {
+	if (bIsFlip) return;
+
 	FVector2D input = value.Get<FVector2D>();
 
 	FRotator rot = Controller->GetControlRotation();
@@ -144,7 +144,7 @@ void AGRPlayer::Move(const FInputActionValue& value)
 
 void AGRPlayer::InGameMove(const FInputActionValue& value)
 {
-	if (bIsMoving) return;
+	if (bIsMoving || bIsFlip) return;
 
 	float input = value.Get<float>();
 	if (FMath::IsNearlyZero(input)) return;
@@ -198,21 +198,60 @@ void AGRPlayer::JumpStop(const FInputActionValue& value)
 
 void AGRPlayer::Flip(const FInputActionValue& value)
 {
+	if (bIsFlip) return;
+
 	auto* movement = GetCharacterMovement();
 	movement->SetMovementMode(EMovementMode::MOVE_Falling);
 
 	movement->SetGravityDirection(FVector(0.f, 0.f, movement->GetGravityDirection().Z * -1));
 
 	movement->bOrientRotationToMovement = false;
-	//movement->Velocity = FVector(0.f, 0.f, 0.f);
 
-	FRotator ReverseRot = GetActorRotation();
-	ReverseRot.Roll += 180.f;
-	SetActorRotation(FRotator(ReverseRot));
+	PrevQuat = GetActorQuat();
+	PitchDegree = RollDegree = 0.f;
 
 	bIsFlip = true;
 	bIsCurrentFlipState ^= 1;
 	CurrentLine = MAX_ROAD_LINE - CurrentLine + 1;
+}
+
+void AGRPlayer::CrossLine(float DeltaTime)
+{
+	FVector CurrentLocation = GetActorLocation();
+	FVector NewLocation = FMath::VInterpTo(CurrentLocation, TargetLocation, DeltaTime, 30.f);
+
+	SetActorLocation(NewLocation);
+
+	if (abs(NewLocation.Y - TargetLocation.Y) < 10.f)
+	{
+		SetActorLocation(FVector(CurrentLocation.X, TargetLocation.Y, CurrentLocation.Z));
+		bIsMoving = false;
+	}
+}
+
+void AGRPlayer::FlipPlayer(float DeltaTime)
+{
+	float PitchDelta = 180.f * DeltaTime;
+	float RollDelta = 360.f * DeltaTime;
+
+	PitchDegree += PitchDelta;
+	RollDegree += RollDelta;
+
+	FQuat QuatPitch = FQuat(FVector(1, 0, 0), FMath::DegreesToRadians(FMath::Min(PitchDegree, 180.f)));
+	FQuat QuatRoll = FQuat(FVector(0, 1, 0), FMath::DegreesToRadians(FMath::Min(RollDegree, 360.f)));
+
+	SetActorRotation(QuatPitch * QuatRoll * PrevQuat);
+}
+
+void AGRPlayer::BoostSpeedTime(float DeltaTime)
+{
+	BoostTime += DeltaTime;
+	if (BoostTime >= MaxBoostTime)
+	{
+		GetCharacterMovement()->MaxWalkSpeed = OriginalMaxSpeed;
+		bIsBoosting = false;
+		BoostTime = 0.f;
+	}
 }
 
 void AGRPlayer::PlayMusic(EGameSound SoundType)

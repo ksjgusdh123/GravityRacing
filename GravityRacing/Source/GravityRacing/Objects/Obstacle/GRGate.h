@@ -26,9 +26,21 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+public:
+	void SetIsOpenGate();
+	void SetIsOpenUpGate(bool b) { bIsOpenUpGate = b; }
+	void SetIsOpenDownGate(bool b) { bIsOpenDownGate = b; }
+
 protected:
 	virtual void HitEvent(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 		FVector NormalImpulse, const FHitResult& SweepResult) override;
+
+	UFUNCTION()
+	virtual void OnOpenTriggerBoxOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
+		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+private:
+	void OpenGateEvent(float DeltaTime);
 
 protected:
 	UPROPERTY(EditAnywhere)
@@ -38,9 +50,13 @@ protected:
 	UStaticMeshComponent* DownGateMesh;
 
 	UPROPERTY(EditAnywhere)
-	class UBoxComponent* UpCollisionBox;
+	class UBoxComponent* OpenTriggerBox;
 
-	UPROPERTY(EditAnywhere)
-	class UBoxComponent* DownCollisionBox;
+private:
+	int32 bIsGateOpen : 1;
+	int32 bIsOpenUpGate : 1;
+	int32 bIsOpenDownGate : 1;
+		
+	float OpenSpeed;
 
 };

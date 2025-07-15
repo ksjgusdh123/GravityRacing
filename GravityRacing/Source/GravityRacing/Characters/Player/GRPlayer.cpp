@@ -17,10 +17,13 @@
 
 // Sets default values
 AGRPlayer::AGRPlayer()
-	: OneLineDistance(0.f), CurrentLine(1), bIsMoving(false), bIsFlip(false), bIsCurrentFlipState(false), bIsBoosting(false), OriginalMaxSpeed(600.f), BoostTime(0.f), MaxBoostTime(1.f)
+	: OneLineDistance(0.f), CurrentLine(1), bIsMoving(false), bIsFlip(false), bIsCurrentFlipState(false), bIsBoosting(false), OriginalMaxSpeed(1200.f), BoostTime(0.f), MaxBoostTime(1.f)
+	, LeanAngle(15.f)
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	PlayerMesh = GetMesh();
 
 	BikeMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Bike"));
 	BikeMesh->SetupAttachment(GetMesh());
@@ -41,22 +44,26 @@ AGRPlayer::AGRPlayer()
 	static ConstructorHelpers::FObjectFinder<USoundBase> BoostSound(TEXT("/Game/GravityRacing/Audio/BGM/SW_Boost.SW_Boost"));
 	if (BoostSound.Succeeded()) Boost = BoostSound.Object;
 
-	GetMesh()->SetRelativeLocation(FVector(0.f, 0.f, -90.f));
-	FRotator Rot = GetMesh()->GetRelativeRotation();
+	PlayerMesh->SetRelativeLocation(FVector(0.f, 0.f, -90.f));
+	FRotator Rot = PlayerMesh->GetRelativeRotation();
 	Rot.Yaw += -90.f;
-	GetMesh()->SetRelativeRotation(Rot);
+	PlayerMesh->SetRelativeRotation(Rot);
 
 	GetCharacterMovement()->bOrientRotationToMovement = false;
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
+
+	GetCharacterMovement()->MaxWalkSpeed = 1200.f;
+	GetCharacterMovement()->GravityScale = 4.f;
+
 }
 
 // Called when the game starts or when spawned
 void AGRPlayer::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 	if (APlayerController* controller = Cast<APlayerController>(Controller))
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(controller->GetLocalPlayer()))
@@ -66,7 +73,7 @@ void AGRPlayer::BeginPlay()
 	}
 
 	GetCharacterMovement()->AirControl = 1.f;
-	
+
 	SetActorLocation(FVector(0.f, -OneLineDistance * 1.5, 0.f));
 }
 
@@ -90,7 +97,11 @@ void AGRPlayer::Tick(float DeltaTime)
 		BoostSpeedTime(DeltaTime);
 	}
 
-	FQuat NewQuat = GetActorQuat();
+	if (bIsRecoverCenter)
+	{
+		RecoverCenter(DeltaTime);
+	}
+
 
 	AddMovementInput(FVector(1.f, 0.f, 0.f));
 }
@@ -154,6 +165,7 @@ void AGRPlayer::InGameMove(const FInputActionValue& value)
 		input *= -1.f;
 	}
 
+	FRotator Rot = PlayerMesh->GetRelativeRotation();
 	if (input > 0)
 	{
 		if (CurrentLine >= MAX_ROAD_LINE)
@@ -161,6 +173,8 @@ void AGRPlayer::InGameMove(const FInputActionValue& value)
 
 		TargetLocation = GetActorLocation() + GetActorRightVector() * OneLineDistance;
 		++CurrentLine;
+
+		Rot.Pitch = LeanAngle;
 	}
 	else if (input < 0)
 	{
@@ -169,9 +183,12 @@ void AGRPlayer::InGameMove(const FInputActionValue& value)
 
 		TargetLocation = GetActorLocation() - GetActorRightVector() * OneLineDistance;
 		--CurrentLine;
+
+		Rot.Pitch = -LeanAngle;
 	}
 
-		
+	TargetRot = Rot;
+	bIsRecoverCenter = false;
 	bIsMoving = true;
 }
 
@@ -203,7 +220,7 @@ void AGRPlayer::Flip(const FInputActionValue& value)
 	auto* movement = GetCharacterMovement();
 	movement->SetMovementMode(EMovementMode::MOVE_Falling);
 
-	movement->SetGravityDirection(FVector(0.f, 0.f, movement->GetGravityDirection().Z * -1));
+	movement->SetGravityDirection(FVector(0.f, 0.f, -movement->GetGravityDirection().Z));
 
 	movement->bOrientRotationToMovement = false;
 
@@ -222,17 +239,24 @@ void AGRPlayer::CrossLine(float DeltaTime)
 
 	SetActorLocation(NewLocation);
 
+	FRotator CurrentRotator = PlayerMesh->GetRelativeRotation();
+	FRotator NewRotator = FMath::RInterpTo(CurrentRotator, TargetRot, DeltaTime, 30.f);
+	PlayerMesh->SetRelativeRotation(NewRotator);
+
 	if (abs(NewLocation.Y - TargetLocation.Y) < 10.f)
 	{
 		SetActorLocation(FVector(CurrentLocation.X, TargetLocation.Y, CurrentLocation.Z));
+		FRotator Rot = PlayerMesh->GetRelativeRotation();
+		TargetRot = FRotator(0.f, Rot.Yaw, Rot.Roll);
+		bIsRecoverCenter = true;
 		bIsMoving = false;
 	}
 }
 
 void AGRPlayer::FlipPlayer(float DeltaTime)
 {
-	float PitchDelta = 180.f * DeltaTime;
-	float RollDelta = 360.f * DeltaTime;
+	float PitchDelta = 180.f * DeltaTime * 2;
+	float RollDelta = 360.f * DeltaTime * 2;
 
 	PitchDegree += PitchDelta;
 	RollDegree += RollDelta;
@@ -254,11 +278,25 @@ void AGRPlayer::BoostSpeedTime(float DeltaTime)
 	}
 }
 
+void AGRPlayer::RecoverCenter(float DeltaTime)
+{
+	FRotator CurrentRotator = PlayerMesh->GetRelativeRotation();
+	FRotator NewRotator = FMath::RInterpTo(CurrentRotator, TargetRot, DeltaTime, 10.f);
+
+	if (abs(NewRotator.Pitch - TargetRot.Pitch) < 1.f)
+	{
+		bIsRecoverCenter = false;
+		NewRotator.Pitch = 0.f;
+	}
+
+	PlayerMesh->SetRelativeRotation(NewRotator);
+}
+
 void AGRPlayer::PlayMusic(EGameSound SoundType)
 {
 	switch (SoundType) {
 	case EGameSound::Coin:
-		UGameplayStatics::PlaySound2D(this,Coin);
+		UGameplayStatics::PlaySound2D(this, Coin);
 		break;
 
 	case EGameSound::Boost:
@@ -266,5 +304,5 @@ void AGRPlayer::PlayMusic(EGameSound SoundType)
 		break;
 
 	}
-	
+
 }

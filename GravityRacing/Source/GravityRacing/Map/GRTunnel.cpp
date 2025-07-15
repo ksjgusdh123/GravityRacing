@@ -81,7 +81,7 @@ void AGRTunnel::RePositionEvent(TSubclassOf<AGRObstacle> NewObstacleClass)
 			{
 				if (AGRGate* Gate = Cast<AGRGate>(NewObstacle))
 				{
-					Gate->SetIsOpenGate();
+					Gate->SetIsOpenGate(GetTunnelHeight());
 				}
 			}
 			else if (ObstacleMeshes[0])

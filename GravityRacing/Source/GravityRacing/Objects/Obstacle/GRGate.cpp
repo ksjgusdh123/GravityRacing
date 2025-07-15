@@ -7,7 +7,7 @@
 #include "../../Characters/Player/GRPlayer.h"
 
 AGRGate::AGRGate()
-	: OpenSpeed(1000.f)
+	: OpenSpeed(1000.f), TriggerSizeXY(FVector2D(1000.f, 1000.f))
 {
 	Mesh->SetupAttachment(Root);
 
@@ -45,14 +45,16 @@ void AGRGate::Tick(float DeltaTime)
 	}
 }
 
-void AGRGate::SetIsOpenGate()
+void AGRGate::SetIsOpenGate(float height)
 {
 	bool UpFirst = FMath::RandBool();
+
+	OpenTriggerBox->SetBoxExtent(FVector(TriggerSizeXY, height));
 
 	if(UpFirst)
 	{
 		bIsOpenUpGate = FMath::RandBool();
-		if (bIsOpenUpGate)
+		if (bIsOpenUpGate)	
 		{
 			bIsOpenDownGate = FMath::RandBool();
 		}

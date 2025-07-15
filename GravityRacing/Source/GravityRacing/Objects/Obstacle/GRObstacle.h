@@ -33,5 +33,4 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	USceneComponent* Root;
-
 };

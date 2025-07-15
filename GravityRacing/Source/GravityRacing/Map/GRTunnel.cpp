@@ -3,6 +3,7 @@
 
 #include "Map/GRTunnel.h"
 #include "../Objects/Obstacle/GRObstacle.h"
+#include "../Objects/Obstacle/GRGate.h"
 #include "../GravityRacing.h"
 
 // Sets default values
@@ -49,7 +50,10 @@ void AGRTunnel::RePositionEvent(TSubclassOf<AGRObstacle> NewObstacleClass)
 
 			if (ObstacleMeshes.Num() > 1)
 			{
-
+				if (AGRGate* Gate = Cast<AGRGate>(NewObstacle))
+				{
+					Gate->SetIsOpenGate();
+				}
 			}
 			else if (ObstacleMeshes[0])
 			{

@@ -14,7 +14,7 @@ void AGRGameModeBase::BeginPlay()
 	AGRPlayer* Player = Cast<AGRPlayer>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	if (Player)
 	{
-		Player->SetRoadDistance(AGRMapGenerator::OneLineLengthY);
+		Player->SetRoadOneLineDistance(AGRMapGenerator::OneLineLengthY);
 	}
 }
 

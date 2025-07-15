@@ -46,7 +46,6 @@ void AGRMovingObstacle::HitEvent(UPrimitiveComponent* OverlappedComponent, AActo
 	AGRPlayer* player = Cast<AGRPlayer>(OtherActor);
 	if (!player)
 	{
-		GRLOG("With Wall");
 		Dir *= -1;
 
 		FVector PushOffset = SweepResult.ImpactNormal * PushDistance;

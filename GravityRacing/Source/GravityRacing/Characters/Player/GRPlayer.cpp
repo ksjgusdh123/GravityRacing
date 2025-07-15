@@ -17,7 +17,7 @@
 
 // Sets default values
 AGRPlayer::AGRPlayer()
-	: RoadDistance(0.f), CurrentLine(1), bIsMoving(false), bIsFlip(false), bIsCurrentFlipState(false), bIsBoosting(false), OriginalMaxSpeed(600.f), BoostTime(0.f), MaxBoostTime(1.f)
+	: OneLineDistance(0.f), CurrentLine(1), bIsMoving(false), bIsFlip(false), bIsCurrentFlipState(false), bIsBoosting(false), OriginalMaxSpeed(600.f), BoostTime(0.f), MaxBoostTime(1.f)
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -67,7 +67,7 @@ void AGRPlayer::BeginPlay()
 
 	GetCharacterMovement()->AirControl = 1.f;
 	
-	SetActorLocation(FVector(0.f, -RoadDistance * 1.5, 0.f));
+	SetActorLocation(FVector(0.f, -OneLineDistance * 1.5, 0.f));
 }
 
 // Called every frame
@@ -159,7 +159,7 @@ void AGRPlayer::InGameMove(const FInputActionValue& value)
 		if (CurrentLine >= MAX_ROAD_LINE)
 			return;
 
-		TargetLocation = GetActorLocation() + GetActorRightVector() * RoadDistance;
+		TargetLocation = GetActorLocation() + GetActorRightVector() * OneLineDistance;
 		++CurrentLine;
 	}
 	else if (input < 0)
@@ -167,7 +167,7 @@ void AGRPlayer::InGameMove(const FInputActionValue& value)
 		if (CurrentLine <= 1)
 			return;
 
-		TargetLocation = GetActorLocation() - GetActorRightVector() * RoadDistance;
+		TargetLocation = GetActorLocation() - GetActorRightVector() * OneLineDistance;
 		--CurrentLine;
 	}
 

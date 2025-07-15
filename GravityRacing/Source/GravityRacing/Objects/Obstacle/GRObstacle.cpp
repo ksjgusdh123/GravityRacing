@@ -7,6 +7,7 @@
 
 // Sets default values
 AGRObstacle::AGRObstacle()
+	: OneLineDistance(0.f), CurrentLine(0)
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -38,7 +39,13 @@ void AGRObstacle::BeginPlay()
 void AGRObstacle::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+}
 
+void AGRObstacle::SpawnObstacle(int32 line)
+{
+	CurrentLine = line;
+	FVector Location = GetActorLocation();
+	SetActorLocation(FVector(Location.X, -OneLineDistance * 1.5 + OneLineDistance * (line - 1), Location.Z));
 }
 
 void AGRObstacle::HitEvent(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& SweepResult)

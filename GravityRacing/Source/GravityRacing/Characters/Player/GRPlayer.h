@@ -38,7 +38,7 @@ protected:
 
 public:
 	void SetPlayerMaxSpeed(float Speed);
-	void SetRoadDistance(float dist) { RoadDistance = dist; }
+	void SetRoadOneLineDistance(float dist) { OneLineDistance = dist; }
 public:
 	void Move(const FInputActionValue& value);
 	void InGameMove(const FInputActionValue& value);
@@ -97,7 +97,7 @@ private:
 	uint32 bIsMoving : 1;
 	uint32 bIsBoosting : 1;
 
-	float RoadDistance;
+	float OneLineDistance;
 	float OriginalMaxSpeed;
 	float BoostTime;
 	float MaxBoostTime;

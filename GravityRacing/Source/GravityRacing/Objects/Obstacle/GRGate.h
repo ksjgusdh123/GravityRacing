@@ -27,7 +27,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 public:
-	void SetIsOpenGate();
+	void SetIsOpenGate(float height);
 	void SetIsOpenUpGate(bool b) { bIsOpenUpGate = b; }
 	void SetIsOpenDownGate(bool b) { bIsOpenDownGate = b; }
 
@@ -52,6 +52,8 @@ protected:
 	UPROPERTY(EditAnywhere)
 	class UBoxComponent* OpenTriggerBox;
 
+	UPROPERTY(EditAnywhere)
+	FVector2D TriggerSizeXY;
 private:
 	int32 bIsGateOpen : 1;
 	int32 bIsOpenUpGate : 1;

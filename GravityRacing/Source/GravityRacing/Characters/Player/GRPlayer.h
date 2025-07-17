@@ -38,7 +38,7 @@ protected:
 
 public:
 	void SetPlayerMaxSpeed(float Speed);
-	void SetRoadDistance(float dist) { RoadDistance = dist; }
+	void SetRoadOneLineDistance(float dist) { OneLineDistance = dist; }
 public:
 	void Move(const FInputActionValue& value);
 	void InGameMove(const FInputActionValue& value);
@@ -50,6 +50,8 @@ public:
 	void CrossLine(float DeltaTime);
 	void FlipPlayer(float DeltaTime);
 	void BoostSpeedTime(float DeltaTime);
+	void RecoverCenter(float DeltaTime);
+
 	
 public:
 	void PlayMusic(EGameSound SoundType);
@@ -88,16 +90,20 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Sound)
 	class USoundBase* Boost;
 
-
-
+	UPROPERTY()
+	USkeletalMeshComponent* PlayerMesh;
+	
+	UPROPERTY(EditAnywhere)
+	float LeanAngle;
 
 private:
 	uint32 bIsFlip : 1;
 	uint32 bIsCurrentFlipState : 1;
 	uint32 bIsMoving : 1;
 	uint32 bIsBoosting : 1;
+	uint32 bIsRecoverCenter : 1;
 
-	float RoadDistance;
+	float OneLineDistance;
 	float OriginalMaxSpeed;
 	float BoostTime;
 	float MaxBoostTime;
@@ -105,6 +111,7 @@ private:
 	float RollDegree = 0.f;
 
 	FVector TargetLocation;
+	FRotator TargetRot;
 	FQuat  PrevQuat;
 	int32 CurrentLine;
 };

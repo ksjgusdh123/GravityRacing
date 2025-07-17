@@ -57,7 +57,6 @@ float AGRTunnel::GetTunnelLinesLengthY() const
 
 float AGRTunnel::GetTunnelOneLineLengthY() const
 {
-	GRLOG("%.2f", GetTunnelLinesLengthY() / 4);
 	return GetTunnelLinesLengthY() / 4;
 }
 
@@ -76,12 +75,13 @@ void AGRTunnel::RePositionEvent(TSubclassOf<AGRObstacle> NewObstacleClass)
 		{
 			TArray<UStaticMeshComponent*> ObstacleMeshes;
 			NewObstacle->GetComponents<UStaticMeshComponent>(ObstacleMeshes);
+			NewObstacle->SetRoadOneLineDistance(GetTunnelOneLineLengthY());
 
 			if (ObstacleMeshes.Num() > 1)
 			{
 				if (AGRGate* Gate = Cast<AGRGate>(NewObstacle))
 				{
-					Gate->SetIsOpenGate();
+					Gate->SetIsOpenGate(GetTunnelHeight());
 				}
 			}
 			else if (ObstacleMeshes[0])
@@ -89,8 +89,23 @@ void AGRTunnel::RePositionEvent(TSubclassOf<AGRObstacle> NewObstacleClass)
 				FVector Extent = ObstacleMeshes[0]->Bounds.BoxExtent;
 
 				FVector OriginLocation = GetActorLocation();
-				OriginLocation.Z += Extent.Z;
+				bool IsFlip = FMath::RandBool();
+
+				if (IsFlip)
+				{
+					FRotator Rot = NewObstacle->GetActorRotation();
+					Rot.Yaw += 180.f;
+					NewObstacle->SetActorRotation(Rot);
+
+					OriginLocation.Z -= Extent.Z;
+					OriginLocation.Z += GetTunnelHeight();
+				}
+				else
+				{
+					OriginLocation.Z += Extent.Z;
+				}
 				NewObstacle->SetActorLocation(OriginLocation);
+				NewObstacle->SpawnObstacle(FMath::RandRange(1, 4));
 			}
 
 			Obstacle = NewObstacle;

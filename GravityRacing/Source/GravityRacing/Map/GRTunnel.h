@@ -25,6 +25,7 @@ public:
 
 public:
 	float GetTunnelLengthX() const { return Mesh->Bounds.BoxExtent.X * 2; }
+	float GetTunnelHeight() const { return Mesh->Bounds.BoxExtent.Z * 2; }
 	float GetTunnelLinesLengthY() const;
 	float GetTunnelOneLineLengthY() const;
 

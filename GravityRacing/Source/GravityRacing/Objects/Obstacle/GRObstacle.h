@@ -23,14 +23,27 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	virtual void SpawnObstacle(int32 line);
+
+public:
+	void SetRoadOneLineDistance(float dist) { OneLineDistance = dist; }
+	void SetCurrentLine(int32 line) { CurrentLine = line; }
+
 protected:
 	UFUNCTION()
 	virtual void HitEvent(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, 
 		FVector NormalImpulse, const FHitResult& SweepResult);
+
 protected:
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* Mesh;
 
 	UPROPERTY(EditAnywhere)
 	USceneComponent* Root;
+
+private:
+	float OneLineDistance;
+	float TunnelHeight;
+
+	int32 CurrentLine;
 };

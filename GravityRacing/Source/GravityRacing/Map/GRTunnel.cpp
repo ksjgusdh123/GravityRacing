@@ -86,7 +86,7 @@ void AGRTunnel::RePositionEvent(TSubclassOf<AGRObstacle> NewObstacleClass)
 			}
 			else if (ObstacleMeshes[0])
 			{
-				FVector Extent = ObstacleMeshes[0]->Bounds.BoxExtent;
+				/*FVector Extent = ObstacleMeshes[0]->Bounds.BoxExtent;
 
 				FVector OriginLocation = GetActorLocation();
 				bool IsFlip = FMath::RandBool();
@@ -104,7 +104,7 @@ void AGRTunnel::RePositionEvent(TSubclassOf<AGRObstacle> NewObstacleClass)
 				{
 					OriginLocation.Z += Extent.Z;
 				}
-				NewObstacle->SetActorLocation(OriginLocation);
+				NewObstacle->SetActorLocation(OriginLocation);*/
 				NewObstacle->SpawnObstacle(FMath::RandRange(1, 4));
 			}
 

@@ -50,6 +50,5 @@ void AGRObstacle::SpawnObstacle(int32 line)
 
 void AGRObstacle::HitEvent(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& SweepResult)
 {
-	GRLOG("NOTIFYOVERRIDE");
 }
 

@@ -76,5 +76,7 @@ void AGRMapGenerator::RepositionTunnel()
 
 	LastTunnelLocation = NewLocation;
 	ActiveTunnels.Add(tunnel);
+
+	OnTunnelRepositioned.Broadcast(NewLocation);
 }
 

@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "GRMapGenerator.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTunnelRepositioned, FVector, TunnelLocation);
+
 UCLASS()
 class GRAVITYRACING_API AGRMapGenerator : public AActor
 {
@@ -30,6 +32,10 @@ public:
 
 	// X -> 터널의 X축 총 길이, Y -> 터널의 4차선의 길이
 	static FVector2D TunnelLength;
+
+public:
+	UPROPERTY()
+	FOnTunnelRepositioned OnTunnelRepositioned;
 
 private:
 	UPROPERTY(EditAnywhere)

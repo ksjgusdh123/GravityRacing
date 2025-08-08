@@ -144,34 +144,34 @@ void AGRPlayer::Landed(const FHitResult& Hit)
 
 void AGRPlayer::HitEvent(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& SweepResult)
 {
-	AGRObstacle* Obstacle = Cast<AGRObstacle>(OtherActor);
-	if (Obstacle)
-	{
-		bIsDie = true;
+	//AGRObstacle* Obstacle = Cast<AGRObstacle>(OtherActor);
+	//if (Obstacle)
+	//{
+	//	bIsDie = true;
 
-		FVector BounceDirection = SweepResult.ImpactNormal;
-		BounceDirection.Normalize();
+	//	FVector BounceDirection = SweepResult.ImpactNormal;
+	//	BounceDirection.Normalize();
 
-		float ImpulseStrength = 5000.0f;
+	//	float ImpulseStrength = 5000.0f;
 
-		FVector FinalImpulse = BounceDirection * ImpulseStrength;
+	//	FVector FinalImpulse = BounceDirection * ImpulseStrength;
 
-		GetMesh()->SetPhysicsLinearVelocity(FVector::ZeroVector);
-		GetMesh()->AddImpulseToAllBodiesBelow(FinalImpulse, NAME_None);
-		SpringArm->SetupAttachment(GetMesh());
+	//	GetMesh()->SetPhysicsLinearVelocity(FVector::ZeroVector);
+	//	GetMesh()->AddImpulseToAllBodiesBelow(FinalImpulse, NAME_None);
+	//	SpringArm->SetupAttachment(GetMesh());
 
-		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-		GetMesh()->SetSimulatePhysics(true);
-		GetMesh()->SetCollisionProfileName(FName("Ragdoll"));
+	//	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	//	GetMesh()->SetSimulatePhysics(true);
+	//	GetMesh()->SetCollisionProfileName(FName("Ragdoll"));
 
-		APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-		if (PC)
-		{
-			PC->SetInputMode(FInputModeUIOnly()); 
-			//PC->bShowMouseCursor = true;          
-		}
+	//	APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	//	if (PC)
+	//	{
+	//		PC->SetInputMode(FInputModeUIOnly()); 
+	//		//PC->bShowMouseCursor = true;          
+	//	}
 
-	}
+	//}
 }
 
 void AGRPlayer::SetPlayerMaxSpeed(float Speed)

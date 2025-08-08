@@ -4,7 +4,7 @@
 #include "Objects/Obstacle/GRMovingObstacle.h"
 #include "Characters/Player/GRPlayer.h"
 #include "Components/BoxComponent.h"
-#include "../../GravityRacing.h"
+#include "GravityRacing.h"
 
 AGRMovingObstacle::AGRMovingObstacle()
 	: Dir(FVector(0.f, 1.f, 0.f)), Speed(FMath::RandRange(300.f, 2000.f)), PushDistance(5.f)

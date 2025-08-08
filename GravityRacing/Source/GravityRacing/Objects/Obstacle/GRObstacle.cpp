@@ -3,7 +3,7 @@
 
 #include "Objects/Obstacle/GRObstacle.h"
 #include "Components/BoxComponent.h"
-#include "../../GravityRacing.h"
+#include "GravityRacing.h"
 
 // Sets default values
 AGRObstacle::AGRObstacle()

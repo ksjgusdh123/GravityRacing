@@ -3,8 +3,8 @@
 
 #include "Objects/Obstacle/GRGate.h"
 #include "Components/BoxComponent.h"
-#include "../../GravityRacing.h"
-#include "../../Characters/Player/GRPlayer.h"
+#include "GravityRacing.h"
+#include "Characters/Player/GRPlayer.h"
 
 AGRGate::AGRGate()
 	: OpenSpeed(1000.f), TriggerSizeXY(FVector2D(1000.f, 1000.f))

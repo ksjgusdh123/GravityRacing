@@ -19,7 +19,7 @@ void AGRCoinSpawner::SpawnCoinsInLength(float Length, int32 MaxCoins)
 {
 	if (!CoinClass)
 	{
-		GRERR("CoinClass is null");
+		GRLOG_E("CoinClass is null");
 		return;
 	}
 

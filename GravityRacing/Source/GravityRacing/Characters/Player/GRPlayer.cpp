@@ -12,12 +12,15 @@
 #include "Components/ArrowComponent.h"
 #include "Sound/SoundBase.h"
 #include "Components/AudioComponent.h"
+#include "Objects/Obstacle/GRObstacle.h"
+#include "Components/CapsuleComponent.h"
 #include <Kismet/GameplayStatics.h>
 #include <Sound/SoundCue.h>
 
+
 // Sets default values
 AGRPlayer::AGRPlayer()
-	: OneLineDistance(0.f), CurrentLine(1), bIsMoving(false), bIsFlip(false), bIsCurrentFlipState(false), bIsBoosting(false), OriginalMaxSpeed(1200.f), BoostTime(0.f), MaxBoostTime(1.f)
+	: OneLineDistance(0.f), CurrentLine(1), bIsMoving(false), bIsFlip(false), bIsCurrentFlipState(false), bIsBoosting(false), bIsDie(false), OriginalMaxSpeed(1200.f), BoostTime(0.f), MaxBoostTime(1.f)
 	, LeanAngle(15.f)
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
@@ -43,6 +46,7 @@ AGRPlayer::AGRPlayer()
 
 	static ConstructorHelpers::FObjectFinder<USoundBase> BoostSound(TEXT("/Game/GravityRacing/Audio/BGM/SW_Boost.SW_Boost"));
 	if (BoostSound.Succeeded()) Boost = BoostSound.Object;
+
 
 	PlayerMesh->SetRelativeLocation(FVector(0.f, 0.f, -90.f));
 	FRotator Rot = PlayerMesh->GetRelativeRotation();
@@ -75,6 +79,7 @@ void AGRPlayer::BeginPlay()
 	GetCharacterMovement()->AirControl = 1.f;
 
 	SetActorLocation(FVector(0.f, -OneLineDistance * 1.5, 0.f));
+	GetCapsuleComponent()->OnComponentHit.AddDynamic(this, &AGRPlayer::HitEvent);
 }
 
 // Called every frame
@@ -82,28 +87,34 @@ void AGRPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (bIsMoving)
+	if (!bIsDie)
 	{
-		CrossLine(DeltaTime);
-	}
+		if (bIsMoving)
+		{
+			CrossLine(DeltaTime);
+		}
 
-	if (bIsFlip)
+		if (bIsFlip)
+		{
+			FlipPlayer(DeltaTime);
+		}
+
+		if (bIsBoosting)
+		{
+			BoostSpeedTime(DeltaTime);
+		}
+
+		if (bIsRecoverCenter)
+		{
+			RecoverCenter(DeltaTime);
+		}
+
+		AddMovementInput(FVector(1.f, 0.f, 0.f));
+	}
+	else
 	{
-		FlipPlayer(DeltaTime);
+		SetActorLocation(GetMesh()->GetComponentLocation() + FVector(0.f, 0.f, 100.f));
 	}
-
-	if (bIsBoosting)
-	{
-		BoostSpeedTime(DeltaTime);
-	}
-
-	if (bIsRecoverCenter)
-	{
-		RecoverCenter(DeltaTime);
-	}
-
-
-	AddMovementInput(FVector(1.f, 0.f, 0.f));
 }
 
 // Called to bind functionality to input
@@ -131,10 +142,53 @@ void AGRPlayer::Landed(const FHitResult& Hit)
 	bIsFlip = false;
 }
 
+void AGRPlayer::HitEvent(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& SweepResult)
+{
+	AGRObstacle* Obstacle = Cast<AGRObstacle>(OtherActor);
+	if (Obstacle)
+	{
+		bIsDie = true;
+
+		FVector BounceDirection = SweepResult.ImpactNormal;
+		BounceDirection.Normalize();
+
+		float ImpulseStrength = 5000.0f;
+
+		FVector FinalImpulse = BounceDirection * ImpulseStrength;
+
+		GetMesh()->SetPhysicsLinearVelocity(FVector::ZeroVector);
+		GetMesh()->AddImpulseToAllBodiesBelow(FinalImpulse, NAME_None);
+		SpringArm->SetupAttachment(GetMesh());
+
+		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		GetMesh()->SetSimulatePhysics(true);
+		GetMesh()->SetCollisionProfileName(FName("Ragdoll"));
+
+		APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+		if (PC)
+		{
+			PC->SetInputMode(FInputModeUIOnly()); 
+			//PC->bShowMouseCursor = true;          
+		}
+
+	}
+}
+
 void AGRPlayer::SetPlayerMaxSpeed(float Speed)
 {
 	GetCharacterMovement()->MaxWalkSpeed = Speed;
 	bIsBoosting = true;
+}
+
+void AGRPlayer::BouncePlayer(const FHitResult& SweepResult)
+{
+	FVector BounceDirection = SweepResult.ImpactNormal;
+
+	if (BounceDirection.X > -0.5f) BounceDirection.X = -0.5f;
+
+	LaunchCharacter(BounceDirection * 2000.f + FVector(0, 0, 1000.f), true, true);
+	GetCharacterMovement()->GravityScale *= 0.4;
+	GRLOG("%s", *BounceDirection.ToString());
 }
 
 void AGRPlayer::Move(const FInputActionValue& value)

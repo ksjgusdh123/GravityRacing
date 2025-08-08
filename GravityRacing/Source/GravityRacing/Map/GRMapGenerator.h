@@ -39,7 +39,7 @@ private:
 	TArray<TSubclassOf<class AGRObstacle>> ObstacleClasses;
 
 	UPROPERTY(EditAnywhere)
-	int32 MaxTunnelCount = 5;
+	int32 MaxTunnelCount = 10;
 
 
 	UPROPERTY()

@@ -14,9 +14,13 @@ AGRCoin::AGRCoin()
 	PrimaryActorTick.bCanEverTick = false;
 
 	Collision = CreateDefaultSubobject<USphereComponent>(TEXT("Collision"));
-	RootComponent = Collision;
-	Collision->SetSphereRadius(50.f);
-	Collision->SetCollisionProfileName(TEXT("OverlapAllDynamic"));
+	SetRootComponent(Collision);
+	Collision->InitSphereRadius(50.f);
+	Collision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	Collision->SetCollisionObjectType(ECC_WorldDynamic);
+	Collision->SetCollisionResponseToAllChannels(ECR_Ignore);
+	Collision->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+	Collision->SetGenerateOverlapEvents(true);
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	Mesh->SetupAttachment(RootComponent);
@@ -31,15 +35,24 @@ void AGRCoin::BeginPlay()
 
 void AGRCoin::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (AGRPlayer* Player = Cast<AGRPlayer>(OtherActor))
-	{
-		Player->PlayMusic(EGameSound::Coin);
-		GRLOG("Coin!");
-		auto* GameMode = Cast<AGRGameModeBase>(UGameplayStatics::GetGameMode(this));
-		if (GameMode)
-		{
-			GameMode->AddScore(1);
-		}
-		Destroy();
-	}
+    if (bPickedUp) return;
+
+    if (AGRPlayer* Player = Cast<AGRPlayer>(OtherActor))
+    {
+        bPickedUp = true;
+
+        Collision->SetGenerateOverlapEvents(false);
+        Collision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+        Mesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+        Player->PlayMusic(EGameSound::Coin);
+        GRLOG("Coin!");
+
+        if (auto* GameMode = Cast<AGRGameModeBase>(UGameplayStatics::GetGameMode(this)))
+        {
+            GameMode->AddScore(Value);
+        }
+
+        Destroy();
+    }
 }

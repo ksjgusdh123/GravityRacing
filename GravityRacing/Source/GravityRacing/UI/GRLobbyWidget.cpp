@@ -11,22 +11,9 @@ void UGRLobbyWidget::NativeConstruct()
 {
     Super::NativeConstruct();
 
-    if (NameEditText)
-    {
-        NameEditText->OnTextCommitted.AddDynamic(this, &UGRLobbyWidget::OnNameCommitted);
-    }
-
     if (StartButton)
     {
         StartButton->OnClicked.AddDynamic(this, &UGRLobbyWidget::OnStartButtonClicked);
-    }
-}
-
-void UGRLobbyWidget::OnNameCommitted(const FText& Text, ETextCommit::Type CommitMethod)
-{
-    if (auto* GI = Cast<UGRGameInstance>(GetGameInstance()))
-    {
-        GI->SetPlayerName(Text.ToString());
     }
 }
 

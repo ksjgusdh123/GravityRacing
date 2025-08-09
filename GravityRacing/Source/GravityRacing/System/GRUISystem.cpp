@@ -5,6 +5,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "UI/GRLobbyWidget.h"
 #include "UI/GRGameWidget.h"
+#include "UI/GRPauseWidget.h"
+#include "UI/GRResultWidget.h"
 
 UGRUISystem::UGRUISystem()
 {
@@ -19,6 +21,12 @@ void UGRUISystem::LoadWidgetClasses()
 	static ConstructorHelpers::FClassFinder<UGRGameWidget> GameBP(TEXT("/Game/GravityRacing/UI/Widgets/WBP_Game"));
 	if (GameBP.Succeeded())
 		GameWidgetClass = GameBP.Class;
+	static ConstructorHelpers::FClassFinder<UGRPauseWidget> PauseBP(TEXT("/Game/GravityRacing/UI/Widgets/WBP_Pause"));
+	if (PauseBP.Succeeded())
+		PauseWidgetClass = PauseBP.Class;
+	static ConstructorHelpers::FClassFinder<UGRResultWidget> ResultBP(TEXT("/Game/GravityRacing/UI/Widgets/WBP_Result"));
+	if (ResultBP.Succeeded())
+		ResultWidgetClass = ResultBP.Class;
 }
 
 void UGRUISystem::SetUIMode(bool bShowCursor, UUserWidget* FocusWidget)
@@ -113,5 +121,55 @@ void UGRUISystem::OnGame()
 		UE_LOG(LogTemp, Log, TEXT("GameWidget Added to Viewport"));
 
 		GameWidget->StartPlayTimer();
+	}
+}
+
+void UGRUISystem::OnPause()
+{
+	UE_LOG(LogTemp, Log, TEXT("OnPause"));
+
+	if (PauseWidget)
+	{
+		PauseWidget->RemoveFromParent();
+		PauseWidget = nullptr;
+		UE_LOG(LogTemp, Log, TEXT("Old PauseWidget Removed"));
+	}
+
+	if (PauseWidgetClass)
+	{
+		PauseWidget = CreateWidget<UGRPauseWidget>(GetWorld(), PauseWidgetClass);
+		UE_LOG(LogTemp, Log, TEXT("Created PauseWidget"));
+	}
+
+	if (PauseWidget && !PauseWidget->IsInViewport())
+	{
+		PauseWidget->AddToViewport();
+		SetUIMode(true, PauseWidget);
+		UE_LOG(LogTemp, Log, TEXT("PauseWidget Added to Viewport"));
+	}
+}
+
+void UGRUISystem::OnResult()
+{
+	UE_LOG(LogTemp, Log, TEXT("OnResult"));
+
+	if (ResultWidget)
+	{
+		ResultWidget->RemoveFromParent();
+		ResultWidget = nullptr;
+		UE_LOG(LogTemp, Log, TEXT("Old ResultWidget Removed"));
+	}
+
+	if (ResultWidgetClass)
+	{
+		ResultWidget = CreateWidget<UGRResultWidget>(GetWorld(), ResultWidgetClass);
+		UE_LOG(LogTemp, Log, TEXT("Created ResultWidget"));
+	}
+
+	if (ResultWidget && !ResultWidget->IsInViewport())
+	{
+		ResultWidget->AddToViewport();
+		SetUIMode(true, ResultWidget);
+		UE_LOG(LogTemp, Log, TEXT("ResultWidget Added to Viewport"));
 	}
 }

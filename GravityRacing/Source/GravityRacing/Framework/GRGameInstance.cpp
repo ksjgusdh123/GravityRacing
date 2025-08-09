@@ -22,9 +22,3 @@ void UGRGameInstance::AddScore(int32 Amount)
 	Score += Amount;
 	OnScoreChanged.Broadcast(Score);
 }
-
-void UGRGameInstance::SetPlayerName(const FString& NewName)
-{
-	PlayerName = NewName;
-	OnPlayerNameChanged.Broadcast(PlayerName);
-}

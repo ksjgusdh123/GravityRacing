@@ -17,17 +17,10 @@ class GRAVITYRACING_API UGRLobbyWidget : public UUserWidget
 public:
     virtual void NativeConstruct() override;
 
-protected:
-    UPROPERTY(meta = (BindWidget))
-    UEditableTextBox* NameEditText;
-
     UPROPERTY(meta = (BindWidget))
     UButton* StartButton;
 
 private:
-    UFUNCTION()
-    void OnNameCommitted(const FText& Text, ETextCommit::Type CommitMethod);
-
     UFUNCTION()
     void OnStartButtonClicked();
 };

@@ -42,14 +42,6 @@ void UGRGameWidget::SetScoreText(int32 InScore)
 	}
 }
 
-void UGRGameWidget::SetPlayerNameText(FString Name)
-{
-	if (PlayerName)
-	{
-		PlayerName->SetText(FText::FromString(Name));
-	}
-}
-
 void UGRGameWidget::StartPlayTimer()
 {
 	if (!GetWorld()) return;
@@ -119,6 +111,12 @@ void UGRGameWidget::RefreshTimeLabel(float Seconds)
 {
 	if (PlayerTime)
 	{
-		PlayerTime->SetText(FText::FromString(FormatMMSSms(Seconds)));
+		FString FormatTime = FormatMMSSms(Seconds);
+		PlayerTime->SetText(FText::FromString(FormatTime));
+		auto* GI = Cast<UGRGameInstance>(GetGameInstance());
+		if (GI)
+		{
+			GI->SetPlayTime(FormatTime);
+		}
 	}
 }

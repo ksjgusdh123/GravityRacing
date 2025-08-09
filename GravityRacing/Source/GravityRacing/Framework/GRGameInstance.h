@@ -27,17 +27,14 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void AddScore(int32 Amount);
-
 	UFUNCTION(BlueprintPure)
 	int32 GetScore() const { return Score; }
-
 	UFUNCTION(BlueprintCallable)
-	void SetPlayerName(const FString& NewName);
-
+	void SetPlayTime(const FString& TimeText) { PlayTime = TimeText; }
 	UFUNCTION(BlueprintPure)
-	FString GetPlayerName() const { return PlayerName; }
+	FString GetPlayTime() const { return PlayTime; }
 
 private:
 	int32 Score = 0;
-	FString PlayerName;
+	FString PlayTime;
 };

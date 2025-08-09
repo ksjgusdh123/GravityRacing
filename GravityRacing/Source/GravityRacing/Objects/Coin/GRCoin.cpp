@@ -40,7 +40,6 @@ void AGRCoin::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 
     if (AGRPlayer* Player = Cast<AGRPlayer>(OtherActor))
     {
-        GRLOG("Coin!");
 		auto* SoundSys = GetGameInstance()->GetSubsystem<UGPSoundSystem>();
 		SoundSys->Play2D(EGameSound::Coin);
 

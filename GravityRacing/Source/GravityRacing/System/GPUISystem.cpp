@@ -12,7 +12,7 @@ UGPUISystem::UGPUISystem()
 
 void UGPUISystem::LoadWidgetClasses()
 {
-	static ConstructorHelpers::FClassFinder<UUserWidget> BP(TEXT("/Game/GravityRacing/Widgets/WBP_Game"));
+	static ConstructorHelpers::FClassFinder<UGPGameWidget> BP(TEXT("/Game/GravityRacing/UI/Widgets/WBP_Game"));
 	if (BP.Succeeded())
 		GameWidgetClass = BP.Class;
 }
@@ -81,7 +81,7 @@ void UGPUISystem::OnGameStart()
 	{
 		GameWidget->AddToViewport();
 		UE_LOG(LogTemp, Log, TEXT("GameWidget Added to Viewport"));
-	}
 
-	GameWidget->StartPlayTimer();
+		GameWidget->StartPlayTimer();
+	}
 }

@@ -6,6 +6,7 @@
 #include "Map/GRMapGenerator.h"
 #include "Characters/Player/GRPlayer.h"
 #include "Kismet/GameplayStatics.h"
+#include "System/GPUISystem.h"
 
 void AGRGameModeBase::BeginPlay()
 {
@@ -15,6 +16,11 @@ void AGRGameModeBase::BeginPlay()
 	if (Player)
 	{
 		Player->SetRoadOneLineDistance(AGRMapGenerator::OneLineLengthY);
+	}
+	auto* UISys = GetGameInstance()->GetSubsystem<UGPUISystem>();
+	if (UISys)
+	{
+		UISys->OnGameStart();
 	}
 }
 

@@ -16,6 +16,11 @@ public:
 	virtual void NativeConstruct() override;
 	virtual void NativeDestruct() override;
 
+	UFUNCTION()
+	void SetScoreText(int32 Score);
+	UFUNCTION()
+	void SetPlayerNameText(FString Name);
+
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidgetOptional))
 	UTextBlock* PlayerTime;
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidgetOptional))
@@ -39,8 +44,6 @@ public:
 	float GetElapsedPlaySeconds() const;
 
 private:
-	void SetScoreText(int32 Score);
-	void SetPlayerNameText(FString Name);
 	void RefreshTimeLabel(float Seconds);
 
 private:

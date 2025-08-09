@@ -92,6 +92,7 @@ void UGRSoundSystem::PlayBGM(EGameSound Id)
             NewComp->bAutoDestroy = false;
             NewComp->bStopWhenOwnerDestroyed = false;
 
+            NewComp->OnAudioFinished.RemoveDynamic(this, &UGRSoundSystem::HandleBGMFinished);
             NewComp->OnAudioFinished.AddUniqueDynamic(this, &UGRSoundSystem::HandleBGMFinished);
 
             NewComp->FadeIn(FadeTime, 1.f);
@@ -100,7 +101,7 @@ void UGRSoundSystem::PlayBGM(EGameSound Id)
     }
 }
 
-void UGRSoundSystem::HandleBGMFinished()
+void UGRSoundSystem::HandleBGMFinished(UAudioComponent* AC)
 {
     if (IsValid(BGMComp))
     {

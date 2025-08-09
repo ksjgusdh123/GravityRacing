@@ -46,7 +46,7 @@ public:
     void Play2D(EGameSound Id);
     void PlayBGM(EGameSound Id);
     void StopBGM();
-    void HandleBGMFinished();
+    void HandleBGMFinished(UAudioComponent* AC);
 
     void Preload(EGameSound Id);
     void PreloadAll();

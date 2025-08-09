@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Framework/GRGameInstance.h"
-
+#include "System/GPSoundSystem.h"
 
 void UGRGameInstance::Init()
 {
@@ -16,13 +16,7 @@ void UGRGameInstance::Shutdown()
 void UGRGameInstance::OnStart()
 {
 	Super::OnStart();
-	if (MusicSystem == nullptr)
-	{
-		MusicSystem = NewObject<UMusicSystem>(this);
-		MusicSystem->Init(this);
-	}
-
-	MusicSystem->Play(EGameMusic::MainMenu);
-
+	auto* SoundSys = GetSubsystem<UGPSoundSystem>();
+	SoundSys->PlayBGM(EGameSound::MainBGM);
 }
 

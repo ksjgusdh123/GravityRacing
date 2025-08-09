@@ -8,6 +8,7 @@
 #include "Characters/Player/GRPlayer.h" 
 #include "Framework/GRGameModeBase.h"
 #include "Kismet/GameplayStatics.h"
+#include "System/GPSoundSystem.h"
 
 AGRCoin::AGRCoin()
 {
@@ -39,14 +40,16 @@ void AGRCoin::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 
     if (AGRPlayer* Player = Cast<AGRPlayer>(OtherActor))
     {
+        GRLOG("Coin!");
+		auto* SoundSys = GetGameInstance()->GetSubsystem<UGPSoundSystem>();
+		SoundSys->Play2D(EGameSound::Coin);
+
         bPickedUp = true;
 
         Collision->SetGenerateOverlapEvents(false);
         Collision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
         Mesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
-        Player->PlayMusic(EGameSound::Coin);
-        GRLOG("Coin!");
 
         if (auto* GameMode = Cast<AGRGameModeBase>(UGameplayStatics::GetGameMode(this)))
         {

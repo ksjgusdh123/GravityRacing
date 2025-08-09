@@ -4,7 +4,8 @@
 #include "GRBooster.h"
 #include "GravityRacing.h"
 #include "Components/BoxComponent.h"
-#include "../../Characters/Player/GRPlayer.h"
+#include "Characters/Player/GRPlayer.h"
+#include "System/GPSoundSystem.h"
 
 // Sets default values
 AGRBooster::AGRBooster()
@@ -46,9 +47,11 @@ void AGRBooster::OverlapEvent(UPrimitiveComponent* OverlappedComponent, AActor* 
 	AGRPlayer* player = Cast<AGRPlayer>(OtherActor);
 	if (player)
 	{
-		player->PlayMusic(EGameSound::Boost);
-		player->SetPlayerMaxSpeed(3600.f);
 		GRLOG("Boost!!");
+		auto* SoundSys = GetGameInstance()->GetSubsystem<UGPSoundSystem>();
+		SoundSys->Play2D(EGameSound::Boost);
+
+		player->SetPlayerMaxSpeed(3600.f);
 	}
 }
 

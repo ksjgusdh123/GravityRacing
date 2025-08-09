@@ -345,18 +345,3 @@ void AGRPlayer::RecoverCenter(float DeltaTime)
 
 	PlayerMesh->SetRelativeRotation(NewRotator);
 }
-
-void AGRPlayer::PlayMusic(EGameSound SoundType)
-{
-	switch (SoundType) {
-	case EGameSound::Coin:
-		UGameplayStatics::PlaySound2D(this, Coin);
-		break;
-
-	case EGameSound::Boost:
-		UGameplayStatics::PlaySound2D(this, Boost);
-		break;
-
-	}
-
-}

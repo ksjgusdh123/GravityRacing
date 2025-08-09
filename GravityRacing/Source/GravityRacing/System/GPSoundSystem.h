@@ -1,0 +1,59 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "Subsystems/GameInstanceSubsystem.h"
+#include "Engine/DataTable.h"
+#include "Sound/SoundBase.h"
+#include "Components/AudioComponent.h"
+#include "Sound/SoundClass.h"
+#include "GPSoundSystem.generated.h"
+
+UENUM(BlueprintType)
+enum class EGameSound : uint8
+{
+    None       UMETA(DisplayName = "None"),
+    MainBGM   UMETA(DisplayName = "Main BGM"),
+	Coin	   UMETA(DisplayName = "Coin"),
+	Boost	   UMETA(DisplayName = "Boost"),
+};
+
+USTRUCT(BlueprintType)
+struct FSoundData : public FTableRowBase
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    EGameSound SoundId;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    TSoftObjectPtr<USoundBase> SoundAsset;
+};
+
+UCLASS()
+class UGPSoundSystem : public UGameInstanceSubsystem
+{
+    GENERATED_BODY()
+
+public:
+    virtual void Initialize(FSubsystemCollectionBase& Collection) override;
+    void SetSoundTable(UDataTable* InTable);
+    void BuildMap();
+
+    void Play2D(EGameSound Id);
+    void PlayBGM(EGameSound Id);
+    void StopBGM();
+    void Preload(EGameSound Id);
+    void PreloadAll();
+private:
+    UPROPERTY()
+    UDataTable* SoundTable = nullptr;
+    UPROPERTY()
+    TMap<EGameSound, TSoftObjectPtr<USoundBase>> SoundMap;
+    UPROPERTY(Transient)
+    UAudioComponent* BGMComp = nullptr;
+
+    UFUNCTION()
+    USoundBase* GetSoundSync(EGameSound Id);
+};

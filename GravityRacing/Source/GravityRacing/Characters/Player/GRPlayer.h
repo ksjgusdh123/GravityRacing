@@ -4,7 +4,6 @@
 
 #define MAX_ROAD_LINE 4
 
-#include "System/MusicSystem.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "GRPlayer.generated.h"
@@ -57,10 +56,6 @@ public:
 	void FlipPlayer(float DeltaTime);
 	void BoostSpeedTime(float DeltaTime);
 	void RecoverCenter(float DeltaTime);
-
-	
-public:
-	void PlayMusic(EGameSound SoundType);
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)

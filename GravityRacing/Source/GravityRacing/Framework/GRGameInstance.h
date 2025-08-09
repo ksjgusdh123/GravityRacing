@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include "System/MusicSystem.h"
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
 #include "GRGameInstance.generated.h"
@@ -19,6 +18,4 @@ public:
 	virtual void Init() override;
 	virtual void Shutdown() override;
 	virtual void OnStart() override;
-	UPROPERTY()
-	UMusicSystem* MusicSystem;
 };

@@ -31,7 +31,10 @@ public:
 
 	//void SetObstacle(class AGRObstacle* obstacle) { Obstacle = obstacle; }
 
+	void GetCoin(class AGRCoin* Coin, int32 idx);
+
 	void DestroyObstacles();
+	void DestroyCoins();
 	void RePositionEvent(TSubclassOf<class AGRObstacle> NewObstacleClass, int idx);
 	void RePositionGate();
 
@@ -45,6 +48,9 @@ private:
 
 	UPROPERTY()
 	TArray<AGRObstacle*> Obstacles;
+
+	UPROPERTY()
+	TArray<class AGRCoin*> Coins;	
 	
 	UPROPERTY(EditAnywhere)
 	class UArrowComponent* StartRoadArrow;

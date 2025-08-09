@@ -5,6 +5,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "DrawDebugHelpers.h"
 #include "Map/GRMapGenerator.h"
+#include "Map/GRTunnel.h"
 
 AGRCoinSpawner::AGRCoinSpawner()
 {
@@ -58,7 +59,7 @@ TSubclassOf<AGRCoin> AGRCoinSpawner::PickCoinClassAndValue(int32& OutValue) cons
     return CoinClass;
 }
 
-bool AGRCoinSpawner::TrySpawnOne(const FVector& Loc, const FRotator& Rot)
+bool AGRCoinSpawner::TrySpawnOne(const FVector& Loc, const FRotator& Rot, AGRTunnel* Tunnel, int32 idx)
 {
     int32 ValueToSet = NormalValue;
     TSubclassOf<AGRCoin> ClassToSpawn = PickCoinClassAndValue(ValueToSet);
@@ -75,6 +76,8 @@ bool AGRCoinSpawner::TrySpawnOne(const FVector& Loc, const FRotator& Rot)
     Coin->Value = ValueToSet;
     UGameplayStatics::FinishSpawningActor(Coin, Xform);
 
+    Tunnel->GetCoin(Coin, idx);
+
     return true;
 }
 
@@ -83,7 +86,7 @@ void AGRCoinSpawner::DecideTargetCoinLocation()
     NowSpawnLine = FMath::RandRange(1, 4);
 }
 
-void AGRCoinSpawner::SpawnCoin(FVector TunnelLocation)
+void AGRCoinSpawner::SpawnCoin(FVector TunnelLocation, AGRTunnel* Tunnel)
 {
     if (!CoinClass)
     {
@@ -104,7 +107,7 @@ void AGRCoinSpawner::SpawnCoin(FVector TunnelLocation)
         const float SpawnX = StartX + i * Spacing;
         const FVector SpawnLoc(SpawnX, Y, Z);
         const FRotator SpawnRot = FRotator::ZeroRotator;
-        TrySpawnOne(SpawnLoc, SpawnRot);
+        TrySpawnOne(SpawnLoc, SpawnRot, Tunnel, i);
     }
 }
 

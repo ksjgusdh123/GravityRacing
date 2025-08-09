@@ -6,6 +6,7 @@
 #include "Objects/Obstacle/GRGate.h"
 #include "GravityRacing.h"
 #include "Components/ArrowComponent.h"
+#include "Objects/Coin/GRCoin.h"
 
 // Sets default values
 AGRTunnel::AGRTunnel()
@@ -39,6 +40,7 @@ AGRTunnel::AGRTunnel()
 void AGRTunnel::BeginPlay()
 {
 	Super::BeginPlay();
+	Coins.SetNum(100);
 	Obstacles.SetNum(3);
 
 	ObstacleArrayLine.Push(-(GetTunnelLengthX() / 4));
@@ -64,6 +66,11 @@ float AGRTunnel::GetTunnelOneLineLengthY() const
 	return GetTunnelLinesLengthY() / 4;
 }
 
+void AGRTunnel::GetCoin(AGRCoin* Coin, int32 idx)
+{
+	Coins[idx] = Coin;
+}
+
 void AGRTunnel::DestroyObstacles()
 {
 	for (int i = 0; i < 3; ++i)
@@ -72,6 +79,18 @@ void AGRTunnel::DestroyObstacles()
 
 		Obstacles[i]->Destroy();
 		Obstacles[i] = nullptr;
+	}
+}
+
+void AGRTunnel::DestroyCoins()
+{
+	int32 Size = Coins.Num();
+	for (int i = 0; i < Size; ++i)
+	{
+		if (!Coins[i]) continue;
+
+		Coins[i]->Destroy();
+		Coins[i] = nullptr;
 	}
 }
 

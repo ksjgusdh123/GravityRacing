@@ -6,7 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "GRMapGenerator.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTunnelRepositioned, FVector, TunnelLocation);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnTunnelRepositioned, FVector, TunnelLocation, class AGRTunnel*, Tunnel);
 
 UCLASS()
 class GRAVITYRACING_API AGRMapGenerator : public AActor

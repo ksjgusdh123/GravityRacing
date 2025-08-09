@@ -68,6 +68,7 @@ void AGRMapGenerator::RepositionTunnel()
 	AGRTunnel* tunnel = ActiveTunnels[0];
 	ActiveTunnels.RemoveAt(0);
 	tunnel->DestroyObstacles();
+	tunnel->DestroyCoins();
 
 	FVector NewLocation = LastTunnelLocation + FVector(TunnelLength.X, 0, 0);
 	tunnel->SetActorLocation(NewLocation);
@@ -91,5 +92,5 @@ void AGRMapGenerator::RepositionTunnel()
 	}
 	LastTunnelLocation = NewLocation;
 	ActiveTunnels.Add(tunnel);
-	OnTunnelRepositioned.Broadcast(NewLocation);
+	OnTunnelRepositioned.Broadcast(NewLocation, tunnel);
 }

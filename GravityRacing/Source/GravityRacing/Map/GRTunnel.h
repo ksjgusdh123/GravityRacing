@@ -29,21 +29,30 @@ public:
 	float GetTunnelLinesLengthY() const;
 	float GetTunnelOneLineLengthY() const;
 
-	void SetObstacle(class AGRObstacle* obstacle) { Obstacle = obstacle; }
+	//void SetObstacle(class AGRObstacle* obstacle) { Obstacle = obstacle; }
 
-	void RePositionEvent(TSubclassOf<class AGRObstacle> NewObstacleClass);
+	void DestroyObstacles();
+	void RePositionEvent(TSubclassOf<class AGRObstacle> NewObstacleClass, int idx);
+	void RePositionGate();
+
+public:
+	UPROPERTY(EditAnywhere, Category = Gate)
+	TSubclassOf<AGRObstacle> GateClass;
 
 private:
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* Mesh;
 
 	UPROPERTY()
-	AGRObstacle* Obstacle;
+	TArray<AGRObstacle*> Obstacles;
 	
 	UPROPERTY(EditAnywhere)
 	class UArrowComponent* StartRoadArrow;
 
 	UPROPERTY(EditAnywhere)
 	class UArrowComponent* EndRoadArrow;
+
+private:
+	TArray<float> ObstacleArrayLine;
 };
 	

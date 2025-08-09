@@ -10,9 +10,9 @@
 // Sets default values
 AGRTunnel::AGRTunnel()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	
+
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	SetRootComponent(Mesh);
 
@@ -39,7 +39,11 @@ AGRTunnel::AGRTunnel()
 void AGRTunnel::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	Obstacles.SetNum(3);
+
+	ObstacleArrayLine.Push(-(GetTunnelLengthX() / 4));
+	ObstacleArrayLine.Push(0);
+	ObstacleArrayLine.Push((GetTunnelLengthX() / 4));
 }
 
 // Called every frame
@@ -60,56 +64,77 @@ float AGRTunnel::GetTunnelOneLineLengthY() const
 	return GetTunnelLinesLengthY() / 4;
 }
 
-void AGRTunnel::RePositionEvent(TSubclassOf<AGRObstacle> NewObstacleClass)
+void AGRTunnel::DestroyObstacles()
 {
-	if (Obstacle)
+	for (int i = 0; i < 3; ++i)
 	{
-		Obstacle->Destroy();
-		Obstacle = nullptr;
+		if (!Obstacles[i]) continue;
+
+		Obstacles[i]->Destroy();
+		Obstacles[i] = nullptr;
+	}
+}
+
+void AGRTunnel::RePositionEvent(TSubclassOf<AGRObstacle> NewObstacleClass, int idx)
+{
+	if (Obstacles[idx])
+	{
+		Obstacles[idx]->Destroy();
+		Obstacles[idx] = nullptr;
 	}
 
 	if (NewObstacleClass)
 	{
-		AGRObstacle* NewObstacle = GetWorld()->SpawnActor<AGRObstacle>(NewObstacleClass, GetActorLocation(), GetActorRotation());
+		FVector Location = GetActorLocation();
+		Location.X += ObstacleArrayLine[idx];
+		GRLOG("Spawn Location: %s", *(Location.ToString()));
+		AGRObstacle* NewObstacle = GetWorld()->SpawnActor<AGRObstacle>(NewObstacleClass, Location, GetActorRotation());
 		if (NewObstacle)
 		{
-			TArray<UStaticMeshComponent*> ObstacleMeshes;
-			NewObstacle->GetComponents<UStaticMeshComponent>(ObstacleMeshes);
 			NewObstacle->SetRoadOneLineDistance(GetTunnelOneLineLengthY());
+			/*FVector Extent = ObstacleMeshes[0]->Bounds.BoxExtent;
 
-			if (ObstacleMeshes.Num() > 1)
+			FVector OriginLocation = GetActorLocation();
+			bool IsFlip = FMath::RandBool();
+
+			if (IsFlip)
 			{
-				if (AGRGate* Gate = Cast<AGRGate>(NewObstacle))
-				{
-					Gate->SetIsOpenGate(GetTunnelHeight());
-				}
+				FRotator Rot = NewObstacle->GetActorRotation();
+				Rot.Yaw += 180.f;
+				NewObstacle->SetActorRotation(Rot);
+
+				OriginLocation.Z -= Extent.Z;
+				OriginLocation.Z += GetTunnelHeight();
 			}
-			else if (ObstacleMeshes[0])
+			else
 			{
-				/*FVector Extent = ObstacleMeshes[0]->Bounds.BoxExtent;
-
-				FVector OriginLocation = GetActorLocation();
-				bool IsFlip = FMath::RandBool();
-
-				if (IsFlip)
-				{
-					FRotator Rot = NewObstacle->GetActorRotation();
-					Rot.Yaw += 180.f;
-					NewObstacle->SetActorRotation(Rot);
-
-					OriginLocation.Z -= Extent.Z;
-					OriginLocation.Z += GetTunnelHeight();
-				}
-				else
-				{
-					OriginLocation.Z += Extent.Z;
-				}
-				NewObstacle->SetActorLocation(OriginLocation);*/
-				NewObstacle->SpawnObstacle(FMath::RandRange(1, 4));
+				OriginLocation.Z += Extent.Z;
 			}
-
-			Obstacle = NewObstacle;
+			NewObstacle->SetActorLocation(OriginLocation);*/
+			NewObstacle->SpawnObstacle(FMath::RandRange(1, 4));
+			Obstacles[idx] = NewObstacle;
 		}
+	}
+}
+
+void AGRTunnel::RePositionGate()
+{
+	if (Obstacles[0])
+	{
+		Obstacles[0]->Destroy();
+		Obstacles[0] = nullptr;
+	}
+
+	AGRObstacle* NewObstacle = GetWorld()->SpawnActor<AGRObstacle>(GateClass, GetActorLocation(), GetActorRotation());
+	if (NewObstacle)
+	{
+		NewObstacle->SetRoadOneLineDistance(GetTunnelOneLineLengthY());
+
+		if (AGRGate* Gate = Cast<AGRGate>(NewObstacle))
+		{
+			Gate->SetIsOpenGate(GetTunnelHeight());
+		}
+		Obstacles[0] = NewObstacle;
 	}
 }
 

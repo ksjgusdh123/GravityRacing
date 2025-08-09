@@ -21,7 +21,7 @@ public:
     void SpawnCoinsInLength(float Length, int32 MaxCoins);
 
     UFUNCTION()
-    void SpawnCoin(FVector TunnelLocation);
+    void SpawnCoin(FVector TunnelLocation, class AGRTunnel* Tunnel);
 
 
     UPROPERTY(EditAnywhere, Category = "Coin|Variety")
@@ -54,7 +54,7 @@ public:
 private:
     bool CanSpawnAt(const FVector& Loc, float Radius) const;
     TSubclassOf<AGRCoin> PickCoinClassAndValue(int32& OutValue) const;
-    bool TrySpawnOne(const FVector& Loc, const FRotator& Rot);
+    bool TrySpawnOne(const FVector& Loc, const FRotator& Rot, AGRTunnel* Tunnel, int32 idx);
 
     void DecideTargetCoinLocation();
 private:

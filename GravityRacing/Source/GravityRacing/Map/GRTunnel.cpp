@@ -6,13 +6,14 @@
 #include "Objects/Obstacle/GRGate.h"
 #include "GravityRacing.h"
 #include "Components/ArrowComponent.h"
+#include "Objects/Coin/GRCoin.h"
 
 // Sets default values
 AGRTunnel::AGRTunnel()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	
+
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	SetRootComponent(Mesh);
 
@@ -39,7 +40,12 @@ AGRTunnel::AGRTunnel()
 void AGRTunnel::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	Coins.SetNum(100);
+	Obstacles.SetNum(3);
+
+	ObstacleArrayLine.Push(-(GetTunnelLengthX() / 4));
+	ObstacleArrayLine.Push(0);
+	ObstacleArrayLine.Push((GetTunnelLengthX() / 4));
 }
 
 // Called every frame
@@ -60,56 +66,98 @@ float AGRTunnel::GetTunnelOneLineLengthY() const
 	return GetTunnelLinesLengthY() / 4;
 }
 
-void AGRTunnel::RePositionEvent(TSubclassOf<AGRObstacle> NewObstacleClass)
+void AGRTunnel::GetCoin(AGRCoin* Coin, int32 idx)
 {
-	if (Obstacle)
+	Coins[idx] = Coin;
+}
+
+void AGRTunnel::DestroyObstacles()
+{
+	for (int i = 0; i < 3; ++i)
 	{
-		Obstacle->Destroy();
-		Obstacle = nullptr;
+		if (!Obstacles[i]) continue;
+
+		Obstacles[i]->Destroy();
+		Obstacles[i] = nullptr;
+	}
+}
+
+void AGRTunnel::DestroyCoins()
+{
+	int32 Size = Coins.Num();
+	for (int i = 0; i < Size; ++i)
+	{
+		if (!Coins[i]) continue;
+
+		Coins[i]->Destroy();
+		Coins[i] = nullptr;
+	}
+}
+
+void AGRTunnel::RePositionEvent(TSubclassOf<AGRObstacle> NewObstacleClass, int idx)
+{
+	if (Obstacles[idx])
+	{
+		Obstacles[idx]->Destroy();
+		Obstacles[idx] = nullptr;
 	}
 
 	if (NewObstacleClass)
 	{
-		AGRObstacle* NewObstacle = GetWorld()->SpawnActor<AGRObstacle>(NewObstacleClass, GetActorLocation(), GetActorRotation());
+		FVector Location = GetActorLocation();
+
+		Location.X += ObstacleArrayLine[idx];
+		AGRObstacle* NewObstacle = GetWorld()->SpawnActor<AGRObstacle>(NewObstacleClass, Location, GetActorRotation());
 		if (NewObstacle)
 		{
-			TArray<UStaticMeshComponent*> ObstacleMeshes;
-			NewObstacle->GetComponents<UStaticMeshComponent>(ObstacleMeshes);
 			NewObstacle->SetRoadOneLineDistance(GetTunnelOneLineLengthY());
 
-			if (ObstacleMeshes.Num() > 1)
+			FVector OriginLocation = NewObstacle->GetActorLocation();
+			bool IsFlip = FMath::RandBool();
+
+			FRotator Rot = GetActorRotation();
+			if (IsFlip)
 			{
-				if (AGRGate* Gate = Cast<AGRGate>(NewObstacle))
-				{
-					Gate->SetIsOpenGate(GetTunnelHeight());
-				}
+				Rot.Yaw = 270.f;
+				Rot.Roll = 180.f;
+				
+				OriginLocation.Z = 700.f;
+				NewObstacle->SetActorLocation(OriginLocation);
 			}
-			else if (ObstacleMeshes[0])
+			else
 			{
-				/*FVector Extent = ObstacleMeshes[0]->Bounds.BoxExtent;
-
-				FVector OriginLocation = GetActorLocation();
-				bool IsFlip = FMath::RandBool();
-
-				if (IsFlip)
-				{
-					FRotator Rot = NewObstacle->GetActorRotation();
-					Rot.Yaw += 180.f;
-					NewObstacle->SetActorRotation(Rot);
-
-					OriginLocation.Z -= Extent.Z;
-					OriginLocation.Z += GetTunnelHeight();
-				}
-				else
-				{
-					OriginLocation.Z += Extent.Z;
-				}
-				NewObstacle->SetActorLocation(OriginLocation);*/
-				NewObstacle->SpawnObstacle(FMath::RandRange(1, 4));
+				Rot.Yaw = 90.f;
+				Rot.Roll = 0.f;
 			}
 
-			Obstacle = NewObstacle;
+			NewObstacle->SetActorRotation(Rot);
+			NewObstacle->SpawnObstacle(FMath::RandRange(1, 4));
+			Obstacles[idx] = NewObstacle;
 		}
+	}
+}
+
+void AGRTunnel::RePositionGate()
+{
+	if (Obstacles[0])
+	{
+		Obstacles[0]->Destroy();
+		Obstacles[0] = nullptr;
+	}
+
+	FRotator Rot = GetActorRotation();
+	Rot.Yaw = (FMath::RandBool() ? 90.f : 270.f);
+
+	AGRObstacle* NewObstacle = GetWorld()->SpawnActor<AGRObstacle>(GateClass, GetActorLocation(), Rot);
+	if (NewObstacle)
+	{
+		NewObstacle->SetRoadOneLineDistance(GetTunnelOneLineLengthY());
+
+		if (AGRGate* Gate = Cast<AGRGate>(NewObstacle))
+		{
+			Gate->SetIsOpenGate(GetTunnelHeight());
+		}
+		Obstacles[0] = NewObstacle;
 	}
 }
 

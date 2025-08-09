@@ -87,7 +87,6 @@ void AGRTunnel::RePositionEvent(TSubclassOf<AGRObstacle> NewObstacleClass, int i
 	{
 		FVector Location = GetActorLocation();
 		Location.X += ObstacleArrayLine[idx];
-		GRLOG("Spawn Location: %s", *(Location.ToString()));
 		AGRObstacle* NewObstacle = GetWorld()->SpawnActor<AGRObstacle>(NewObstacleClass, Location, GetActorRotation());
 		if (NewObstacle)
 		{
@@ -125,7 +124,10 @@ void AGRTunnel::RePositionGate()
 		Obstacles[0] = nullptr;
 	}
 
-	AGRObstacle* NewObstacle = GetWorld()->SpawnActor<AGRObstacle>(GateClass, GetActorLocation(), GetActorRotation());
+	FRotator Rot = GetActorRotation();
+	Rot.Yaw = (FMath::RandBool() ? 90.f : 270.f);
+
+	AGRObstacle* NewObstacle = GetWorld()->SpawnActor<AGRObstacle>(GateClass, GetActorLocation(), Rot);
 	if (NewObstacle)
 	{
 		NewObstacle->SetRoadOneLineDistance(GetTunnelOneLineLengthY());

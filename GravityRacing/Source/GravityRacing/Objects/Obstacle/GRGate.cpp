@@ -79,7 +79,6 @@ void AGRGate::SetIsOpenGate(float height)
 
 void AGRGate::HitEvent(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& SweepResult)
 {
-	GRLOG("Gate Hit Event");
 }
 
 void AGRGate::OnOpenTriggerBoxOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
@@ -87,7 +86,6 @@ void AGRGate::OnOpenTriggerBoxOverlapBegin(UPrimitiveComponent* OverlappedComp, 
 {
 	if (Cast<AGRPlayer>(OtherActor))
 	{
-		GRLOG("Open Gate");
 		bIsGateOpen = true;
 	}
 }

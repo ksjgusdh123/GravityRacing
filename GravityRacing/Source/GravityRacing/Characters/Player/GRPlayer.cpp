@@ -10,12 +10,10 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/ArrowComponent.h"
-#include "Sound/SoundBase.h"
-#include "Components/AudioComponent.h"
 #include "Objects/Obstacle/GRObstacle.h"
 #include "Components/CapsuleComponent.h"
 #include <Kismet/GameplayStatics.h>
-#include <Sound/SoundCue.h>
+#include "System/GRUISystem.h"
 
 
 // Sets default values
@@ -164,15 +162,13 @@ void AGRPlayer::HitEvent(UPrimitiveComponent* OverlappedComponent, AActor* Other
 	//	GetMesh()->SetSimulatePhysics(true);
 	//	GetMesh()->SetCollisionProfileName(FName("Ragdoll"));
 
-	//	APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-	//	if (PC)
-	//	{
-	//		PC->SetInputMode(FInputModeUIOnly()); 
-	//		//PC->bShowMouseCursor = true;          
-	//	}
+	//TODO: 플레이어 죽으면 아래 코드 추가해주삼 -> input모드 설정은 내부에서 함
+	// 
+	//auto* UISys = GetGameInstance()->GetSubsystem<UGRUISystem>();
+	//if (UISys)
+	//	UISys->OnResult();
 
 	//}
-
 
 }
 

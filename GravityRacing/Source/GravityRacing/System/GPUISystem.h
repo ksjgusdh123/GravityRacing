@@ -5,6 +5,7 @@
 #include "Blueprint/UserWidget.h"
 #include "GPUISystem.generated.h"
 
+class UGPLobbyWidget;
 class UGPGameWidget;
 
 UCLASS()
@@ -18,11 +19,14 @@ public:
 	void SetGameMode();
 
 	void OnLobby();
-	void OnGameStart();
+	void OnGame();
 
 private:
+	TSubclassOf<UUserWidget> LobbyWidgetClass;
 	TSubclassOf<UUserWidget> GameWidgetClass;
 
+	UPROPERTY()
+	UGPLobbyWidget* LobbyWidget;
 	UPROPERTY()
 	UGPGameWidget* GameWidget;
 

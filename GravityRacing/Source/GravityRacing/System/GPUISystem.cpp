@@ -3,6 +3,7 @@
 
 #include "System/GPUISystem.h"
 #include "Kismet/GameplayStatics.h"
+#include "UI/GPLobbyWidget.h"
 #include "UI/GPGameWidget.h"
 
 UGPUISystem::UGPUISystem()
@@ -12,9 +13,12 @@ UGPUISystem::UGPUISystem()
 
 void UGPUISystem::LoadWidgetClasses()
 {
-	static ConstructorHelpers::FClassFinder<UGPGameWidget> BP(TEXT("/Game/GravityRacing/UI/Widgets/WBP_Game"));
-	if (BP.Succeeded())
-		GameWidgetClass = BP.Class;
+	static ConstructorHelpers::FClassFinder<UGPLobbyWidget> LobbyBP(TEXT("/Game/GravityRacing/UI/Widgets/WBP_Lobby"));
+	if (LobbyBP.Succeeded())
+		LobbyWidgetClass = LobbyBP.Class;
+	static ConstructorHelpers::FClassFinder<UGPGameWidget> GameBP(TEXT("/Game/GravityRacing/UI/Widgets/WBP_Game"));
+	if (GameBP.Succeeded())
+		GameWidgetClass = GameBP.Class;
 }
 
 void UGPUISystem::SetUIMode(bool bShowCursor, UUserWidget* FocusWidget)
@@ -62,9 +66,30 @@ void UGPUISystem::SetGameMode()
 
 void UGPUISystem::OnLobby()
 {
+	UE_LOG(LogTemp, Log, TEXT("OnLobby"));
+
+	if (LobbyWidget)
+	{
+		LobbyWidget->RemoveFromParent();
+		LobbyWidget = nullptr;
+		UE_LOG(LogTemp, Log, TEXT("Old LobbyWidget Removed"));
+	}
+
+	if (LobbyWidgetClass)
+	{
+		LobbyWidget = CreateWidget<UGPLobbyWidget>(GetWorld(), LobbyWidgetClass);
+		UE_LOG(LogTemp, Log, TEXT("Created LobbyWidget"));
+	}
+
+	if (LobbyWidget && !LobbyWidget->IsInViewport())
+	{
+		LobbyWidget->AddToViewport();
+		SetUIMode(true, LobbyWidget);
+		UE_LOG(LogTemp, Log, TEXT("LobbyWidget Added to Viewport"));
+	}
 }
 
-void UGPUISystem::OnGameStart()
+void UGPUISystem::OnGame()
 {
 	UE_LOG(LogTemp, Log, TEXT("OnGame"));
 
@@ -84,6 +109,7 @@ void UGPUISystem::OnGameStart()
 	if (GameWidget && !GameWidget->IsInViewport())
 	{
 		GameWidget->AddToViewport();
+		SetGameMode();
 		UE_LOG(LogTemp, Log, TEXT("GameWidget Added to Viewport"));
 
 		GameWidget->StartPlayTimer();

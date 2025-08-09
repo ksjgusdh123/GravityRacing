@@ -26,6 +26,6 @@ void AGRGameMode::BeginPlay()
 	UGPUISystem* UISys = GetGameInstance()->GetSubsystem<UGPUISystem>();
 	if (UISys)
 	{
-		UISys->OnGameStart();
+		UISys->OnGame();
 	}
 }

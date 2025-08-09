@@ -4,6 +4,7 @@
 #include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
 #include "DrawDebugHelpers.h"
+#include "Map/GRMapGenerator.h"
 
 AGRCoinSpawner::AGRCoinSpawner()
 {
@@ -13,6 +14,14 @@ AGRCoinSpawner::AGRCoinSpawner()
 void AGRCoinSpawner::BeginPlay()
 {
     Super::BeginPlay();
+    TunnelLength = AGRMapGenerator::TunnelLength;
+    OneLineDistance = TunnelLength.Y / 4;
+
+    AGRMapGenerator* Generator = Cast<AGRMapGenerator>(UGameplayStatics::GetActorOfClass(GetWorld(), AGRMapGenerator::StaticClass()));
+    if (Generator)
+    {
+        Generator->OnTunnelRepositioned.AddDynamic(this, &AGRCoinSpawner::SpawnCoin);
+    }
 }
 
 bool AGRCoinSpawner::CanSpawnAt(const FVector& Loc, float Radius) const
@@ -49,7 +58,7 @@ TSubclassOf<AGRCoin> AGRCoinSpawner::PickCoinClassAndValue(int32& OutValue) cons
     return CoinClass;
 }
 
-bool AGRCoinSpawner::TrySpawnOne(const FVector& Loc, const FRotator& Rot, int32& OutSpawned)
+bool AGRCoinSpawner::TrySpawnOne(const FVector& Loc, const FRotator& Rot)
 {
     int32 ValueToSet = NormalValue;
     TSubclassOf<AGRCoin> ClassToSpawn = PickCoinClassAndValue(ValueToSet);
@@ -66,13 +75,42 @@ bool AGRCoinSpawner::TrySpawnOne(const FVector& Loc, const FRotator& Rot, int32&
     Coin->Value = ValueToSet;
     UGameplayStatics::FinishSpawningActor(Coin, Xform);
 
-    ++OutSpawned;
     return true;
+}
+
+void AGRCoinSpawner::DecideTargetCoinLocation()
+{
+    NowSpawnLine = FMath::RandRange(1, 4);
+}
+
+void AGRCoinSpawner::SpawnCoin(FVector TunnelLocation)
+{
+    if (!CoinClass)
+    {
+        GRLOG_E("CoinClass is null");
+        return;
+    }
+
+    DecideTargetCoinLocation();
+    const float StartX = TunnelLocation.X;
+    const float Y = -OneLineDistance * 1.5 + OneLineDistance * (NowSpawnLine - 1);
+    const float Z = 100.f;
+
+    const float Spacing = 100.f;
+
+    float SpawnCount = TunnelLength.X / Spacing - 1;
+    for (int i = 0; i < SpawnCount; ++i)
+    {
+        const float SpawnX = StartX + i * Spacing;
+        const FVector SpawnLoc(SpawnX, Y, Z);
+        const FRotator SpawnRot = FRotator::ZeroRotator;
+        TrySpawnOne(SpawnLoc, SpawnRot);
+    }
 }
 
 void AGRCoinSpawner::SpawnCoinsInLength(float Length, int32 MaxCoins)
 {
-    if (!CoinClass)
+ /*   if (!CoinClass)
     {
         GRLOG_E("CoinClass is null");
         return;
@@ -84,7 +122,7 @@ void AGRCoinSpawner::SpawnCoinsInLength(float Length, int32 MaxCoins)
     }
 
     const FVector Base = GetActorLocation();
-    const float StartX = Base.X;
+    const float StartX = Base.X;    
     const float Y = Base.Y;
     const float Z = Base.Z + 100.f;
 
@@ -100,5 +138,5 @@ void AGRCoinSpawner::SpawnCoinsInLength(float Length, int32 MaxCoins)
         TrySpawnOne(SpawnLoc, SpawnRot, SpawnCnt);
     }
 
-    GRLOG("Spawn Count : %d", SpawnCnt);
+    GRLOG("Spawn Count : %d", SpawnCnt);*/
 }

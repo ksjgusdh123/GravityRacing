@@ -56,7 +56,7 @@ void AGRMapGenerator::Tick(float DeltaTime)
 	FVector PlayerLocation = PlayerRef->GetActorLocation();
 	float DistFinalTunnel = FVector::Dist(PlayerLocation, ActiveTunnels[0]->GetActorLocation());
 
-	if (DistFinalTunnel > TunnelLength.X)
+	if (DistFinalTunnel > TunnelLength.X * (MaxTunnelCount / 2))
 	{
 		RepositionTunnel();
 	}
@@ -76,5 +76,7 @@ void AGRMapGenerator::RepositionTunnel()
 
 	LastTunnelLocation = NewLocation;
 	ActiveTunnels.Add(tunnel);
+
+	OnTunnelRepositioned.Broadcast(NewLocation);
 }
 

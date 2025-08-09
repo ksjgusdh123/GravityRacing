@@ -35,10 +35,16 @@ protected:
 
 	virtual void Landed(const FHitResult& Hit) override;
 
+protected:
+	UFUNCTION()
+	virtual void HitEvent(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+		FVector NormalImpulse, const FHitResult& SweepResult);
 
 public:
 	void SetPlayerMaxSpeed(float Speed);
 	void SetRoadOneLineDistance(float dist) { OneLineDistance = dist; }
+
+	void BouncePlayer(const FHitResult& SweepResult);
 public:
 	void Move(const FInputActionValue& value);
 	void InGameMove(const FInputActionValue& value);
@@ -102,6 +108,7 @@ private:
 	uint32 bIsMoving : 1;
 	uint32 bIsBoosting : 1;
 	uint32 bIsRecoverCenter : 1;
+	uint32 bIsDie : 1;
 
 	float OneLineDistance;
 	float OriginalMaxSpeed;

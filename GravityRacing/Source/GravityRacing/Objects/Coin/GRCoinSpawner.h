@@ -20,6 +20,10 @@ public:
     UFUNCTION(BlueprintCallable, Category = "Coin|Spawn")
     void SpawnCoinsInLength(float Length, int32 MaxCoins);
 
+    UFUNCTION()
+    void SpawnCoin(FVector TunnelLocation);
+
+
     UPROPERTY(EditAnywhere, Category = "Coin|Variety")
     TSubclassOf<AGRCoin> CoinClass;
 
@@ -50,5 +54,11 @@ public:
 private:
     bool CanSpawnAt(const FVector& Loc, float Radius) const;
     TSubclassOf<AGRCoin> PickCoinClassAndValue(int32& OutValue) const;
-    bool TrySpawnOne(const FVector& Loc, const FRotator& Rot, int32& OutSpawned);
+    bool TrySpawnOne(const FVector& Loc, const FRotator& Rot);
+
+    void DecideTargetCoinLocation();
+private:
+    FVector2D TunnelLength;
+    float OneLineDistance;
+    float NowSpawnLine;
 };

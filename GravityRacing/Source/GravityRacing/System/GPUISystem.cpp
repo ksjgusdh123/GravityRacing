@@ -60,6 +60,10 @@ void UGPUISystem::SetGameMode()
 		if (Pawn->Controller == PC) Pawn->EnableInput(PC);
 }
 
+void UGPUISystem::OnLobby()
+{
+}
+
 void UGPUISystem::OnGameStart()
 {
 	UE_LOG(LogTemp, Log, TEXT("OnGame"));

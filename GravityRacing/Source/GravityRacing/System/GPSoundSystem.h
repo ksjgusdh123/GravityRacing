@@ -15,6 +15,7 @@ enum class EGameSound : uint8
 {
     None       UMETA(DisplayName = "None"),
     MainBGM   UMETA(DisplayName = "Main BGM"),
+    LobbyBGM   UMETA(DisplayName = "Looby BGM"),
 	Coin	   UMETA(DisplayName = "Coin"),
 	Boost	   UMETA(DisplayName = "Boost"),
 };

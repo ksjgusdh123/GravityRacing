@@ -6,7 +6,7 @@
 #include "Components/SphereComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Characters/Player/GRPlayer.h" 
-#include "Framework/GRGameModeBase.h"
+#include "Framework/GRGameInstance.h"
 #include "Kismet/GameplayStatics.h"
 #include "System/GPSoundSystem.h"
 
@@ -49,12 +49,9 @@ void AGRCoin::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
         Collision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
         Mesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
-
-        if (auto* GameMode = Cast<AGRGameModeBase>(UGameplayStatics::GetGameMode(this)))
-        {
-            GameMode->AddScore(Value);
-        }
-
-        Destroy();
+		//TODO:GI addscore
+		auto* GI = Cast<UGRGameInstance>(GetGameInstance());
+		GI->AddScore(Value);
+		Destroy();
     }
 }

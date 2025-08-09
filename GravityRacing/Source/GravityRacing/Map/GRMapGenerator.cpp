@@ -52,6 +52,7 @@ void AGRMapGenerator::BeginPlay()
 void AGRMapGenerator::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	if (!PlayerRef) return;
 
 	FVector PlayerLocation = PlayerRef->GetActorLocation();
 	float DistFinalTunnel = FVector::Dist(PlayerLocation, ActiveTunnels[0]->GetActorLocation());

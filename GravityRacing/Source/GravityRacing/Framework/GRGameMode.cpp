@@ -1,14 +1,15 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Framework/GRGameModeBase.h"
+#include "Framework/GRGameMode.h"
 #include "Map/GRTunnel.h"
 #include "Map/GRMapGenerator.h"
 #include "Characters/Player/GRPlayer.h"
 #include "Kismet/GameplayStatics.h"
+#include "System/GPSoundSystem.h"
 #include "System/GPUISystem.h"
 
-void AGRGameModeBase::BeginPlay()
+void AGRGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 
@@ -17,21 +18,14 @@ void AGRGameModeBase::BeginPlay()
 	{
 		Player->SetRoadOneLineDistance(AGRMapGenerator::OneLineLengthY);
 	}
-	auto* UISys = GetGameInstance()->GetSubsystem<UGPUISystem>();
+	UGPSoundSystem* SoundSys = GetGameInstance()->GetSubsystem<UGPSoundSystem>();
+	if(SoundSys)
+	{
+		SoundSys->PlayBGM(EGameSound::MainBGM);
+	}
+	UGPUISystem* UISys = GetGameInstance()->GetSubsystem<UGPUISystem>();
 	if (UISys)
 	{
 		UISys->OnGameStart();
 	}
-}
-
-void AGRGameModeBase::AddScore(int32 Amount)
-{
-	Score += Amount;
-	OnScoreChanged.Broadcast(Score);
-}
-
-void AGRGameModeBase::SetPlayerName(const FString& NewName)
-{
-	PlayerName = NewName;
-	OnPlayerNameChanged.Broadcast(PlayerName);
 }

@@ -17,6 +17,7 @@ public:
 	void SetUIMode(bool bShowCursor, UUserWidget* FocusWidget);
 	void SetGameMode();
 
+	void OnLobby();
 	void OnGameStart();
 
 private:

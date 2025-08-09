@@ -83,18 +83,30 @@ void UGRSoundSystem::PlayBGM(EGameSound Id)
             Prev->FadeOut(FadeTime, 0.f);
         }
 
-        BGMComp = UGameplayStatics::CreateSound2D(
-            World, S, /*Volume*/1.f, /*Pitch*/1.f, /*StartTime*/0.f, /*Concurrency*/nullptr,
-            /*PersistAcrossLevelTransition*/ true
+        UAudioComponent* NewComp = UGameplayStatics::SpawnSound2D(
+            World, S, /*Volume*/1.f, /*Pitch*/1.f, /*StartTime*/0.f, /*Concurrency*/nullptr, /*bAutoDestroy*/ false
         );
-        if (IsValid(BGMComp))
+
+        if (IsValid(NewComp))
         {
-            BGMComp->bAutoDestroy = false;
-            BGMComp->FadeIn(FadeTime, 1.f);
+            NewComp->bAutoDestroy = false;
+            NewComp->bStopWhenOwnerDestroyed = false;
+
+            NewComp->OnAudioFinished.AddUniqueDynamic(this, &UGRSoundSystem::HandleBGMFinished);
+
+            NewComp->FadeIn(FadeTime, 1.f);
+            BGMComp = NewComp;
         }
     }
 }
 
+void UGRSoundSystem::HandleBGMFinished()
+{
+    if (IsValid(BGMComp))
+    {
+        BGMComp->Play(0.f);
+    }
+}
 
 void UGRSoundSystem::StopBGM()
 {

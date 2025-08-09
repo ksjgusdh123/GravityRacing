@@ -22,9 +22,10 @@ public:
 
 	void OnLobby();
 	void OnGame();
-	void OnPause();
 	void OnResult();
 
+	void ShowPause();
+	void HidePause();
 private:
 	TSubclassOf<UUserWidget> LobbyWidgetClass;
 	TSubclassOf<UUserWidget> GameWidgetClass;

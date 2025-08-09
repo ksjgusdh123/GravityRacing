@@ -18,6 +18,7 @@ enum class EGameSound : uint8
     LobbyBGM   UMETA(DisplayName = "Looby BGM"),
 	Coin	   UMETA(DisplayName = "Coin"),
 	Boost	   UMETA(DisplayName = "Boost"),
+	Die	   UMETA(DisplayName = "Die"),
 };
 
 USTRUCT(BlueprintType)
@@ -45,6 +46,8 @@ public:
     void Play2D(EGameSound Id);
     void PlayBGM(EGameSound Id);
     void StopBGM();
+    void HandleBGMFinished();
+
     void Preload(EGameSound Id);
     void PreloadAll();
 private:

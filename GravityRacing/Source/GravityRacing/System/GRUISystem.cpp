@@ -7,6 +7,7 @@
 #include "UI/GRGameWidget.h"
 #include "UI/GRPauseWidget.h"
 #include "UI/GRResultWidget.h"
+#include "System/GRSoundSystem.h"
 
 UGRUISystem::UGRUISystem()
 {
@@ -75,6 +76,11 @@ void UGRUISystem::SetGameMode()
 void UGRUISystem::OnLobby()
 {
 	UE_LOG(LogTemp, Log, TEXT("OnLobby"));
+	UGRSoundSystem* SoundSys = GetGameInstance()->GetSubsystem<UGRSoundSystem>();
+	if (SoundSys)
+	{
+		SoundSys->PlayBGM(EGameSound::LobbyBGM);
+	}
 
 	if (LobbyWidget)
 	{
@@ -101,6 +107,12 @@ void UGRUISystem::OnGame()
 {
 	UE_LOG(LogTemp, Log, TEXT("OnGame"));
 
+	UGRSoundSystem* SoundSys = GetGameInstance()->GetSubsystem<UGRSoundSystem>();
+	if (SoundSys)
+	{
+		SoundSys->PlayBGM(EGameSound::MainBGM);
+	}
+
 	if (GameWidget)
 	{
 		GameWidget->RemoveFromParent();
@@ -124,33 +136,15 @@ void UGRUISystem::OnGame()
 	}
 }
 
-void UGRUISystem::OnPause()
-{
-	UE_LOG(LogTemp, Log, TEXT("OnPause"));
-
-	if (PauseWidget)
-	{
-		PauseWidget->RemoveFromParent();
-		PauseWidget = nullptr;
-		UE_LOG(LogTemp, Log, TEXT("Old PauseWidget Removed"));
-	}
-
-	if (PauseWidgetClass)
-	{
-		PauseWidget = CreateWidget<UGRPauseWidget>(GetWorld(), PauseWidgetClass);
-		UE_LOG(LogTemp, Log, TEXT("Created PauseWidget"));
-	}
-
-	if (PauseWidget && !PauseWidget->IsInViewport())
-	{
-		PauseWidget->AddToViewport();
-		SetUIMode(true, PauseWidget);
-		UE_LOG(LogTemp, Log, TEXT("PauseWidget Added to Viewport"));
-	}
-}
-
 void UGRUISystem::OnResult()
 {
+	UGRSoundSystem* SoundSys = GetGameInstance()->GetSubsystem<UGRSoundSystem>();
+	if (SoundSys)
+	{
+		SoundSys->StopBGM();
+		SoundSys->Play2D(EGameSound::Die);
+	}
+
 	UE_LOG(LogTemp, Log, TEXT("OnResult"));
 
 	if (ResultWidget)
@@ -171,5 +165,54 @@ void UGRUISystem::OnResult()
 		ResultWidget->AddToViewport();
 		SetUIMode(true, ResultWidget);
 		UE_LOG(LogTemp, Log, TEXT("ResultWidget Added to Viewport"));
+	}
+}
+
+
+void UGRUISystem::ShowPause()
+{
+	UE_LOG(LogTemp, Log, TEXT("OnPause"));
+	UGRSoundSystem* SoundSys = GetGameInstance()->GetSubsystem<UGRSoundSystem>();
+	if (SoundSys)
+	{
+		SoundSys->StopBGM();
+	}
+
+	if (PauseWidget)
+	{
+		PauseWidget->RemoveFromParent();
+		PauseWidget = nullptr;
+		UE_LOG(LogTemp, Log, TEXT("Old PauseWidget Removed"));
+	}
+
+	if (PauseWidgetClass)
+	{
+		PauseWidget = CreateWidget<UGRPauseWidget>(GetWorld(), PauseWidgetClass);
+		UE_LOG(LogTemp, Log, TEXT("Created PauseWidget"));
+	}
+
+	if (PauseWidget && !PauseWidget->IsInViewport())
+	{
+		PauseWidget->AddToViewport();
+		SetUIMode(true, PauseWidget);
+		UE_LOG(LogTemp, Log, TEXT("PauseWidget Added to Viewport"));
+		UGameplayStatics::SetGamePaused(GetWorld(), true);
+	}
+}
+
+void UGRUISystem::HidePause()
+{
+	UGRSoundSystem* SoundSys = GetGameInstance()->GetSubsystem<UGRSoundSystem>();
+	if (SoundSys)
+	{
+		SoundSys->PlayBGM(EGameSound::MainBGM);
+	}
+
+	if (PauseWidget)
+	{
+		PauseWidget->RemoveFromParent();
+		PauseWidget = nullptr;
+		UE_LOG(LogTemp, Log, TEXT("PauseWidget Removed"));
+		UGameplayStatics::SetGamePaused(GetWorld(), false);
 	}
 }

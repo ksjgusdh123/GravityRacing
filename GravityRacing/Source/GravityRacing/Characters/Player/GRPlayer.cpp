@@ -162,7 +162,7 @@ void AGRPlayer::HitEvent(UPrimitiveComponent* OverlappedComponent, AActor* Other
 	//	GetMesh()->SetSimulatePhysics(true);
 	//	GetMesh()->SetCollisionProfileName(FName("Ragdoll"));
 
-	//TODO: 플레이어 죽으면 아래 코드 추가해주삼 -> input모드 설정은 내부에서 함
+	//TODO: 플레이어 죽으면 아래 코드 추가해주삼 -> UIInput모드 설정은 내부에서 함
 	// 
 	//auto* UISys = GetGameInstance()->GetSubsystem<UGRUISystem>();
 	//if (UISys)

@@ -97,7 +97,10 @@ void AGRCoinSpawner::SpawnCoin(FVector TunnelLocation, AGRTunnel* Tunnel)
     DecideTargetCoinLocation();
     const float StartX = TunnelLocation.X;
     const float Y = -OneLineDistance * 1.5 + OneLineDistance * (NowSpawnLine - 1);
-    const float Z = 100.f;
+
+    bool bRand = FMath::RandBool();
+    float Z = 100.f;
+    bRand ? Z = 100.f : Z = 600.f;
 
     const float Spacing = 100.f;
 

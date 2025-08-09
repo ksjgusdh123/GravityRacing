@@ -172,6 +172,8 @@ void AGRPlayer::HitEvent(UPrimitiveComponent* OverlappedComponent, AActor* Other
 	//	}
 
 	//}
+
+
 }
 
 void AGRPlayer::SetPlayerMaxSpeed(float Speed)

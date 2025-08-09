@@ -1,13 +1,13 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "System/GPSoundSystem.h"
+#include "System/GRSoundSystem.h"
 #include "GravityRacing.h"
 #include "Kismet/GameplayStatics.h"
 #include "Engine/StreamableManager.h"
 #include "Engine/AssetManager.h"
 
-void UGPSoundSystem::Initialize(FSubsystemCollectionBase& Collection)
+void UGRSoundSystem::Initialize(FSubsystemCollectionBase& Collection)
 {
     Super::Initialize(Collection);
 
@@ -25,13 +25,13 @@ void UGPSoundSystem::Initialize(FSubsystemCollectionBase& Collection)
     BuildMap();
 }
 
-void UGPSoundSystem::SetSoundTable(UDataTable* InTable)
+void UGRSoundSystem::SetSoundTable(UDataTable* InTable)
 {
     SoundTable = InTable;
     BuildMap();
 }
 
-void UGPSoundSystem::BuildMap()
+void UGRSoundSystem::BuildMap()
 {
     SoundMap.Reset();
     if (!SoundTable) return;
@@ -46,7 +46,7 @@ void UGPSoundSystem::BuildMap()
 }
 
 
-USoundBase* UGPSoundSystem::GetSoundSync(EGameSound Id)
+USoundBase* UGRSoundSystem::GetSoundSync(EGameSound Id)
 {
     if (Id == EGameSound::None) return nullptr;
     if (TSoftObjectPtr<USoundBase>* Found = SoundMap.Find(Id))
@@ -56,7 +56,7 @@ USoundBase* UGPSoundSystem::GetSoundSync(EGameSound Id)
     return nullptr;
 }
 
-void UGPSoundSystem::Play2D(EGameSound Id)
+void UGRSoundSystem::Play2D(EGameSound Id)
 {
     if (USoundBase* S = GetSoundSync(Id))
     {
@@ -67,7 +67,7 @@ void UGPSoundSystem::Play2D(EGameSound Id)
     }
 }
 
-void UGPSoundSystem::PlayBGM(EGameSound Id)
+void UGRSoundSystem::PlayBGM(EGameSound Id)
 {
     if (USoundBase* S = GetSoundSync(Id))
     {
@@ -96,7 +96,7 @@ void UGPSoundSystem::PlayBGM(EGameSound Id)
 }
 
 
-void UGPSoundSystem::StopBGM()
+void UGRSoundSystem::StopBGM()
 {
     if (BGMComp && BGMComp->IsPlaying())
     {
@@ -105,7 +105,7 @@ void UGPSoundSystem::StopBGM()
     }
 }
 
-void UGPSoundSystem::Preload(EGameSound Id)
+void UGRSoundSystem::Preload(EGameSound Id)
 {
     if (TSoftObjectPtr<USoundBase>* Found = SoundMap.Find(Id))
     {
@@ -123,7 +123,7 @@ void UGPSoundSystem::Preload(EGameSound Id)
     }
 }
 
-void UGPSoundSystem::PreloadAll()
+void UGRSoundSystem::PreloadAll()
 {
     if (!SoundTable) return;
 

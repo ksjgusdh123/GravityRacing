@@ -5,10 +5,10 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/TextBlock.h"
-#include "GPGameWidget.generated.h"
+#include "GRGameWidget.generated.h"
 
 UCLASS()
-class GRAVITYRACING_API UGPGameWidget : public UUserWidget
+class GRAVITYRACING_API UGRGameWidget : public UUserWidget
 {
 	GENERATED_BODY()
 
@@ -18,15 +18,11 @@ public:
 
 	UFUNCTION()
 	void SetScoreText(int32 Score);
-	UFUNCTION()
-	void SetPlayerNameText(FString Name);
 
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidgetOptional))
 	UTextBlock* PlayerTime;
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidgetOptional))
 	UTextBlock* Score;
-	UPROPERTY(BlueprintReadWrite, meta = (BindWidgetOptional))
-	UTextBlock* PlayerName;
 
 	UFUNCTION(BlueprintCallable, Category = "GR|GameWidget|Timer")
 	void StartPlayTimer();

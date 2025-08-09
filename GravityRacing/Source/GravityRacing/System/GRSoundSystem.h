@@ -43,12 +43,19 @@ public:
     void SetSoundTable(UDataTable* InTable);
     void BuildMap();
 
+    UFUNCTION()
     void Play2D(EGameSound Id);
+    UFUNCTION()
     void PlayBGM(EGameSound Id);
+    UFUNCTION()
     void StopBGM();
+
+    UFUNCTION()
     void HandleBGMFinished(UAudioComponent* AC);
 
+    UFUNCTION()
     void Preload(EGameSound Id);
+    UFUNCTION()
     void PreloadAll();
 private:
     UPROPERTY()

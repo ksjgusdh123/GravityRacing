@@ -6,8 +6,8 @@
 #include "Map/GRMapGenerator.h"
 #include "Characters/Player/GRPlayer.h"
 #include "Kismet/GameplayStatics.h"
-#include "System/GPSoundSystem.h"
-#include "System/GPUISystem.h"
+#include "System/GRSoundSystem.h"
+#include "System/GRUISystem.h"
 
 void AGRGameMode::BeginPlay()
 {
@@ -18,12 +18,12 @@ void AGRGameMode::BeginPlay()
 	{
 		Player->SetRoadOneLineDistance(AGRMapGenerator::OneLineLengthY);
 	}
-	UGPSoundSystem* SoundSys = GetGameInstance()->GetSubsystem<UGPSoundSystem>();
+	UGRSoundSystem* SoundSys = GetGameInstance()->GetSubsystem<UGRSoundSystem>();
 	if(SoundSys)
 	{
 		SoundSys->PlayBGM(EGameSound::MainBGM);
 	}
-	UGPUISystem* UISys = GetGameInstance()->GetSubsystem<UGPUISystem>();
+	UGRUISystem* UISys = GetGameInstance()->GetSubsystem<UGRUISystem>();
 	if (UISys)
 	{
 		UISys->OnGame();

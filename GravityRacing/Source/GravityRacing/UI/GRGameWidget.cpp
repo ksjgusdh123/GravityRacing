@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "UI/GPGameWidget.h"
+#include "UI/GRGameWidget.h"
 #include "Components/TextBlock.h"
 #include "Engine/World.h"
 #include "TimerManager.h"
@@ -17,24 +17,24 @@ static FString FormatMMSSms(double Seconds)
 	return FString::Printf(TEXT("%02d:%02d.%02d"), Min, Sec, Cs);
 }
 
-void UGPGameWidget::NativeConstruct()
+void UGRGameWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 	RefreshTimeLabel(AccumulatedSeconds);
 	if (auto* GI = Cast<UGRGameInstance>(GetGameInstance()))
 	{
-		GI->OnScoreChanged.AddDynamic(this, &UGPGameWidget::SetScoreText);
+		GI->OnScoreChanged.AddDynamic(this, &UGRGameWidget::SetScoreText);
 	}
 }
 
-void UGPGameWidget::NativeDestruct()
+void UGRGameWidget::NativeDestruct()
 {
 	if (UWorld* W = GetWorld())
 		W->GetTimerManager().ClearTimer(UiUpdateHandle);
 	Super::NativeDestruct();
 }
 
-void UGPGameWidget::SetScoreText(int32 InScore)
+void UGRGameWidget::SetScoreText(int32 InScore)
 {
 	if (Score)
 	{
@@ -42,7 +42,7 @@ void UGPGameWidget::SetScoreText(int32 InScore)
 	}
 }
 
-void UGPGameWidget::SetPlayerNameText(FString Name)
+void UGRGameWidget::SetPlayerNameText(FString Name)
 {
 	if (PlayerName)
 	{
@@ -50,7 +50,7 @@ void UGPGameWidget::SetPlayerNameText(FString Name)
 	}
 }
 
-void UGPGameWidget::StartPlayTimer()
+void UGRGameWidget::StartPlayTimer()
 {
 	if (!GetWorld()) return;
 
@@ -68,7 +68,7 @@ void UGPGameWidget::StartPlayTimer()
 	);
 }
 
-void UGPGameWidget::PausePlayTimer()
+void UGRGameWidget::PausePlayTimer()
 {
 	if (!bTimerRunning || !GetWorld()) return;
 
@@ -78,7 +78,7 @@ void UGPGameWidget::PausePlayTimer()
 	RefreshTimeLabel(AccumulatedSeconds);
 }
 
-void UGPGameWidget::ResumePlayTimer()
+void UGRGameWidget::ResumePlayTimer()
 {
 	if (bTimerRunning || !GetWorld()) return;
 
@@ -86,7 +86,7 @@ void UGPGameWidget::ResumePlayTimer()
 	bTimerRunning = true;
 }
 
-float UGPGameWidget::StopPlayTimerAndGetSeconds()
+float UGRGameWidget::StopPlayTimerAndGetSeconds()
 {
 	if (GetWorld())
 	{
@@ -103,7 +103,7 @@ float UGPGameWidget::StopPlayTimerAndGetSeconds()
 	return static_cast<float>(AccumulatedSeconds);
 }
 
-float UGPGameWidget::GetElapsedPlaySeconds() const
+float UGRGameWidget::GetElapsedPlaySeconds() const
 {
 	if (!GetWorld()) return static_cast<float>(AccumulatedSeconds);
 
@@ -115,7 +115,7 @@ float UGPGameWidget::GetElapsedPlaySeconds() const
 	return static_cast<float>(AccumulatedSeconds);
 }
 
-void UGPGameWidget::RefreshTimeLabel(float Seconds)
+void UGRGameWidget::RefreshTimeLabel(float Seconds)
 {
 	if (PlayerTime)
 	{

@@ -8,7 +8,7 @@
 #include "Characters/Player/GRPlayer.h" 
 #include "Framework/GRGameInstance.h"
 #include "Kismet/GameplayStatics.h"
-#include "System/GPSoundSystem.h"
+#include "System/GRSoundSystem.h"
 
 AGRCoin::AGRCoin()
 {
@@ -40,7 +40,7 @@ void AGRCoin::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 
     if (AGRPlayer* Player = Cast<AGRPlayer>(OtherActor))
     {
-		auto* SoundSys = GetGameInstance()->GetSubsystem<UGPSoundSystem>();
+		auto* SoundSys = GetGameInstance()->GetSubsystem<UGRSoundSystem>();
 		SoundSys->Play2D(EGameSound::Coin);
 
         bPickedUp = true;

@@ -1,28 +1,28 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "UI/GPLobbyWidget.h"
+#include "UI/GRLobbyWidget.h"
 #include "Components/EditableTextBox.h"
 #include "Components/Button.h"
 #include "Kismet/GameplayStatics.h"
 #include "Framework/GRGameInstance.h"
 
-void UGPLobbyWidget::NativeConstruct()
+void UGRLobbyWidget::NativeConstruct()
 {
     Super::NativeConstruct();
 
     if (NameEditText)
     {
-        NameEditText->OnTextCommitted.AddDynamic(this, &UGPLobbyWidget::OnNameCommitted);
+        NameEditText->OnTextCommitted.AddDynamic(this, &UGRLobbyWidget::OnNameCommitted);
     }
 
     if (StartButton)
     {
-        StartButton->OnClicked.AddDynamic(this, &UGPLobbyWidget::OnStartButtonClicked);
+        StartButton->OnClicked.AddDynamic(this, &UGRLobbyWidget::OnStartButtonClicked);
     }
 }
 
-void UGPLobbyWidget::OnNameCommitted(const FText& Text, ETextCommit::Type CommitMethod)
+void UGRLobbyWidget::OnNameCommitted(const FText& Text, ETextCommit::Type CommitMethod)
 {
     if (auto* GI = Cast<UGRGameInstance>(GetGameInstance()))
     {
@@ -30,7 +30,7 @@ void UGPLobbyWidget::OnNameCommitted(const FText& Text, ETextCommit::Type Commit
     }
 }
 
-void UGPLobbyWidget::OnStartButtonClicked()
+void UGRLobbyWidget::OnStartButtonClicked()
 {
     UGameplayStatics::OpenLevel(this, FName("MainLevel"));
 }

@@ -1,27 +1,27 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "System/GPUISystem.h"
+#include "System/GRUISystem.h"
 #include "Kismet/GameplayStatics.h"
-#include "UI/GPLobbyWidget.h"
-#include "UI/GPGameWidget.h"
+#include "UI/GRLobbyWidget.h"
+#include "UI/GRGameWidget.h"
 
-UGPUISystem::UGPUISystem()
+UGRUISystem::UGRUISystem()
 {
 	LoadWidgetClasses();
 }
 
-void UGPUISystem::LoadWidgetClasses()
+void UGRUISystem::LoadWidgetClasses()
 {
-	static ConstructorHelpers::FClassFinder<UGPLobbyWidget> LobbyBP(TEXT("/Game/GravityRacing/UI/Widgets/WBP_Lobby"));
+	static ConstructorHelpers::FClassFinder<UGRLobbyWidget> LobbyBP(TEXT("/Game/GravityRacing/UI/Widgets/WBP_Lobby"));
 	if (LobbyBP.Succeeded())
 		LobbyWidgetClass = LobbyBP.Class;
-	static ConstructorHelpers::FClassFinder<UGPGameWidget> GameBP(TEXT("/Game/GravityRacing/UI/Widgets/WBP_Game"));
+	static ConstructorHelpers::FClassFinder<UGRGameWidget> GameBP(TEXT("/Game/GravityRacing/UI/Widgets/WBP_Game"));
 	if (GameBP.Succeeded())
 		GameWidgetClass = GameBP.Class;
 }
 
-void UGPUISystem::SetUIMode(bool bShowCursor, UUserWidget* FocusWidget)
+void UGRUISystem::SetUIMode(bool bShowCursor, UUserWidget* FocusWidget)
 {
 	UE_LOG(LogTemp, Log, TEXT("SetUIMode: bShowCursor=%s, FocusWidget=%s"),
 		bShowCursor ? TEXT("true") : TEXT("false"),
@@ -47,7 +47,7 @@ void UGPUISystem::SetUIMode(bool bShowCursor, UUserWidget* FocusWidget)
 		if (Pawn->Controller == PC) Pawn->DisableInput(PC);
 }
 
-void UGPUISystem::SetGameMode()
+void UGRUISystem::SetGameMode()
 {
 	UE_LOG(LogTemp, Log, TEXT("SetGameMode"));
 	APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
@@ -64,7 +64,7 @@ void UGPUISystem::SetGameMode()
 		if (Pawn->Controller == PC) Pawn->EnableInput(PC);
 }
 
-void UGPUISystem::OnLobby()
+void UGRUISystem::OnLobby()
 {
 	UE_LOG(LogTemp, Log, TEXT("OnLobby"));
 
@@ -77,7 +77,7 @@ void UGPUISystem::OnLobby()
 
 	if (LobbyWidgetClass)
 	{
-		LobbyWidget = CreateWidget<UGPLobbyWidget>(GetWorld(), LobbyWidgetClass);
+		LobbyWidget = CreateWidget<UGRLobbyWidget>(GetWorld(), LobbyWidgetClass);
 		UE_LOG(LogTemp, Log, TEXT("Created LobbyWidget"));
 	}
 
@@ -89,7 +89,7 @@ void UGPUISystem::OnLobby()
 	}
 }
 
-void UGPUISystem::OnGame()
+void UGRUISystem::OnGame()
 {
 	UE_LOG(LogTemp, Log, TEXT("OnGame"));
 
@@ -102,7 +102,7 @@ void UGPUISystem::OnGame()
 
 	if (GameWidgetClass)
 	{
-		GameWidget = CreateWidget<UGPGameWidget>(GetWorld(), GameWidgetClass);
+		GameWidget = CreateWidget<UGRGameWidget>(GetWorld(), GameWidgetClass);
 		UE_LOG(LogTemp, Log, TEXT("Created GameWidget"));
 	}
 

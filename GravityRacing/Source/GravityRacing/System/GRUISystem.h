@@ -3,18 +3,18 @@
 #include "CoreMinimal.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "Blueprint/UserWidget.h"
-#include "GPUISystem.generated.h"
+#include "GRUISystem.generated.h"
 
-class UGPLobbyWidget;
-class UGPGameWidget;
+class UGRLobbyWidget;
+class UGRGameWidget;
 
 UCLASS()
-class GRAVITYRACING_API UGPUISystem : public UGameInstanceSubsystem
+class GRAVITYRACING_API UGRUISystem : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
 
 public:
-	UGPUISystem();
+	UGRUISystem();
 	void SetUIMode(bool bShowCursor, UUserWidget* FocusWidget);
 	void SetGameMode();
 
@@ -26,9 +26,9 @@ private:
 	TSubclassOf<UUserWidget> GameWidgetClass;
 
 	UPROPERTY()
-	UGPLobbyWidget* LobbyWidget;
+	UGRLobbyWidget* LobbyWidget;
 	UPROPERTY()
-	UGPGameWidget* GameWidget;
+	UGRGameWidget* GameWidget;
 
 	void LoadWidgetClasses();
 };

@@ -4,8 +4,8 @@
 #include "Framework/GRLobbyMode.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/PlayerController.h"
-#include "System/GPSoundSystem.h"
-#include "System/GPUISystem.h"
+#include "System/GRSoundSystem.h"
+#include "System/GRUISystem.h"
 
 void AGRLobbyMode::BeginPlay()
 {
@@ -20,12 +20,12 @@ void AGRLobbyMode::BeginPlay()
 		PC->SetViewTargetWithBlend(Cam, /*BlendTime=*/0.0f);
 	}
 
-	UGPSoundSystem* SoundSys = GetGameInstance()->GetSubsystem<UGPSoundSystem>();
+	UGRSoundSystem* SoundSys = GetGameInstance()->GetSubsystem<UGRSoundSystem>();
 	if (SoundSys)
 	{
 		SoundSys->PlayBGM(EGameSound::LobbyBGM);
 	}
-	UGPUISystem* UISys = GetGameInstance()->GetSubsystem<UGPUISystem>();
+	UGRUISystem* UISys = GetGameInstance()->GetSubsystem<UGRUISystem>();
 	if (UISys)
 	{
 		UISys->OnLobby();

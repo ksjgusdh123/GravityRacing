@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "GPLobbyWidget.generated.h"
+#include "GRLobbyWidget.generated.h"
 
 class UEditableTextBox;
 class UButton;
 
 UCLASS()
-class GRAVITYRACING_API UGPLobbyWidget : public UUserWidget
+class GRAVITYRACING_API UGRLobbyWidget : public UUserWidget
 {
     GENERATED_BODY()
 

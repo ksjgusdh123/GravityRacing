@@ -8,7 +8,7 @@
 #include "Sound/SoundBase.h"
 #include "Components/AudioComponent.h"
 #include "Sound/SoundClass.h"
-#include "GPSoundSystem.generated.h"
+#include "GRSoundSystem.generated.h"
 
 UENUM(BlueprintType)
 enum class EGameSound : uint8
@@ -33,7 +33,7 @@ struct FSoundData : public FTableRowBase
 };
 
 UCLASS()
-class GRAVITYRACING_API UGPSoundSystem : public UGameInstanceSubsystem
+class GRAVITYRACING_API UGRSoundSystem : public UGameInstanceSubsystem
 {
     GENERATED_BODY()
 

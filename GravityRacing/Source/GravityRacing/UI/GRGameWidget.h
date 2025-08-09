@@ -5,10 +5,10 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/TextBlock.h"
-#include "GPGameWidget.generated.h"
+#include "GRGameWidget.generated.h"
 
 UCLASS()
-class GRAVITYRACING_API UGPGameWidget : public UUserWidget
+class GRAVITYRACING_API UGRGameWidget : public UUserWidget
 {
 	GENERATED_BODY()
 

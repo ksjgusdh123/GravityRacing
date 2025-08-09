@@ -7,6 +7,7 @@
 #include "GRGameModeBase.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnScoreChanged, int32, NewScore);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerNameChanged, const FString&, NewName);
 
 UCLASS()
 class GRAVITYRACING_API AGRGameModeBase : public AGameModeBase
@@ -19,6 +20,8 @@ public:
 public:
 	UPROPERTY(BlueprintAssignable, Category = "Event")
 	FOnScoreChanged OnScoreChanged;
+	UPROPERTY(BlueprintAssignable, Category = "Event")
+	FOnPlayerNameChanged OnPlayerNameChanged;
 
 	UFUNCTION(BlueprintCallable)
 	void AddScore(int32 Amount);
@@ -26,6 +29,13 @@ public:
 	UFUNCTION(BlueprintPure)
 	int32 GetScore() const { return Score; }
 
+	UFUNCTION(BlueprintCallable)
+	void SetPlayerName(const FString& NewName);
+
+	UFUNCTION(BlueprintPure)
+	FString GetPlayerName() const { return PlayerName; }
+
 private:
 	int32 Score = 0;
+	FString PlayerName;
 };

@@ -32,7 +32,7 @@ struct FSoundData : public FTableRowBase
 };
 
 UCLASS()
-class UGPSoundSystem : public UGameInstanceSubsystem
+class GRAVITYRACING_API UGPSoundSystem : public UGameInstanceSubsystem
 {
     GENERATED_BODY()
 

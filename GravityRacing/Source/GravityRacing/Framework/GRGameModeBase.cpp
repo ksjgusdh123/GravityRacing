@@ -23,3 +23,9 @@ void AGRGameModeBase::AddScore(int32 Amount)
 	Score += Amount;
 	OnScoreChanged.Broadcast(Score);
 }
+
+void AGRGameModeBase::SetPlayerName(const FString& NewName)
+{
+	PlayerName = NewName;
+	OnPlayerNameChanged.Broadcast(PlayerName);
+}

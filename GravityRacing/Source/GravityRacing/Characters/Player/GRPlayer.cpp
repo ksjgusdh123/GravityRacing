@@ -142,33 +142,32 @@ void AGRPlayer::Landed(const FHitResult& Hit)
 
 void AGRPlayer::HitEvent(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& SweepResult)
 {
-	//AGRObstacle* Obstacle = Cast<AGRObstacle>(OtherActor);
-	//if (Obstacle)
-	//{
-	//	bIsDie = true;
+	if (bTest) return;
+	AGRObstacle* Obstacle = Cast<AGRObstacle>(OtherActor);
+	if (Obstacle)
+	{
+		bIsDie = true;
 
-	//	FVector BounceDirection = SweepResult.ImpactNormal;
-	//	BounceDirection.Normalize();
+		FVector BounceDirection = SweepResult.ImpactNormal;
+		BounceDirection.Normalize();
 
-	//	float ImpulseStrength = 5000.0f;
+		float ImpulseStrength = 5000.0f;
 
-	//	FVector FinalImpulse = BounceDirection * ImpulseStrength;
+		FVector FinalImpulse = BounceDirection * ImpulseStrength;
 
-	//	GetMesh()->SetPhysicsLinearVelocity(FVector::ZeroVector);
-	//	GetMesh()->AddImpulseToAllBodiesBelow(FinalImpulse, NAME_None);
-	//	SpringArm->SetupAttachment(GetMesh());
+		GetMesh()->SetPhysicsLinearVelocity(FVector::ZeroVector);
+		GetMesh()->AddImpulseToAllBodiesBelow(FinalImpulse, NAME_None);
+		SpringArm->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform);
 
-	//	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	//	GetMesh()->SetSimulatePhysics(true);
-	//	GetMesh()->SetCollisionProfileName(FName("Ragdoll"));
+		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		GetMesh()->SetSimulatePhysics(true);
+		GetMesh()->SetCollisionProfileName(FName("Ragdoll"));
 
-	//TODO: 플레이어 죽으면 아래 코드 추가해주삼 -> UIInput모드 설정은 내부에서 함
-	// 
-	//auto* UISys = GetGameInstance()->GetSubsystem<UGRUISystem>();
-	//if (UISys)
-	//	UISys->OnResult();
+		auto* UISys = GetGameInstance()->GetSubsystem<UGRUISystem>();
+		if (UISys)
+			UISys->OnResult();
 
-	//}
+	}
 
 }
 

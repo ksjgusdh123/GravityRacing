@@ -7,6 +7,8 @@
 #include "Components/TextBlock.h"
 #include "GRGameWidget.generated.h"
 
+class UButton;
+
 UCLASS()
 class GRAVITYRACING_API UGRGameWidget : public UUserWidget
 {
@@ -23,6 +25,11 @@ public:
 	UTextBlock* PlayerTime;
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidgetOptional))
 	UTextBlock* Score;
+	UPROPERTY(meta = (BindWidget))
+	UButton* PauseButton;
+
+	UFUNCTION()
+	void OnPauseButtonClicked();
 
 	UFUNCTION(BlueprintCallable, Category = "GR|GameWidget|Timer")
 	void StartPlayTimer();

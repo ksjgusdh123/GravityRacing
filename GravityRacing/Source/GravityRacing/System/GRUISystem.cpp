@@ -73,6 +73,27 @@ void UGRUISystem::SetGameMode()
 		if (Pawn->Controller == PC) Pawn->EnableInput(PC);
 }
 
+void UGRUISystem::SetGameAndUIMode(UUserWidget* FocusWidget)
+{
+	UE_LOG(LogTemp, Log, TEXT("SetGameMode"));
+	APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	if (!PC) { UE_LOG(LogTemp, Error, TEXT("Invalid PlayerController")); return; }
+
+	FInputModeGameAndUI InputMode;
+
+	if (FocusWidget)
+	{
+		FocusWidget->SetIsFocusable(true);
+		InputMode.SetWidgetToFocus(FocusWidget->TakeWidget());
+	}
+
+	InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+	InputMode.SetHideCursorDuringCapture(false);
+
+	PC->SetInputMode(InputMode);
+	PC->bShowMouseCursor = true;
+}
+
 void UGRUISystem::OnLobby()
 {
 	UE_LOG(LogTemp, Log, TEXT("OnLobby"));
@@ -129,7 +150,7 @@ void UGRUISystem::OnGame()
 	if (GameWidget && !GameWidget->IsInViewport())
 	{
 		GameWidget->AddToViewport();
-		SetGameMode();
+		SetGameAndUIMode(GameWidget);
 		UE_LOG(LogTemp, Log, TEXT("GameWidget Added to Viewport"));
 
 		GameWidget->StartPlayTimer();
@@ -201,7 +222,6 @@ void UGRUISystem::ShowPause()
 	if (PauseWidget && !PauseWidget->IsInViewport())
 	{
 		PauseWidget->AddToViewport();
-		SetUIMode(true, PauseWidget);
 		UE_LOG(LogTemp, Log, TEXT("PauseWidget Added to Viewport"));
 		UGameplayStatics::SetGamePaused(GetWorld(), true);
 	}
@@ -217,9 +237,10 @@ void UGRUISystem::HidePause()
 
 	if (PauseWidget)
 	{
+		UGameplayStatics::SetGamePaused(GetWorld(), false);
 		PauseWidget->RemoveFromParent();
 		PauseWidget = nullptr;
 		UE_LOG(LogTemp, Log, TEXT("PauseWidget Removed"));
-		UGameplayStatics::SetGamePaused(GetWorld(), false);
 	}
+
 }

@@ -7,9 +7,8 @@
 #include "Components/TextBlock.h"
 #include "GRResultWidget.generated.h"
 
-/**
- * 
- */
+class UButton;
+
 UCLASS()
 class GRAVITYRACING_API UGRResultWidget : public UUserWidget
 {
@@ -17,8 +16,21 @@ class GRAVITYRACING_API UGRResultWidget : public UUserWidget
 public:
 	virtual void NativeConstruct() override;
 
+	UFUNCTION()
+	void OnReplayClicked();
+
+	UFUNCTION()
+	void OnExitClicked();
+
+public:
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidgetOptional))
 	UTextBlock* PlayerTime;
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidgetOptional))
 	UTextBlock* Score;
+
+	UPROPERTY(meta = (BindWidget))
+	UButton* ReplayButton;
+
+	UPROPERTY(meta = (BindWidget))
+	UButton* ExitButton;
 };

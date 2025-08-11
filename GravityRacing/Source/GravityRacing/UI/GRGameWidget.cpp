@@ -6,7 +6,9 @@
 #include "Engine/World.h"
 #include "TimerManager.h"
 #include "Framework/GRGameInstance.h"
+#include "Components/Button.h"
 #include "Kismet/GameplayStatics.h"
+#include "System/GRUISystem.h"
 
 static FString FormatMMSSms(double Seconds)
 {
@@ -25,6 +27,8 @@ void UGRGameWidget::NativeConstruct()
 	{
 		GI->OnScoreChanged.AddDynamic(this, &UGRGameWidget::SetScoreText);
 	}
+	if (PauseButton)
+		PauseButton->OnClicked.AddDynamic(this, &UGRGameWidget::OnPauseButtonClicked);
 }
 
 void UGRGameWidget::NativeDestruct()
@@ -40,6 +44,13 @@ void UGRGameWidget::SetScoreText(int32 InScore)
 	{
 		Score->SetText(FText::AsNumber(InScore));
 	}
+}
+
+void UGRGameWidget::OnPauseButtonClicked()
+{
+	auto* UISys = GetGameInstance()->GetSubsystem<UGRUISystem>();
+	if (UISys)
+		UISys->ShowPause();
 }
 
 void UGRGameWidget::StartPlayTimer()

@@ -19,6 +19,7 @@ public:
 	UGRUISystem();
 	void SetUIMode(bool bShowCursor, UUserWidget* FocusWidget);
 	void SetGameMode();
+	void SetGameAndUIMode(UUserWidget* FocusWidget);
 
 	void OnLobby();
 	void OnGame();

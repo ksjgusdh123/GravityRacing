@@ -3,6 +3,7 @@
 #include "UI/GRPauseWidget.h"
 #include "Components/Button.h"
 #include "Kismet/GameplayStatics.h"
+#include "System/GRUISystem.h"
 
 void UGRPauseWidget::NativeConstruct()
 {
@@ -21,6 +22,9 @@ void UGRPauseWidget::NativeConstruct()
 void UGRPauseWidget::OnPlayClicked()
 {
 	UE_LOG(LogTemp, Log, TEXT("Play Button Clicked"));
+	auto* UISys = GetGameInstance()->GetSubsystem<UGRUISystem>();
+	if (UISys)
+		UISys->HidePause();
 }
 
 void UGRPauseWidget::OnReplayClicked()

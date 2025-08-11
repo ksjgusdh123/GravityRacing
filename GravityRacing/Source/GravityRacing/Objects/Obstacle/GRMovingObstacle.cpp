@@ -24,13 +24,13 @@ void AGRMovingObstacle::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (Mesh && CollisionBox)
-	{
-		FVector extent, origin;
-		Mesh->GetLocalBounds(origin, extent);
+	//if (Mesh && CollisionBox)
+	//{
+	//	FVector extent, origin;
+	//	Mesh->GetLocalBounds(origin, extent);
 
-		CollisionBox->SetBoxExtent(extent);	
-	}
+	//	CollisionBox->SetBoxExtent(extent);	
+	//}
 }
 
 void AGRMovingObstacle::Tick(float DeltaSeconds)

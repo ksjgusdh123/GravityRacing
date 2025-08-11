@@ -15,7 +15,7 @@ enum class EGameSound : uint8
 {
     None       UMETA(DisplayName = "None"),
     MainBGM   UMETA(DisplayName = "Main BGM"),
-    LobbyBGM   UMETA(DisplayName = "Looby BGM"),
+    LobbyBGM   UMETA(DisplayName = "Lobby BGM"),
 	Coin	   UMETA(DisplayName = "Coin"),
 	Boost	   UMETA(DisplayName = "Boost"),
 	Die	   UMETA(DisplayName = "Die"),
@@ -27,7 +27,7 @@ struct FSoundData : public FTableRowBase
     GENERATED_BODY()
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    EGameSound SoundId;
+    EGameSound SoundId = EGameSound::None;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     TSoftObjectPtr<USoundBase> SoundAsset;

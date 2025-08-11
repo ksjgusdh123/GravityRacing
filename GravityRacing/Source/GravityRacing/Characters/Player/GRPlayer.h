@@ -21,6 +21,8 @@ class GRAVITYRACING_API AGRPlayer : public ACharacter
 public:
 	AGRPlayer();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TEST")
+	bool bTest;
 protected:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;

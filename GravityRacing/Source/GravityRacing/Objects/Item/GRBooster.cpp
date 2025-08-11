@@ -58,7 +58,7 @@ void AGRBooster::OverlapEvent(UPrimitiveComponent* OverlappedComponent, AActor* 
 		auto* SoundSys = GetGameInstance()->GetSubsystem<UGRSoundSystem>();
 		SoundSys->Play2D(EGameSound::Boost);
 
-		player->SetPlayerMaxSpeed(3600.f);
+		player->SetPlayerBoost();
 	}
 }
 

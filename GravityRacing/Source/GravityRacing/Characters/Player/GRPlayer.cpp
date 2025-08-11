@@ -19,7 +19,7 @@
 // Sets default values
 AGRPlayer::AGRPlayer()
 	: OneLineDistance(0.f), CurrentLine(1), bIsMoving(false), bIsFlip(false), bIsCurrentFlipState(false), bIsBoosting(false), bIsDie(false), OriginalMaxSpeed(1200.f), BoostTime(0.f), MaxBoostTime(1.f)
-	, LeanAngle(15.f)
+	, LeanAngle(15.f), MaxSpeed(3000.f)
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -107,12 +107,18 @@ void AGRPlayer::Tick(float DeltaTime)
 			RecoverCenter(DeltaTime);
 		}
 
+		if (bIsChangeSpeed && !bIsBoosting)
+		{
+			ChangeSpeed(DeltaTime);
+		}
+		UpdateSpeed(DeltaTime);
 		AddMovementInput(FVector(1.f, 0.f, 0.f));
 	}
 	else
 	{
 		SetActorLocation(GetMesh()->GetComponentLocation() + FVector(0.f, 0.f, 100.f));
 	}
+	GRLOG("%f", GetCharacterMovement()->MaxWalkSpeed);
 }
 
 // Called to bind functionality to input
@@ -174,6 +180,12 @@ void AGRPlayer::HitEvent(UPrimitiveComponent* OverlappedComponent, AActor* Other
 void AGRPlayer::SetPlayerMaxSpeed(float Speed)
 {
 	GetCharacterMovement()->MaxWalkSpeed = Speed;
+	bIsBoosting = true;
+}
+
+void AGRPlayer::SetPlayerBoost()
+{
+	GetCharacterMovement()->MaxWalkSpeed = OriginalMaxSpeed * 2;
 	bIsBoosting = true;
 }
 
@@ -341,4 +353,34 @@ void AGRPlayer::RecoverCenter(float DeltaTime)
 	}
 
 	PlayerMesh->SetRelativeRotation(NewRotator);
+}
+
+void AGRPlayer::ChangeSpeed(float DeltaTime)
+{
+	float Cur = GetCharacterMovement()->MaxWalkSpeed;
+	float New = FMath::FInterpTo(Cur, TargetMaxSpeed, DeltaTime, 20.f);
+	GetCharacterMovement()->MaxWalkSpeed = New;
+	if (GetCharacterMovement()->MaxWalkSpeed >= TargetMaxSpeed)
+	{
+		if (bIsBoosting)
+		{
+			OriginalMaxSpeed = TargetMaxSpeed;
+			bIsChangeSpeed = false;
+			return;
+		}
+		GetCharacterMovement()->MaxWalkSpeed = TargetMaxSpeed;
+		bIsChangeSpeed = false;
+		OriginalMaxSpeed = TargetMaxSpeed;
+	}
+}
+
+void AGRPlayer::UpdateSpeed(float DeltaTime)
+{
+	ChangeSpeedTime += DeltaTime;
+	if (ChangeSpeedTime >= MaxChangeSpeedTime)
+	{
+		ChangeSpeedTime = 0.f;
+		bIsChangeSpeed = true;
+		TargetMaxSpeed = OriginalMaxSpeed + 100.f;
+	}
 }

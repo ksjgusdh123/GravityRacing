@@ -37,6 +37,7 @@ protected:
 
 public:
 	void SetPlayerMaxSpeed(float Speed);
+	void SetPlayerBoost();
 	void SetRoadOneLineDistance(float dist) { OneLineDistance = dist; }
 
 	void BouncePlayer(const FHitResult& SweepResult);
@@ -52,6 +53,8 @@ public:
 	void FlipPlayer(float DeltaTime);
 	void BoostSpeedTime(float DeltaTime);
 	void RecoverCenter(float DeltaTime);
+	void ChangeSpeed(float DeltaTime);
+	void UpdateSpeed(float DeltaTime);
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
@@ -100,13 +103,18 @@ private:
 	uint32 bIsBoosting : 1;
 	uint32 bIsRecoverCenter : 1;
 	uint32 bIsDie : 1;
+	uint32 bIsChangeSpeed : 1;
 
 	float OneLineDistance;
 	float OriginalMaxSpeed;
+	float TargetMaxSpeed;
+	float MaxSpeed;
 	float BoostTime;
 	float MaxBoostTime;
 	float PitchDegree = 0.f;
 	float RollDegree = 0.f;
+	float ChangeSpeedTime = 0.f;
+	float MaxChangeSpeedTime = 10.f;
 
 	FVector TargetLocation;
 	FRotator TargetRot;

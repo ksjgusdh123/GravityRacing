@@ -75,24 +75,25 @@ void UGRUISystem::SetGameMode()
 
 void UGRUISystem::SetGameAndUIMode(UUserWidget* FocusWidget)
 {
-	UE_LOG(LogTemp, Log, TEXT("SetGameMode"));
+	UE_LOG(LogTemp, Log, TEXT("SetGameAndUIMode"));
 	APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 	if (!PC) { UE_LOG(LogTemp, Error, TEXT("Invalid PlayerController")); return; }
 
 	FInputModeGameAndUI InputMode;
-
 	if (FocusWidget)
 	{
 		FocusWidget->SetIsFocusable(true);
 		InputMode.SetWidgetToFocus(FocusWidget->TakeWidget());
 	}
-
 	InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
 	InputMode.SetHideCursorDuringCapture(false);
 
 	PC->SetInputMode(InputMode);
 	PC->bShowMouseCursor = true;
+	PC->SetIgnoreMoveInput(false);
+	PC->SetIgnoreLookInput(false);
 }
+
 
 void UGRUISystem::OnLobby()
 {

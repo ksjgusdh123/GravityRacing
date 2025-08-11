@@ -42,6 +42,13 @@ void AGRBooster::Tick(float DeltaTime)
 
 }
 
+void AGRBooster::SpawnBooster(int32 line)
+{
+	CurrentLine = line;
+	FVector Location = GetActorLocation();
+	SetActorLocation(FVector(Location.X, -OneLineDistance * 1.5 + OneLineDistance * (line - 1), Location.Z));
+}
+
 void AGRBooster::OverlapEvent(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	AGRPlayer* player = Cast<AGRPlayer>(OtherActor);

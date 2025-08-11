@@ -23,6 +23,11 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+public:
+	void SetRoadOneLineDistance(float dist) { OneLineDistance = dist; }
+	void SetCurrentLine(int32 line) { CurrentLine = line; }
+	virtual void SpawnBooster(int32 line);
+
 protected:
 	UFUNCTION()
 	virtual void OverlapEvent(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
@@ -34,4 +39,10 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	class UBoxComponent* CollisionBox;
+
+private:
+	float OneLineDistance;
+	float TunnelHeight;
+
+	int32 CurrentLine;
 };

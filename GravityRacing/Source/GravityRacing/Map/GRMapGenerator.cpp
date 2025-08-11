@@ -81,6 +81,10 @@ void AGRMapGenerator::RepositionTunnel()
 		// 터널인 경우
 		tunnel->RePositionGate();
 	}
+	if (ObstacleType == ObstaclesCount * 2)
+	{
+		tunnel->RePositionBooster();
+	}
 	else
 	{
 		// 터널이 아닌 경우

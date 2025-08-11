@@ -37,10 +37,14 @@ public:
 	void DestroyCoins();
 	void RePositionEvent(TSubclassOf<class AGRObstacle> NewObstacleClass, int idx);
 	void RePositionGate();
+	void RePositionBooster();
 
 public:
 	UPROPERTY(EditAnywhere, Category = Gate)
 	TSubclassOf<AGRObstacle> GateClass;
+
+	UPROPERTY(EditAnywhere, Category = Booster)
+	TSubclassOf<class AGRBooster> BoosterClass;
 
 private:
 	UPROPERTY(EditAnywhere)
@@ -48,6 +52,9 @@ private:
 
 	UPROPERTY()
 	TArray<AGRObstacle*> Obstacles;
+
+	UPROPERTY()
+	AGRBooster* Booster;
 
 	UPROPERTY()
 	TArray<class AGRCoin*> Coins;	

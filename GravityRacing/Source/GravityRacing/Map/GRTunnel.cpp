@@ -7,6 +7,7 @@
 #include "GravityRacing.h"
 #include "Components/ArrowComponent.h"
 #include "Objects/Coin/GRCoin.h"
+#include "Objects/Item/GRBooster.h"
 
 // Sets default values
 AGRTunnel::AGRTunnel()
@@ -158,6 +159,26 @@ void AGRTunnel::RePositionGate()
 			Gate->SetIsOpenGate(GetTunnelHeight());
 		}
 		Obstacles[0] = NewObstacle;
+	}
+}
+
+void AGRTunnel::RePositionBooster()
+{
+	if (Booster)
+	{
+		Booster->Destroy();
+		Booster = nullptr;
+	}
+
+	FRotator Rot = GetActorRotation();
+	Rot.Yaw = 90.f;
+
+	AGRBooster* NewBooster = GetWorld()->SpawnActor<AGRBooster>(BoosterClass, GetActorLocation(), Rot);
+	if (NewBooster)
+	{
+		NewBooster->SetRoadOneLineDistance(GetTunnelOneLineLengthY());
+		NewBooster->SpawnBooster(FMath::RandRange(1, 4));
+		Booster = NewBooster;
 	}
 }
 

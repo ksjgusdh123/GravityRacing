@@ -114,7 +114,8 @@ private:
 	float RollDegree = 0.f;
 	float ChangeSpeedTime = 0.f;
 	float MaxChangeSpeedTime = 10.f;
-
+	float NextSpringArmRot = 20.f;	
+		
 	FVector TargetLocation;
 	FRotator TargetRot;
 	FQuat  PrevQuat;

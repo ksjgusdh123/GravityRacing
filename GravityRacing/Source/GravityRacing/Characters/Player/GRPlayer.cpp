@@ -34,6 +34,8 @@ AGRPlayer::AGRPlayer()
 	SpringArm->SetupAttachment(RootComponent);
 	SpringArm->TargetArmLength = 300.f;
 	SpringArm->bUsePawnControlRotation = true;
+	SpringArm->SetRelativeRotation(FRotator(0.f, NextSpringArmRot, 0.f));
+	NextSpringArmRot *= -1;
 
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
@@ -118,7 +120,8 @@ void AGRPlayer::Tick(float DeltaTime)
 	{
 		SetActorLocation(GetMesh()->GetComponentLocation() + FVector(0.f, 0.f, 100.f));
 	}
-	GRLOG("%f", GetCharacterMovement()->MaxWalkSpeed);
+	GRLOG("%s", *(SpringArm->GetRelativeRotation().ToString()));
+
 }
 
 // Called to bind functionality to input
@@ -132,6 +135,7 @@ void AGRPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 		input->BindAction(FlipAction, ETriggerEvent::Started, this, &AGRPlayer::Flip);
 	}
 
+
 }
 
 void AGRPlayer::Landed(const FHitResult& Hit)
@@ -139,6 +143,11 @@ void AGRPlayer::Landed(const FHitResult& Hit)
 	auto* movement = GetCharacterMovement();
 	movement->SetMovementMode(EMovementMode::MOVE_Walking);
 	movement->bOrientRotationToMovement = true;
+	if (bIsFlip)
+	{
+		FRotator Target = FRotator(NextSpringArmRot, 0.f, 0.f);
+		SpringArm->SetRelativeRotation(Target);
+	}
 	bIsFlip = false;
 }
 
@@ -193,7 +202,6 @@ void AGRPlayer::BouncePlayer(const FHitResult& SweepResult)
 
 	LaunchCharacter(BounceDirection * 2000.f + FVector(0, 0, 1000.f), true, true);
 	GetCharacterMovement()->GravityScale *= 0.4;
-	GRLOG("%s", *BounceDirection.ToString());
 }
 
 void AGRPlayer::InGameMove(const FInputActionValue& value)
@@ -238,7 +246,8 @@ void AGRPlayer::InGameMove(const FInputActionValue& value)
 void AGRPlayer::Flip(const FInputActionValue& value)
 {
 	if (bIsFlip) return;
-
+	NextSpringArmRot *= -1;
+	//SpringArm->SetRelativeRotation(FRotator(NextSpringArmRot, 0.f, 0.f));
 	auto* movement = GetCharacterMovement();
 	movement->SetMovementMode(EMovementMode::MOVE_Falling);
 
@@ -287,6 +296,11 @@ void AGRPlayer::FlipPlayer(float DeltaTime)
 	FQuat QuatRoll = FQuat(FVector(0, 1, 0), FMath::DegreesToRadians(FMath::Min(RollDegree, 360.f)));
 
 	SetActorRotation(QuatPitch * QuatRoll * PrevQuat);
+
+	FRotator Now = SpringArm->GetRelativeRotation();
+	FRotator Target = FRotator(NextSpringArmRot, 0.f, 0.f);
+	FRotator Good = FMath::RInterpTo(Now, Target, DeltaTime, 7.f);
+	SpringArm->SetRelativeRotation(Good);
 }
 
 void AGRPlayer::BoostSpeedTime(float DeltaTime)

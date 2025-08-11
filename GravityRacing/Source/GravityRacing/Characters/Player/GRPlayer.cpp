@@ -41,13 +41,6 @@ AGRPlayer::AGRPlayer()
 	Camera->SetupAttachment(SpringArm);
 	Camera->bUsePawnControlRotation = false;
 
-	static ConstructorHelpers::FObjectFinder<USoundBase> CoinSound(TEXT("/Game/GravityRacing/Audio/BGM/SW_Coin.SW_Coin"));
-	if (CoinSound.Succeeded()) Coin = CoinSound.Object;
-
-	static ConstructorHelpers::FObjectFinder<USoundBase> BoostSound(TEXT("/Game/GravityRacing/Audio/BGM/SW_Boost.SW_Boost"));
-	if (BoostSound.Succeeded()) Boost = BoostSound.Object;
-
-
 	PlayerMesh->SetRelativeLocation(FVector(0.f, 0.f, -90.f));
 	FRotator Rot = PlayerMesh->GetRelativeRotation();
 	Rot.Yaw += -90.f;

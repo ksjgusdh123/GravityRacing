@@ -83,11 +83,6 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	class UCameraComponent* Camera;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Sound)
-	class USoundBase* Coin;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Sound)
-	class USoundBase* Boost;
 
 	UPROPERTY()
 	USkeletalMeshComponent* PlayerMesh;

@@ -42,11 +42,10 @@ public:
 
 	void BouncePlayer(const FHitResult& SweepResult);
 public:
-	void Move(const FInputActionValue& value);
+
+	UFUNCTION(BlueprintCallable)
 	void InGameMove(const FInputActionValue& value);
-	void Look(const FInputActionValue& value);
-	void JumpStart(const FInputActionValue& value);
-	void JumpStop(const FInputActionValue& value);
+	UFUNCTION(BlueprintCallable)
 	void Flip(const FInputActionValue& value);
 
 	void CrossLine(float DeltaTime);

@@ -128,11 +128,7 @@ void AGRPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 	if (UEnhancedInputComponent* input = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
 	{
-		input->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AGRPlayer::Move);
 		input->BindAction(InGameMoveAction, ETriggerEvent::Triggered, this, &AGRPlayer::InGameMove);
-		//input->BindAction(LookAction, ETriggerEvent::Triggered, this, &AGRPlayer::Look);
-		input->BindAction(JumpAction, ETriggerEvent::Started, this, &AGRPlayer::JumpStart);
-		input->BindAction(JumpAction, ETriggerEvent::Ongoing, this, &AGRPlayer::JumpStop);
 		input->BindAction(FlipAction, ETriggerEvent::Started, this, &AGRPlayer::Flip);
 	}
 
@@ -200,22 +196,6 @@ void AGRPlayer::BouncePlayer(const FHitResult& SweepResult)
 	GRLOG("%s", *BounceDirection.ToString());
 }
 
-void AGRPlayer::Move(const FInputActionValue& value)
-{
-	if (bIsFlip) return;
-
-	FVector2D input = value.Get<FVector2D>();
-
-	FRotator rot = Controller->GetControlRotation();
-	FRotator yaw(0.f, rot.Yaw, 0.f);
-
-	FVector forward = FRotationMatrix(yaw).GetUnitAxis(EAxis::X);
-	FVector right = FRotationMatrix(yaw).GetUnitAxis(EAxis::Y);
-
-	AddMovementInput(forward, input.Y);
-	AddMovementInput(right, input.X);
-}
-
 void AGRPlayer::InGameMove(const FInputActionValue& value)
 {
 	if (bIsMoving || bIsFlip) return;
@@ -253,27 +233,6 @@ void AGRPlayer::InGameMove(const FInputActionValue& value)
 	TargetRot = Rot;
 	bIsRecoverCenter = false;
 	bIsMoving = true;
-}
-
-void AGRPlayer::Look(const FInputActionValue& value)
-{
-	if (Controller == nullptr)
-		return;
-
-	FVector2D input = value.Get<FVector2D>();
-
-	AddControllerYawInput(input.X);
-	AddControllerPitchInput(input.Y);
-}
-
-void AGRPlayer::JumpStart(const FInputActionValue& value)
-{
-	Jump();
-}
-
-void AGRPlayer::JumpStop(const FInputActionValue& value)
-{
-	StopJumping();
 }
 
 void AGRPlayer::Flip(const FInputActionValue& value)

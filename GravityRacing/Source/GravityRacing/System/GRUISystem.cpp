@@ -222,8 +222,8 @@ void UGRUISystem::ShowPause()
 	if (PauseWidget && !PauseWidget->IsInViewport())
 	{
 		PauseWidget->AddToViewport();
-		SetUIMode(true, PauseWidget);
 		UE_LOG(LogTemp, Log, TEXT("PauseWidget Added to Viewport"));
+		UGameplayStatics::SetGamePaused(GetWorld(), true);
 	}
 }
 
@@ -237,6 +237,7 @@ void UGRUISystem::HidePause()
 
 	if (PauseWidget)
 	{
+		UGameplayStatics::SetGamePaused(GetWorld(), false);
 		PauseWidget->RemoveFromParent();
 		PauseWidget = nullptr;
 		UE_LOG(LogTemp, Log, TEXT("PauseWidget Removed"));

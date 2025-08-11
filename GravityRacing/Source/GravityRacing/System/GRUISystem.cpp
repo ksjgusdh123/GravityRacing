@@ -147,6 +147,13 @@ void UGRUISystem::OnResult()
 
 	UE_LOG(LogTemp, Log, TEXT("OnResult"));
 
+	if (GameWidget)
+	{
+		GameWidget->RemoveFromParent();
+		GameWidget = nullptr;
+		UE_LOG(LogTemp, Log, TEXT("Old GameWidget Removed"));
+	}
+
 	if (ResultWidget)
 	{
 		ResultWidget->RemoveFromParent();

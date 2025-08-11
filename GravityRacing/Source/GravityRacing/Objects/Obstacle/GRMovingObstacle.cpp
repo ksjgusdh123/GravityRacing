@@ -43,12 +43,19 @@ void AGRMovingObstacle::Tick(float DeltaSeconds)
 
 void AGRMovingObstacle::HitEvent(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& SweepResult)
 {
-	AGRPlayer* player = Cast<AGRPlayer>(OtherActor);
-	if (!player)
+	if (OtherComp->GetCollisionObjectType() ==	ECC_GameTraceChannel1)
 	{
 		Dir *= -1;
 
 		FVector PushOffset = SweepResult.ImpactNormal * PushDistance;
 		SetActorLocation(GetActorLocation() + PushOffset);
 	}
+	/*AGRPlayer* player = Cast<AGRPlayer>(OtherActor);
+	if (!player)
+	{
+		Dir *= -1;
+
+		FVector PushOffset = SweepResult.ImpactNormal * PushDistance;
+		SetActorLocation(GetActorLocation() + PushOffset);
+	}*/
 }

@@ -124,7 +124,7 @@ void UGRSoundSystem::Preload(EGameSound Id)
     {
         if (!Found->IsValid())
         {
-            if (UAssetManager* AM = UAssetManager::GetIfValid())
+            if (UAssetManager* AM = UAssetManager::GetIfInitialized())
             {
                 AM->GetStreamableManager().RequestSyncLoad(Found->ToSoftObjectPath());
             }
@@ -143,7 +143,7 @@ void UGRSoundSystem::PreloadAll()
     TArray<FSoundData*> Rows;
     SoundTable->GetAllRows<FSoundData>(TEXT("SoundPreloadAll"), Rows);
 
-    if (UAssetManager* AM = UAssetManager::GetIfValid())
+    if (UAssetManager* AM = UAssetManager::GetIfInitialized())
     {
         TArray<FSoftObjectPath> Paths;
         for (const FSoundData* Row : Rows)

@@ -113,8 +113,6 @@ void AGRPlayer::Tick(float DeltaTime)
 	{
 		SetActorLocation(GetMesh()->GetComponentLocation() + FVector(0.f, 0.f, 100.f));
 	}
-	GRLOG("%s", *(SpringArm->GetRelativeRotation().ToString()));
-
 }
 
 // Called to bind functionality to input
@@ -179,12 +177,14 @@ void AGRPlayer::SetPlayerMaxSpeed(float Speed)
 {
 	GetCharacterMovement()->MaxWalkSpeed = Speed;
 	bIsBoosting = true;
+	BoostTime = 0.f;
 }
 
 void AGRPlayer::SetPlayerBoost()
 {
 	GetCharacterMovement()->MaxWalkSpeed = OriginalMaxSpeed * 2;
 	bIsBoosting = true;
+	BoostTime = 0.f;
 }
 
 void AGRPlayer::BouncePlayer(const FHitResult& SweepResult)
@@ -303,7 +303,6 @@ void AGRPlayer::BoostSpeedTime(float DeltaTime)
 	{
 		GetCharacterMovement()->MaxWalkSpeed = OriginalMaxSpeed;
 		bIsBoosting = false;
-		BoostTime = 0.f;
 	}
 }
 

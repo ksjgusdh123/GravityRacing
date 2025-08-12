@@ -33,10 +33,10 @@ void AGRMapGenerator::BeginPlay()
 			LastTunnelLocation,
 			FRotator(0.f, 0.f, 0.f));
 
-		TunnelLength.X = tunnel->GetTunnelLengthX();
 
 		if (tunnel)
 		{
+			TunnelLength.X = tunnel->GetTunnelLengthX();
 			ActiveTunnels.Add(tunnel);
 			LastTunnelLocation += FVector(TunnelLength.X, 0.f, 0.f);
 		}

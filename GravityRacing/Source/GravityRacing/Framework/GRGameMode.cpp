@@ -24,3 +24,10 @@ void AGRGameMode::BeginPlay()
 		UISys->OnGame();
 	}
 }
+
+
+void AGRGameMode::AddScore(int32 Amount)
+{
+	Score += Amount;
+	OnScoreChanged.Broadcast(Score);
+}

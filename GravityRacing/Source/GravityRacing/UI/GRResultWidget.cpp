@@ -4,16 +4,17 @@
 #include "UI/GRResultWidget.h"
 #include "Components/Button.h"
 #include "Kismet/GameplayStatics.h"
-#include "Framework/GRGameInstance.h"
+#include "Framework/GRGameMode.h"
 
 void UGRResultWidget::NativeConstruct()
 {
     Super::NativeConstruct();
 
-    if (auto* GI = Cast<UGRGameInstance>(GetGameInstance()))
-    {
-        if (PlayerTime) PlayerTime->SetText(FText::FromString(GI->GetPlayTime()));
-        if (Score)      Score->SetText(FText::AsNumber(GI->GetScore()));
+	auto* GM = Cast<AGRGameMode>(GetWorld()->GetAuthGameMode());
+	if (GM)
+	{
+        if (PlayerTime) PlayerTime->SetText(FText::FromString(GM->GetPlayTime()));
+        if (Score)      Score->SetText(FText::AsNumber(GM->GetScore()));
     }
 
 	if (ReplayButton)

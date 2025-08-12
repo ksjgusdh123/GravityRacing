@@ -5,7 +5,7 @@
 #include "Components/TextBlock.h"
 #include "Engine/World.h"
 #include "TimerManager.h"
-#include "Framework/GRGameInstance.h"
+#include "Framework/GRGameMode.h"
 #include "Components/Button.h"
 #include "Kismet/GameplayStatics.h"
 #include "System/GRUISystem.h"
@@ -23,10 +23,10 @@ void UGRGameWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 	RefreshTimeLabel(AccumulatedSeconds);
-	if (auto* GI = Cast<UGRGameInstance>(GetGameInstance()))
-	{
-		GI->OnScoreChanged.AddDynamic(this, &UGRGameWidget::SetScoreText);
-	}
+	auto* GM = Cast<AGRGameMode>(GetWorld()->GetAuthGameMode());
+	if (GM)
+		GM->OnScoreChanged.AddDynamic(this, &UGRGameWidget::SetScoreText);
+
 	if (PauseButton)
 		PauseButton->OnClicked.AddDynamic(this, &UGRGameWidget::OnPauseButtonClicked);
 }
@@ -124,10 +124,8 @@ void UGRGameWidget::RefreshTimeLabel(float Seconds)
 	{
 		FString FormatTime = FormatMMSSms(Seconds);
 		PlayerTime->SetText(FText::FromString(FormatTime));
-		auto* GI = Cast<UGRGameInstance>(GetGameInstance());
-		if (GI)
-		{
-			GI->SetPlayTime(FormatTime);
-		}
+		auto* GM = Cast<AGRGameMode>(GetWorld()->GetAuthGameMode());
+		if (GM)
+			GM->SetPlayTime(FormatTime);
 	}
 }

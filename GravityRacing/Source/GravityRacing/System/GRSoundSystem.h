@@ -39,8 +39,9 @@ class GRAVITYRACING_API UGRSoundSystem : public UGameInstanceSubsystem
     GENERATED_BODY()
 
 public:
-    UGRSoundSystem();
     virtual void Initialize(FSubsystemCollectionBase& Collection) override;
+    void SetSoundTable(UDataTable* InTable);
+    void BuildMap();
 
     UFUNCTION()
     void Play2D(EGameSound Id);
@@ -56,23 +57,11 @@ public:
     void Preload(EGameSound Id);
     UFUNCTION()
     void PreloadAll();
-
 private:
     UPROPERTY()
-    TSoftObjectPtr<USoundBase> MainBGM;
-
+    UDataTable* SoundTable = nullptr;
     UPROPERTY()
-    TSoftObjectPtr<USoundBase> LobbyBGM;
-
-    UPROPERTY()
-    TSoftObjectPtr<USoundBase> CoinSFX;
-
-    UPROPERTY()
-    TSoftObjectPtr<USoundBase> BoostSFX;
-
-    UPROPERTY()
-    TSoftObjectPtr<USoundBase> DieSFX;
-
+    TMap<EGameSound, TSoftObjectPtr<USoundBase>> SoundMap;
     UPROPERTY(Transient)
     UAudioComponent* BGMComp = nullptr;
 

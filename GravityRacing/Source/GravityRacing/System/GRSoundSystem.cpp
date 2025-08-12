@@ -7,62 +7,53 @@
 #include "Engine/StreamableManager.h"
 #include "Engine/AssetManager.h"
 
-UGRSoundSystem::UGRSoundSystem()
-{
-    static ConstructorHelpers::FObjectFinder<USoundBase> MainBGMObj(TEXT("/Game/GravityRacing/Audio/BGM/Cyber_Punk_Music_v11/Sound_Cues/MainBGM.MainBGM"));
-    if (MainBGMObj.Succeeded())
-    {
-        MainBGM = MainBGMObj.Object;
-    }
-
-    static ConstructorHelpers::FObjectFinder<USoundBase> LobbyBGMObj(TEXT("/Game/GravityRacing/Audio/BGM/Cyber_Punk_Music_v11/Sound_Waves/LobbyBGM.LobbyBGM"));
-    if (LobbyBGMObj.Succeeded())
-    {
-        LobbyBGM = LobbyBGMObj.Object;
-    }
-
-    static ConstructorHelpers::FObjectFinder<USoundBase> CoinObj(TEXT("/Game/GravityRacing/Audio/SFX/Coin/SFX_Coin.SFX_Coin"));
-    if (CoinObj.Succeeded())
-    {
-        CoinSFX = CoinObj.Object;
-    }
-
-    static ConstructorHelpers::FObjectFinder<USoundBase> BoostObj(TEXT("/Game/GravityRacing/Audio/SFX/Booster/SFX_Boost.SFX_Boost"));
-    if (BoostObj.Succeeded())
-    {
-        BoostSFX = BoostObj.Object;
-    }
-
-    static ConstructorHelpers::FObjectFinder<USoundBase> DieObj(TEXT("/Game/GravityRacing/Audio/SFX/Booster/SFX_Die.SFX_Die"));
-    if (DieObj.Succeeded())
-    {
-        DieSFX = DieObj.Object;
-    }
-}
-
 void UGRSoundSystem::Initialize(FSubsystemCollectionBase& Collection)
 {
     Super::Initialize(Collection);
 
-    // 필요하다면 여기서 미리 PreloadAll 호출
-    PreloadAll();
+    if (!SoundTable)
+    {
+        static const TCHAR* Path = TEXT("/Game/GravityRacing/Data/DT_SoundTable");
+        SoundTable = LoadObject<UDataTable>(nullptr, Path);
+        if (!SoundTable)
+        {
+            GRLOG("[SoundManager] Failed to load DataTable: %s", Path);
+            return;
+        }
+    }
+
+    BuildMap();
 }
+
+void UGRSoundSystem::SetSoundTable(UDataTable* InTable)
+{
+    SoundTable = InTable;
+    BuildMap();
+}
+
+void UGRSoundSystem::BuildMap()
+{
+    SoundMap.Reset();
+    if (!SoundTable) return;
+
+    TArray<FSoundData*> Rows;
+    SoundTable->GetAllRows<FSoundData>(TEXT("SoundReload"), Rows);
+    for (const FSoundData* Row : Rows)
+    {
+        if (Row && Row->SoundId != EGameSound::None)
+            SoundMap.Add(Row->SoundId, Row->SoundAsset);
+    }
+}
+
 
 USoundBase* UGRSoundSystem::GetSoundSync(EGameSound Id)
 {
-    TSoftObjectPtr<USoundBase> Asset;
-
-    switch (Id)
+    if (Id == EGameSound::None) return nullptr;
+    if (TSoftObjectPtr<USoundBase>* Found = SoundMap.Find(Id))
     {
-    case EGameSound::MainBGM:   Asset = MainBGM; break;
-    case EGameSound::LobbyBGM:  Asset = LobbyBGM; break;
-    case EGameSound::Coin:      Asset = CoinSFX; break;
-    case EGameSound::Boost:     Asset = BoostSFX; break;
-    case EGameSound::Die:       Asset = DieSFX; break;
-    default: return nullptr;
+        return Found->IsValid() ? Found->Get() : Found->LoadSynchronous();
     }
-
-    return Asset.IsValid() ? Asset.Get() : Asset.LoadSynchronous();
+    return nullptr;
 }
 
 void UGRSoundSystem::Play2D(EGameSound Id)
@@ -80,35 +71,33 @@ void UGRSoundSystem::PlayBGM(EGameSound Id)
 {
     if (USoundBase* S = GetSoundSync(Id))
     {
-        if (UWorld* World = GetWorld())
+        UWorld* World = GetWorld();
+        if (!World) return;
+
+        const float FadeTime = 0.5f;
+
+        if (IsValid(BGMComp))
         {
-            const float FadeTime = 0.5f;
-
-            if (IsValid(BGMComp))
-            {
-                BGMComp->FadeOut(FadeTime, 0.f);
-                BGMComp = nullptr;
-            }
-
-            UAudioComponent* NewComp = UGameplayStatics::SpawnSound2D(World, S, 1.f, 1.f, 0.f, nullptr, false);
-            if (IsValid(NewComp))
-            {
-                NewComp->bAutoDestroy = false;
-                NewComp->bStopWhenOwnerDestroyed = false;
-                NewComp->OnAudioFinishedNative.RemoveAll(this);
-                NewComp->OnAudioFinishedNative.AddUObject(this, &UGRSoundSystem::HandleBGMFinished);
-                NewComp->FadeIn(FadeTime, 1.f);
-                BGMComp = NewComp;
-            }
+            UAudioComponent* Prev = BGMComp;
+            BGMComp = nullptr;
+            Prev->FadeOut(FadeTime, 0.f);
         }
-    }
-}
 
-void UGRSoundSystem::StopBGM()
-{
-    if (BGMComp && BGMComp->IsPlaying())
-    {
-        BGMComp->FadeOut(0.5f, 0.f);
+        UAudioComponent* NewComp = UGameplayStatics::SpawnSound2D(
+            World, S, /*Volume*/1.f, /*Pitch*/1.f, /*StartTime*/0.f, /*Concurrency*/nullptr, /*bAutoDestroy*/ false
+        );
+
+        if (IsValid(NewComp))
+        {
+            NewComp->bAutoDestroy = false;
+            NewComp->bStopWhenOwnerDestroyed = false;
+
+            NewComp->OnAudioFinishedNative.RemoveAll(this);
+            NewComp->OnAudioFinishedNative.AddUObject(this, &UGRSoundSystem::HandleBGMFinished);
+
+            NewComp->FadeIn(FadeTime, 1.f);
+            BGMComp = NewComp;
+        }
     }
 }
 
@@ -120,20 +109,57 @@ void UGRSoundSystem::HandleBGMFinished(UAudioComponent* AC)
     }
 }
 
+void UGRSoundSystem::StopBGM()
+{
+    if (BGMComp && BGMComp->IsPlaying())
+    {
+        float FadeTime = 0.5f;
+        BGMComp->FadeOut(FadeTime, 0.f);
+    }
+}
+
 void UGRSoundSystem::Preload(EGameSound Id)
 {
-    if (UAssetManager* AM = UAssetManager::GetIfValid())
+    if (TSoftObjectPtr<USoundBase>* Found = SoundMap.Find(Id))
     {
-        if (USoundBase* S = GetSoundSync(Id))
+        if (!Found->IsValid())
         {
+            if (UAssetManager* AM = UAssetManager::GetIfValid())
+            {
+                AM->GetStreamableManager().RequestSyncLoad(Found->ToSoftObjectPath());
+            }
+            else
+            {
+                Found->LoadSynchronous();
+            }
         }
     }
 }
 
 void UGRSoundSystem::PreloadAll()
 {
-    for (uint8 i = 0; i <= (uint8)EGameSound::Die; ++i)
+    if (!SoundTable) return;
+
+    TArray<FSoundData*> Rows;
+    SoundTable->GetAllRows<FSoundData>(TEXT("SoundPreloadAll"), Rows);
+
+    if (UAssetManager* AM = UAssetManager::GetIfValid())
     {
-        Preload((EGameSound)i);
+        TArray<FSoftObjectPath> Paths;
+        for (const FSoundData* Row : Rows)
+        {
+            if (Row)
+            {
+                const auto& P = Row->SoundAsset.ToSoftObjectPath();
+                if (P.IsValid()) Paths.Add(P);
+            }
+        }
+        if (Paths.Num() > 0)
+            AM->GetStreamableManager().RequestSyncLoad(Paths);
+    }
+    else
+    {
+        for (const FSoundData* Row : Rows)
+            if (Row) Row->SoundAsset.LoadSynchronous();
     }
 }

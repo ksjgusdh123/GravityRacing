@@ -5,7 +5,6 @@
 #include "Components/EditableTextBox.h"
 #include "Components/Button.h"
 #include "Kismet/GameplayStatics.h"
-#include "Framework/GRGameInstance.h"
 
 void UGRLobbyWidget::NativeConstruct()
 {

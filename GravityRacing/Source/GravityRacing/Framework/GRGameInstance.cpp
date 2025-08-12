@@ -16,9 +16,3 @@ void UGRGameInstance::OnStart()
 {
 	Super::OnStart();
 }
-
-void UGRGameInstance::AddScore(int32 Amount)
-{
-	Score += Amount;
-	OnScoreChanged.Broadcast(Score);
-}

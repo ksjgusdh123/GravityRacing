@@ -7,9 +7,10 @@
 #include "Kismet/GameplayStatics.h"
 #include "../Objects/Obstacle/GRObstacle.h"
 #include "Objects/Obstacle/GRGate.h"
+#include "GravityRacing.h"
 
 float AGRMapGenerator::OneLineLengthY = 0.f;
-FVector2D AGRMapGenerator::TunnelLength = FVector2D(0.f, 0.f);
+FVector2D AGRMapGenerator::TunnelLength = FVector2D(2000.f, 1480.f);
 
 // Sets default values
 AGRMapGenerator::AGRMapGenerator()
@@ -36,15 +37,18 @@ void AGRMapGenerator::BeginPlay()
 
 		if (tunnel)
 		{
-			TunnelLength.X = tunnel->GetTunnelLengthX();
 			ActiveTunnels.Add(tunnel);
 			LastTunnelLocation += FVector(TunnelLength.X, 0.f, 0.f);
 		}
 	}
 	LastTunnelLocation -= FVector(TunnelLength.X, 0.f, 0.f);
 
-	OneLineLengthY = ActiveTunnels[0]->GetTunnelOneLineLengthY();
-	TunnelLength.Y = ActiveTunnels[0]->GetTunnelLinesLengthY();
+	if(ActiveTunnels[0])
+	{
+		OneLineLengthY = ActiveTunnels[0]->GetTunnelOneLineLengthY();
+		TunnelLength.Y = ActiveTunnels[0]->GetTunnelLinesLengthY();
+	}
+
 
 	ObstaclesCount = ObstacleClasses.Num();
 }
@@ -80,8 +84,9 @@ void AGRMapGenerator::RepositionTunnel()
 	{
 		// 터널인 경우
 		tunnel->RePositionGate();
+
 	}
-	if (ObstacleType == ObstaclesCount * 2)
+	else if (ObstacleType == ObstaclesCount * 2)
 	{
 		tunnel->RePositionBooster();
 	}
